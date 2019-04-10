@@ -4,7 +4,6 @@ type: pipeline-template
 name: Maven App Pipeline Job
 description: Run browser compat tests in the dev environment.
 parameters:
-  - name: previewEnvHostname
-    displayName: Preview env hostname
   - name: emailRecipient
-    displayName: Notification email address
+    type: string
+    displayName: Email address to be used for sending build notifications
