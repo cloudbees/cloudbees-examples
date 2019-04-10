@@ -1,8 +1,8 @@
 version: 1
 type: pipeline-template
 
-name: Maven App Pipeline Job
-description: Run browser compat tests in the dev environment.
+name: Java Maven App Pipeline Job
+description: Simple Java App With Maven
 parameters:
   - name: emailRecipient
     type: string
