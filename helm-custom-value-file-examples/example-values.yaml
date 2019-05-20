@@ -1,8 +1,8 @@
-# A helm example values file for standard kubernetes install. An nginx-ingress controller is not installed and ssl isn't installed.
-# This example file is used to create the sample cloudbees-core.yaml file bundled with the installation.
+# A helm example values file for standard kubernetes install.
+# An nginx-ingress controller is not installed and ssl isn't installed.
 # Install an nginx-ingress controller 
 nginx-ingress:
-  enabled: false
+  Enabled: false
 
 OperationsCenter:
   # Set the HostName for the Operation Center
@@ -13,15 +13,3 @@ OperationsCenter:
       Enable: false
       SecretName: core-example-com-tls
       Host: jenkins.cluster.local
-
-# If you are migrating from an existing manual installation of CloudBees Core, provide the PVC that was created
-# during the initial installation
-Persistence:
-  ExistingClaim:
-
-nameOverride: cjoc
-
-saOverride:
-  enabled : true
-  serviceAccount: cjoc
-  masterServiceAccount: jenkins
