@@ -5,6 +5,9 @@ nginx-ingress:
   Enabled: false
 
 OperationsCenter:
+  # Set the platform to aws, so that ELBs are created
+  # platform: 'aws'
+  
   # Set the HostName for the Operation Center
   HostName: 'cloudbees-core.example.com'
   Ingress:
