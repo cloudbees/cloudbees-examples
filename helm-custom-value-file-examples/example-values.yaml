@@ -1,0 +1,18 @@
+# A helm example values file for standard kubernetes install.
+# An nginx-ingress controller is not installed and ssl isn't installed.
+# Install an nginx-ingress controller 
+nginx-ingress:
+  Enabled: false
+
+OperationsCenter:
+  # Set the platform to aws, so that ELBs are created
+  # platform: 'aws'
+  
+  # Set the HostName for the Operation Center
+  HostName: 'cloudbees-core.example.com'
+  Ingress:
+    tls:
+    ## Set this to true in order to enable TLS on the ingress record
+      Enable: false
+      SecretName: core-example-com-tls
+      Host: jenkins.cluster.local
