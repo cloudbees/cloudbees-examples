@@ -1,7 +1,7 @@
 ## Welcome
 Welcome to the CloudBees examples repository. This repository was created as a place for storing tutorials, examples, and other learning materials. 
 
-## Examples Summary
+## Examples summary
 The following table is a brief summary of each of the example projects. 
 
 |Directory|Description  |
