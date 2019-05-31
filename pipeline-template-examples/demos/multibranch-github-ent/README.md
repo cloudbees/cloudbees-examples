@@ -10,5 +10,5 @@ multibranch:
       apiUrl: https://github.beescloud.com/api/v3
       repoOwner: myCompany
       repository: ${repoName}
-      scanCredentialsId: my-team-github-credentials
+      credentialsId: my-team-github-credentials
 ````

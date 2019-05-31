@@ -9,5 +9,5 @@ multibranch:
     github:
       repoOwner: myCompany
       repository: ${repoName}
-      scanCredentialsId: my-team-github-credentials
+      credentialsId: my-team-github-credentials
 ````
