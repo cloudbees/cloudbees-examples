@@ -7,7 +7,7 @@ This example shows how to add authentication to a Bitbucket server. The develope
 multibranch:
   branchSource:
     bitbucket:
-      remote: https://bitbucket.mycompany.com
+      remote: https://bitbucket.example.com
       repoOwner: myCompany
       repository: ${repoName}
       credentialsId: my-team-bitbucket-credentials
