@@ -7,7 +7,7 @@ This example shows how to add authentication to Bitbucket.org. The developer wil
 multibranch:
   branchSource:
     bitbucket:
-      remote: https://bitbucket.org
+      serverUrl: https://bitbucket.org
       repoOwner: myCompany
       repository: ${repoName}
       credentialsId: my-team-bitbucket-credentials
