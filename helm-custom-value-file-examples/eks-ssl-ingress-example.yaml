@@ -1,0 +1,20 @@
+# A helm example values file for an AWS install with nginx-ingress controller and TLS
+# Install an nginx-ingress controller 
+nginx-ingress:
+    Enabled: true
+OperationsCenter:
+  # Set the platform to aws, so that ELBs are created
+  platform: 'aws'
+  # Set the HostName for the Operation Center
+  HostName: 'cloudbees-core.example.com'
+  # Setting ServiceType to ClusterIP creates ingress
+  ServiceType: ClusterIP
+  Ingress:
+      tls:
+      ## Set this to true in order to enable TLS on the ingress
+       Enable: true
+       ## Replace with your Kubernetes Certificate Select
+       SecretName: core-example-com-tls
+       Host: jenkins.cluster.local
+
+
