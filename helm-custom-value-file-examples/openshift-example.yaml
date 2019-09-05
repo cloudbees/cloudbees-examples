@@ -1,0 +1,22 @@
+# A helm example values file for an OpenShift install
+# Install an nginx-ingress controller 
+nginx-ingress:
+    Enabled: false
+OperationsCenter:
+  # Set the platform to openshift, so that routes are created
+  Platform: 'openshift'
+  # Set the HostName for the Operation Center
+  HostName: 'cloudbees-core.example.com'
+  # Setting ServiceType to ClusterIP creates ingress
+  ServiceType: ClusterIP
+  Route:
+    tls:
+      ## Set this to true in order to enable TLS on the ingress route
+      Enable: false
+      ## Replace with your Kubernetes Certificate Select
+      SecretName: core-example-com-tls
+      Host: jenkins.cluster.local
+  # Update this with the openshift project your are using.
+  Project:
+    name: myproject
+

@@ -17,10 +17,3 @@ OperationsCenter:
 # Do not change these values. They are all set for migrating CloudBees Core. 
 Persistence:
   ExistingClaim: 'jenkins-home-cjoc-0' 
-
-nameOverride: cjoc
-
-saOverride:
-  enabled : true
-  serviceAccount: cjoc
-  masterServiceAccount: jenkins
