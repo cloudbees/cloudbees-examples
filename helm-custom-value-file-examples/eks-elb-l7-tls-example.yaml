@@ -1,4 +1,4 @@
-# A helm example values file for an AWS install with nginx-ingress controller, TLS termination at ELB layer 7 and enable JNLP external communication
+# A helm example values file for an AWS install with nginx-ingress controller, TLS termination at ELB layer 7 and JNLP external communication enabled.
 # Install an nginx-ingress controller 
 nginx-ingress:
   Enabled: true
