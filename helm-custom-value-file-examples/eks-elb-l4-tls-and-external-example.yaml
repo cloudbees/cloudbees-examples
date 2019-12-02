@@ -1,0 +1,47 @@
+# A helm example values file for an AWS install with nginx-ingress controller, TLS termination at ELB layer 4 and JNLP external communication enabled.
+# Install an nginx-ingress controller 
+nginx-ingress:
+  Enabled: true
+  rbac:
+    create: true
+  controller:
+    ingressClass: "nginx"
+    config:
+      use-proxy-protocol: "true"
+      http-snippet: |
+        map '' $pass_access_scheme {
+            default          https;
+        }
+        map '' $pass_port {
+            default          443;
+        }
+        server {
+          listen 8080 proxy_protocol;
+          return 301 https://$host$request_uri;
+        }
+    service:
+      targetPorts:
+        # 8080 used for redirection
+        http: 8080
+        https: http
+      annotations:
+        service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "tcp"
+        service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
+        service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
+        # The ARN reference 'arn:aws:acm:us-west-2:XXXXXXXX:certificate/XXXXXX-XXXXXXX-XXXXXXX-XXXXXXXX' must be replaced by the actual ARN of the
+        # ACM certificate used to do the TLS termination.
+        service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:us-east-1:XXXXXXXX:certificate/XXXXXX-XXXXXXX-XXXXXXX-XXXXXXXX"
+        service.beta.kubernetes.io/aws-load-balancer-ssl-negotiation-policy: "ELBSecurityPolicy-TLS-1-2-2017-01"
+        # Increase the connection idle timeout for external communication (should be greater than the Ping Thread)
+        service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: '3600'
+      externalTrafficPolicy: "Local"
+  # Allow external communication to the Operations Center through JNLP
+  tcp:
+    50000: "{{ .Release.Namespace }}/cjoc:50000:PROXY"
+OperationsCenter:
+  # Set the platform to aws, so that ELBs are created
+  platform: 'aws'
+  # Set the HostName for the Operation Center
+  HostName: 'cloudbees-core.example.com'
+  # Setting ServiceType to ClusterIP creates ingress
+  ServiceType: ClusterIP

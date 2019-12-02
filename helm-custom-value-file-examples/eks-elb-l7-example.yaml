@@ -1,0 +1,28 @@
+# A helm example values file for an AWS install with nginx-ingress controller and ELB layer 7
+# Install an nginx-ingress controller 
+nginx-ingress:
+  Enabled: true
+  rbac:
+    create: true
+  controller:
+    ingressClass: "nginx"
+    config:
+      use-proxy-protocol: "false"
+      use-forwarded-headers: "true"
+      proxy-real-ip-cidr: "0.0.0.0/0" # restrict this to the IP addresses of ELB (or VPC / subnet CIDR)
+    service:
+      targetPorts:
+        http: http
+      annotations:
+        service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
+        # Ensure the ELB idle timeout is less than nginx keep-alive timeout. By default,
+        # NGINX keep-alive is set to 75s. If using WebSockets, the value will need to be
+        # increased to '3600' to avoid any potential issues.
+        service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "60"
+OperationsCenter:
+  # Set the platform to aws, so that ELBs are created
+  platform: 'aws'
+  # Set the HostName for the Operation Center
+  HostName: 'cloudbees-core.example.com'
+  # Setting ServiceType to ClusterIP creates ingress
+  ServiceType: ClusterIP
