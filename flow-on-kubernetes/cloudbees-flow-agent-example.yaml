@@ -1,0 +1,49 @@
+#---------------------------------------------
+# Flow agent configurations section
+#---------------------------------------------
+
+## Resource name to use when registering the agent as a resource on the Flow server.
+#
+## Use Helm template variables such as {{ .Release.Name }} or {{ .Release.Namespace }}
+## and tokens {{ hostname }} and {{ ordinalIndex }} to contruct names dynamically
+## when installing multiple agents using the chart.
+##
+## Some examples:
+## resourceName: "flow-agent-{{ .Release.Name }}-{{ ordinalIndex }}"
+## resourceName: "{{ .Release.Name }}-{{ hostname }}"
+## where,
+## {{ hostname }} - represents the agent hostname
+## {{ ordinalIndex }} - represents the replica index assigned to the agent's StatefulSet
+##
+resourceName: "{{ .Release.Name }}-{{ ordinalIndex }}"
+
+## Number of Flow agents to create
+replicas: 1
+
+##---------------------------------------------
+## Flow server configurations section
+##---------------------------------------------
+
+## The Flow server where the agent(s) will be registered as resource(s).
+##
+## Defaults to the Flow server service 'flow-server' expected to be in the
+## same namespace as the agent(s) being installed.
+## If installing in a different namespace than the server, then the
+## server endpoint should be set as "flow-server.<namespace>".
+##
+serverEndpoint: flow-server
+
+flowCredentials:
+
+  ## Flow user credentials to use in order to register the agent as a resource on the Flow server.
+  ## If a user other than 'admin' user is used, ensure that the user has `modify` permissions on
+  ## `resources` on the Flow server.
+  ##
+  ## Name of the secret containing the Flow user credentials to use.
+  ## The data field must contain base64 encoded value for keys 'CBF_SERVER_USER' and 'CBF_SERVER_PASSWORD'.
+  ## E.g., kubectl create secret generic your-flow-user-secret --from-literal=CBF_SERVER_USER='admin' --from-literal=CBF_SERVER_PASSWORD='rrx!*d$z75Dsb'
+  ##
+  ## Set the name of the secret that contains the Flow user credentials.
+  # existingSecret: your-flow-user-secret
+  password: changeme
+  

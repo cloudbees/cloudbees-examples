@@ -1,0 +1,115 @@
+# Default values for cloudbees-flow-agent chart
+#
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+images:
+  registry: "docker.io/cloudbees"
+  imageRepository: "cbflow-agent"
+  tag: "9.2.0.139827_1.0.7_20191110"
+  pullPolicy: IfNotPresent
+
+# Please state flow-server endpoint here. Please note that if installing in different namespace than server
+# service name has to be stated in form "service-name.namespace"
+# Here we assume the same namespace
+serverEndpoint: flow-server
+
+#---------------------------------------------
+# Flow agent configuration section
+#---------------------------------------------
+
+# List of resource pools agents will try to register with upon coming up and registering with server
+resourcePools:
+
+# Flow resource name which agents of this deployment will be assigned to (defaults to hostname)
+#
+# Ordinary helm template values are allowed here. For example: {{ .Release.Name }},
+# {{ .Release.Namespace }} etc. Also, 2 special templates are allowed here:
+#
+#     {{ hostname }} - will be replaced by the actual resource hostname
+#     {{ ordinalIndex }} - will be replaced by a serial replica index in StatefulSet
+#
+# Sample:
+#
+#     resourceName: "myResource - {{ .Release.Name }} - {{ ordinalIndex }}"
+#
+resourceName:
+
+# Number of replicas
+replicas: 1
+
+# The default is to deploy all pods serially. By setting this to parallel 
+# all pods are started at the same time.
+podManagementPolicy: "Parallel"
+
+# The zone (must exist in CloudBees Flow server instance) for
+# the resources created in the Flow server for the agent(s).
+zoneName:
+
+# The default workspace (must exist in CloudBees Flow server instance) for
+# the resources created in the Flow server for the agent(s).
+workspaceName:
+
+# Set to true to configure the agent as a trusted agent,
+# restricting the agent to one CloudBees Flow server deployment
+trustedAgent: false
+
+# Type of resource to create on the remote CloudBees
+# Flow server. This argument is relevant only when the
+# CloudBees Flow server is using a mixed-mode license
+# (concurrent resources and registered hosts).
+# Valid options for this argument are 'concurrent'
+# or 'registered'.
+resourceType:
+
+#---------------------------------------------
+# Pod scheduling settings
+#---------------------------------------------
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+
+# This line is interpreted as if passsed to ecconfigure utility within the container
+ecconfigure: "--agentInitMemoryMB=16 --agentMaxMemoryMB=64"
+
+# Master loglevel for com.electriccloud package
+logLevel: DEBUG
+
+
+#---------------------------------------------
+# Flow agent storage and resources configuration section
+#---------------------------------------------
+
+# Agent workspace volume related settings: volume-name,
+# access-mode (either nfs(aka ReadWriteMany) or thrditional volume mount(aka ReadWriteOnce))
+# and storage amount
+storage:
+  volumes:
+    agentWorkspace:
+      name: flow-agent-workspace
+      accessMode: ReadWriteOnce
+      storage: 5Gi
+# In order to use any non "platform-default" or custom storage class just uncomment the line and and state required storageClass name
+#      storageClass: my-class
+
+resources:
+  limits:
+    cpu: 1
+    memory: 1024Mi
+  requests:
+    cpu: 0.25
+    memory: 512Mi
+
+#---------------------------------------------
+# Flow server credentials configuration section
+#---------------------------------------------
+
+# Flow server credentials to use in order to register with agent as a resource on the Flow server.
+# 'admin' user is used by default. You may user a different user if desired. The user must have
+# `modify` permissions on `resources` on the Flow server.
+flowCredentials:
+  existingSecret:
+  user: admin
+  password:

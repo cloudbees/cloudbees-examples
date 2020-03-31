@@ -1,13 +1,16 @@
-# Default values for cloudbees-flow
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
-demoMode: false
-
+##---------------------------------------------
+## Common images configurations section
+##---------------------------------------------
 images:
-  repository: "232781528762.dkr.ecr.us-east-1.amazonaws.com"
-  tag: "latest-staging-9.1.0"
-  pullPolicy: Always
+  # Image registry to pull the images from.
+  # E.g., registry: "123456789012.dkr.ecr.us-east-1.amazonaws.com"
+  registry: "docker.io/cloudbees"
+
+  # Image tag of the image to pull
+  tag: "9.2.0.139827_1.0.7_20191110"
+
+  # The image pull policy to use
+  pullPolicy: IfNotPresent
 
 # The name of the Flow server, usually its fully-qualified domain name, from
 # which the server will be available for all agents (resources) and other
@@ -59,7 +62,7 @@ server:
 # Flag that dictates whether this workload and its accompanying services are
 # to be installed.
   enabled: true
-  imageName: cbflow-server
+  imageRepository: cbflow-server
   replicas: 1
 
 # expose As flow requires repository to be exposed as externally available
@@ -68,7 +71,7 @@ server:
   expose: true
 
 # Master loglevel for com.electriccloud package.
-  logLevel: INFO
+  logLevel: DEBUG
 
   zk:
     host: zookeeper
@@ -99,7 +102,7 @@ web:
 # Flag that dictates whether this workload and its accompanying services are
 # to be installed.
   enabled: true
-  imageName: cbflow-web
+  imageRepository: cbflow-web
   replicas: 1
 
   service:
@@ -130,7 +133,7 @@ repository:
 # Flag that dictates whether this workload and its accompanying services are
 # to be installed.
   enabled: true
-  imageName: cbflow-repository
+  imageRepository: cbflow-repository
   replicas: 1
 
 # expose As flow requires repository to be exposed as externally available
@@ -181,7 +184,7 @@ dois:
 # Flag that dictates whether this workload and its accompanying services are
 # to be installed.
   enabled: true
-  imageName: cbflow-dois
+  imageRepository: cbflow-dois
 # Number or Elasticsearch nodes
   replicas: 1
 
@@ -243,7 +246,7 @@ dois:
 
 boundAgent:
 
-  imageName: cbflow-agent
+  imageRepository: cbflow-agent
   replicas: 1
 
 # Master loglevel for com.electriccloud package.
@@ -411,7 +414,11 @@ zookeeper:
 nginx-ingress:
 
   enabled: true
-
+  
+  defaultBackend:
+    service:
+      omitClusterIP: true
+# To omit the clusterIP from the controller service 
   controller:
     ingressClass: flow-ingress
 # publishService Allows customization of the external service the ingress will
@@ -421,6 +428,34 @@ nginx-ingress:
     scope:
       enabled: true
 
+#    extraArgs:
+# Additional log messages that may be useful for debugging:
+# shows details using diff about the changes in the configuration in nginx
+#      v: 2
+# shows details about the service, Ingress rule, endpoint changes and it
+# dumps the nginx configuration in JSON format
+#      v: 3
+# configures NGINX in debug mode
+#      v: 5
+
+    config:
+# Ingress must support long-running requests without resetting the connection.
+# By default, nginx reset connections to TCP/UDP services after 600 seconds of
+# inactivity between two successive read or write operations. This setting
+# extends the timeout to 4000 seconds.
+      proxy-stream-timeout: "4000s"
+# Increasing the detail of the error log. This can be useful for debugging.
+#      error-log-level: debug
+
+# Ingress must support long-running requests without resetting the connection.
+# By default, AWS ELB resets connections after 60 seconds of inactivity. With
+# this annotation, the timeout will be increased to 4000 seconds. This is
+# the maximum timeout supported by AWS ELB.
+    service:
+      annotations:
+        service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: 4000
+      omitClusterIP: true
+
   tcp:
     8200: "{{ .Release.Namespace }}/flow-repository:8200"
     8443: "{{ .Release.Namespace }}/flow-server:8443"
@@ -428,3 +463,8 @@ nginx-ingress:
     9200: "{{ .Release.Namespace }}/flow-devopsinsight:9200"
     9500: "{{ .Release.Namespace }}/flow-devopsinsight:9500"
 
+
+##---------------------------------------------
+## Miscellaneous configuration section
+##---------------------------------------------
+demoMode: false
