@@ -17,7 +17,7 @@ Welcome to the CloudBees examples repository. This repository is a place for sto
   git commit -m "commit message"
   git push
   
-  // create symlink to old file
+  // create link to old file
   ln  newfile.yaml origfile.yaml
   
   // add, commit, and push the symlink
