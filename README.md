@@ -1,5 +1,6 @@
 ## Welcome
-Welcome to the CloudBees examples repository. This repository is a place for storing tutorials, examples, and other learning materials. Of note:
+Welcome to the CloudBees examples repository. This repository is a place for storing tutorials, examples, and other learning materials to complement mentions in product documentation. 
+Of note:
 
 * It is owned and managed by the docs team. Please contact a docs team member or manager for assistance in adding files.
 * This repo contains assets that complement mentions in product documentation.  As such, it is not standalone.
