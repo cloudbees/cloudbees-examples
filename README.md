@@ -9,7 +9,7 @@ Welcome to the CloudBees examples repository. This repository is a place for sto
 
 ## Managing asset links
 * When providing a link in product documentation to a repo asset, consider using the raw link where appropriate. This gives the reader a cut/paste-ready version of the asset.
-* Choose prudent filenames to minimize future renames. Simply moving a file to a new name breaks exiting links out in the wild. It is recommended to leverage symbolic links to effect "redirects". The following shows how to rename `origfile.yaml` and then create a symbol link to this original name. As a result, links to the old name will automatically "redirect" to the new name.
+* Choose prudent filenames to minimize future renames. Simply moving a file to a new name breaks exiting links out in the wild. It is recommended to leverage symbolic links to effect "redirects". The following shows how to rename `origfile.yaml` and then create a hard link to this original name. As a result, links to the old name will automatically "redirect" to the new name.
 
   ```shell
   // move old file to new name
