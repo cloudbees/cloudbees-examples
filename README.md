@@ -12,10 +12,18 @@ Welcome to the CloudBees examples repository. This repository is a place for sto
 * Choose prudent filenames to minimize future renames. Simply moving a file to a new name breaks exiting links out in the wild. It is recommended to leverage symbolic links to effect "redirects". The following shows how to rename `origfile.yaml` and then create a symbol link to this original name. As a result, links to the old name will automatically "redirect" to the new name.
 
   ```shell
+  // move old file to new name
   git mv origfile.yaml newfile.yaml
   git commit -m "commit message"
   git push
+  
+  // create symlink to old file
   ln -s newfile.yaml origfile.yaml
+  
+  // add, commit, and push the symlink
+  git add origfile.yaml
+  git commit -m "created symlink to origfile.yaml"
+  git push
   ```
 
 ## Examples summary
