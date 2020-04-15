@@ -2,11 +2,9 @@
 Welcome to the CloudBees examples repository. This repository is a place for storing tutorials, examples, and other learning materials to complement mentions in product documentation. 
 Of note:
 
-* It is owned and managed by the docs team. Please contact a docs team member or manager for assistance in adding files.
+* It is owned and managed by the docs team.
 * This repo contains assets that complement mentions in product documentation.  As such, it is not standalone.
-* Top-level folders are named to reflect their contents and must contain the CloudBees product name according to this convention: `<productName>-<shortDescription>`. Keep names narrow in scope.
-* A given folder should contain related assets as indicated by the folder name. Create other folders as needed.
-* Consider providing a local Readme.md file in the asset folder.
+* It is pre-populated with top-level product folders. Organize content in sub-folders appropriate to your files or projects.
 
 ## Managing asset links
 * When providing a link in product documentation to a repo asset, consider using the raw link where appropriate. This gives the reader a cut/paste-ready version of the asset.
