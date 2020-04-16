@@ -25,7 +25,7 @@ Of note:
   git push
   ```
 
-## Examples summary
+## In this repo
 The following table is a brief summary of each of the example projects.
 
 |Directory|Description  |
