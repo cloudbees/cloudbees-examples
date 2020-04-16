@@ -1,5 +1,5 @@
 # Welcome
-Welcome to the CloudBees examples repository. This repository is a place for storing tutorials, examples, and other learning materials to complement mentions in product documentation. 
+Welcome to the CloudBees examples repository. This repository is a place for storing tutorials, examples, and other learning materials to complement mentions in product documentation.
 Of note:
 
 * It is owned and managed by the docs team.
@@ -15,13 +15,13 @@ Of note:
   git mv origfile.yaml newfile.yaml
   git commit -m "commit message"
   git push
-  
+
   // create link to old file
   ln  newfile.yaml origfile.yaml
-  
+
   // add, commit, and push the symlink
   git add origfile.yaml
-  git commit -m "created symlink to origfile.yaml"
+  git commit -m "created symlink to the original file"
   git push
   ```
 
