@@ -4,5 +4,5 @@ beekeeper:
     enabledForCore: true
     enabledForPlugins: false
   upgrades:
-    autoDowngradePlugins: true
-    autoUpgradePlugins: false
+    autoDowngradePlugins: false
+    autoUpgradePlugins: true
