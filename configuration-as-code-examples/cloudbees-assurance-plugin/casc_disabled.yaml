@@ -1,5 +1,5 @@
 # This file shows how it is possible to disable the CloudBees Assurance Program using Configuration as Code.
-# CloudBees does not encourage you to disable it, however.
+# CloudBees does not recommend you to disable it, however.
 beekeeper:
   enabled: false
   securityWarnings:
