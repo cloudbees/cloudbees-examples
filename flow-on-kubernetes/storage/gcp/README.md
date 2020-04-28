@@ -16,13 +16,14 @@ cloud.google.gpg add -
   ```
 2. Configure gcloud sdk
 
-  1. `gcloud init`
-  2. Accept the option to sign in using your Google user account.
-  3. In your browser, sign in to your Google user account when prompted and click **Allow** to grant permission to access Google Cloud Platform resources.
+    a. `gcloud init`
+  
+    b. Accept the option to sign in using your Google user account.
+  
+    c. In your browser, sign in to your Google user account when prompted and click **Allow** to grant permission to access Google Cloud Platform resources.
 
-3. Create service account.
-
-  Service account must have `Filestore` viewer and `Filestore` editor roles.
+3. Create service account. 
+   Service account must have `Filestore viewer` and `Filestore editor` roles.
 
 4. Run the script
 
