@@ -14,22 +14,22 @@ Python 2 version 2.7+ or Python 3 version 3.4+
 
 2. Configure the AWS cli:
 
-```shell
-aws configure
-    AWS Access Key ID: <AWS Access Key ID>
-    AWS Secret Access Key: <AWS Secret Access Key>
-    Default region name: <region>
-    Default output format: <text|table|json>
-```
+    ```shell
+    aws configure
+        AWS Access Key ID: <AWS Access Key ID>
+        AWS Secret Access Key: <AWS Secret Access Key>
+        Default region name: <region>
+        Default output format: <text|table|json>
+    ```
 
 3. Run the script:
 
-```shell
-./efs-provision.sh --action <create|delete> \
-    --efs-name <name> \
-    --vpc-id <vpc-id> \
-    --region <region>
-```
+    ```shell
+    ./efs-provision.sh --action <create|delete> \
+        --efs-name <name> \
+        --vpc-id <vpc-id> \
+        --region <region>
+    ```
 where:
 
 `action`              =   create | delete
@@ -48,10 +48,10 @@ where:
                                                                    
 4. Deploy helm chart
 
-```shell
-helm repo add stable https://kubernetes-charts.storage.googleapis.com/
-helm repo update
-helm install <name> stable/efs-provisioner \
+    ```shell
+    helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+    helm repo update
+    helm install <name> stable/efs-provisioner \
                 --set efsProvisioner.efsFileSystemId=<file system id> \
                 --set efsProvisioner.awsRegion=<region> \
                 --set efsProvisioner.dnsName=<filesystem ip>
