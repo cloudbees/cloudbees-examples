@@ -32,21 +32,21 @@ Python 2 version 2.7+ or Python 3 version 3.4+
         --vpc-id <vpc-id> \
         --region <region>
     ```
-where:
+    where:
 
-`action`              =   create | delete
+    `action`              =   create | delete
 
-`efs-name`            =   efs name
+    `efs-name`            =   efs name
 
-`vpc-id`              =   vpc id
+    `vpc-id`              =   vpc id
 
-`region`              =   region
+    `region`              =   region
 
-`performance-mode`    =   generalPurpose | `maxIO` (Optional)
+    `performance-mode`    =   generalPurpose | `maxIO` (Optional)
 
-`throughput-mode`     =   provisioned | `bursting` (Optional)
+    `throughput-mode`     =   provisioned | `bursting` (Optional)
 
-`throughput`          =   in mbps, Only if `--throughput` is provisioned
+    `throughput`          =   in mbps, Only if `--throughput` is provisioned
                                                                    
 4. Deploy helm chart
 
