@@ -25,8 +25,6 @@ cloud.google.gpg add -
 3. Create service account. 
    Service account must have `Filestore viewer` and `Filestore editor` roles.
 
-4. Run the script
-
   ```shell
   ./filestore.sh --action <create|delete> \
       --project <project name> \
