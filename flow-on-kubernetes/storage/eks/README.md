@@ -3,32 +3,33 @@
 After running the script successfully, the terminal displays commands to deploy the Helm chart,
 
 ### Prerequisite
-    Python 2 version 2.7+ or Python 3 version 3.4+
 
-### Provisioning shared storage service on AWS
-    1. Install the AWS cli:
+Python 2 version 2.7+ or Python 3 version 3.4+
 
-        ```shell
-        pip3 install awscli
-        ```
+1. Install the AWS cli:
 
-    2. Configure the AWS cli:
+    ```shell
+    pip3 install awscli
+    ```
 
-        ```shell
+2. Configure the AWS cli:
+
+    ```shell
         aws configure
             AWS Access Key ID: <AWS Access Key ID>
             AWS Secret Access Key: <AWS Secret Access Key>
             Default region name: <region>
             Default output format: <text|table|json>
-        ```
-    3. Run the script:
+    ```
 
-        ```shell
+3. Run the script:
+
+    ```shell
         ./efs-provision.sh --action <create|delete> \
                            --efs-name <name> \
                            --vpc-id <vpc-id> \
                            --region <region>
-        ```
+    ```
 
         where:
             `action`              =   create | delete
@@ -38,10 +39,15 @@ After running the script successfully, the terminal displays commands to deploy 
             `performance-mode`    =   generalPurpose | `maxIO` (Optional)
             `throughput-mode`     =   provisioned | `bursting` (Optional)
             `throughput`          =   in mbps, Only if `--throughput` is provisioned
+                                                                   
+4. Deploy helm chart
 
-    4. Deploy helm chart
-        ```shell
+    ```shell
         helm repo add stable https://kubernetes-charts.storage.googleapis.com/
         helm repo update
-        helm install <name> stable/efs-provisioner --set efsProvisioner.efsFileSystemId=<file system id> --set efsProvisioner.awsRegion=<region> --set efsProvisioner.dnsName=<filesystem ip>
-        ```
+        helm install <name> stable/efs-provisioner \
+                --set efsProvisioner.efsFileSystemId=<file system id> \
+                --set efsProvisioner.awsRegion=<region> \
+                --set efsProvisioner.dnsName=<filesystem ip>
+    ```
+
