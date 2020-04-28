@@ -6,6 +6,8 @@ After running the script successfully, the terminal displays commands to deploy 
 
 Python 2 version 2.7+ or Python 3 version 3.4+
 
+### Provisioning shared storage
+
 1. Install the AWS cli:
 
     ```shell
