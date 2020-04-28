@@ -1,6 +1,6 @@
 ## Provision Shared Storage Service (EFS) on AWS
 
-After running the script successfully, the terminal displays commands to deploy the Helm chart,
+After running the script successfully, the terminal displays commands to deploy the Helm chart.
 
 ### Prerequisite
 
@@ -57,5 +57,4 @@ Python 2 version 2.7+ or Python 3 version 3.4+
                 --set efsProvisioner.efsFileSystemId=<file system id> \
                 --set efsProvisioner.awsRegion=<region> \
                 --set efsProvisioner.dnsName=<filesystem ip>
-```
-
+    ```
