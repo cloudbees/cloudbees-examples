@@ -35,30 +35,30 @@ cloud.google.gpg add -
   ```
 where:
 
-    `action`      =   `create` | `delete`
+`action`      =   `create` | `delete`
 
-    `project`     =   project name
+`project`     =   project name
 
-    `location`    =   Location, for example, region
+`location`    =   Location, for example, region
 
-    `fs-name`     =   filestore name
+`fs-name`     =   filestore name
 
-    `tier`        =   STANDARD | PREMIUM  (Optional)
+`tier`        =   STANDARD | PREMIUM  (Optional)
 
-    `capacity`    =   size for filestore instance in gb, Mimimum 1024 (Optional)
+`capacity`    =   size for filestore instance in gb, Mimimum 1024 (Optional)
 
-    `fs-network`  =   network name
+`fs-network`  =   network name
 
-    `path`        =   filestore path, for example, `filestore` (Optional)
+`path`        =   filestore path, for example, `filestore` (Optional)
 
 NOTE: `--fs-network` must be same as the GKE network otherwise NFS will not mount.
 
 5. Deploy helm chart
   ```shell
-        helm repo add stable \
-          https://kubernetes-charts.storage.googleapis.com/
-        helm repo update
-        helm install <name> stable/nfs-client-provisioner  \
-          --set nfs.server=<filestore ip address> \
-          --set nfs.path=/filestore
+  helm repo add stable \
+    https://kubernetes-charts.storage.googleapis.com/
+  helm repo update
+  helm install <name> stable/nfs-client-provisioner  \
+       --set nfs.server=<filestore ip address> \
+       --set nfs.path=/filestore
   ```
