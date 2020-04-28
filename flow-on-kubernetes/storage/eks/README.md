@@ -42,11 +42,11 @@ Python 2 version 2.7+ or Python 3 version 3.4+
 
     `region`              =   region
 
-    `performance-mode`    =   generalPurpose | `maxIO` (Optional)
+    `performance-mode`    =   `generalPurpose` | `maxIO` (Optional)
 
-    `throughput-mode`     =   provisioned | `bursting` (Optional)
+    `throughput-mode`     =   `provisioned` | `bursting` (Optional)
 
-    `throughput`          =   in mbps, Only if `--throughput` is provisioned
+    `throughput`          =   in mbps, only if `--throughput` is provisioned
                                                                    
 4. Deploy helm chart
 
