@@ -1,0 +1,5 @@
+unclassified:
+  validatedMergeGlobalConfiguration:
+    preferHttp: true
+    pushFromMaster: true
+    sshHostOverride: "http://myserver:5050"
