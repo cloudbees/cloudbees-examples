@@ -1,0 +1,47 @@
+cloudbees-monitoring:
+  recipientList:
+    - email:
+        emailAddresses: "recipient-list-email"
+        subjectPrefix: "[Jenkins incident]"
+  conditionList:
+    - healthCheck:
+        alertAfter: "5sec"
+        name: "Health check"
+        recipientList:
+          - email:
+              emailAddresses: "health-check-notification-email"
+              subjectPrefix: "[Jenkins health-check]"
+    - localMetricGauge:
+        alertAfter: "5sec"
+        name: "local metric gauge"
+        gaugeName: "http.responseCodes.ok"
+        inclusive: true
+        max: "0.9"
+        min: "0.5"
+        recipientList:
+          - email:
+              emailAddresses: "health-check-notification-email"
+              subjectPrefix: "[Jenkins health-check]"
+    - localMetricMeter:
+        alertAfter: "5sec"
+        name: "local metric meter"
+        meterName: "http.responseCodes.ok"
+        inclusive: true
+        max: "0.8"
+        min: "0.5"
+        rate: 2
+        recipientList:
+          - email:
+              emailAddresses: "health-check-notification-email"
+              subjectPrefix: "[Jenkins health-check]"
+    - localMetricTimer:
+        alertAfter: "10sec"
+        name: "local metric timer"
+        timerName: "http.responseCodes.ok"
+        inclusive: true
+        min: "0.5"
+        rate: 5
+        recipientList:
+          - email:
+              emailAddresses: "health-check-notification-email"
+              subjectPrefix: "[Jenkins health-check]"
