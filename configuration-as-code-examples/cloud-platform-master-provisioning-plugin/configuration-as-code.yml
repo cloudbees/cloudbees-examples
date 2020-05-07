@@ -1,0 +1,25 @@
+unclassified:
+  dockerImageDefinitionConfiguration:
+    images:
+      - imageTag: "cloudbees/cloudbees-core-mm"
+        name: "latest"
+  kubernetesMasterProvisioning:
+    clusterEndpoints:
+      - id: "default"
+        jenkinsUrl: "http://host.docker.internal:8080/jenkins"
+        name: "kubernetes"
+    cpus: 1.0
+    disk: 50
+    fsGroup: "1000"
+    javaOptions: "-XshowSettings:vm -XX:MaxRAMFraction=1 -XX:+AlwaysPreTouch -XX:+UseG1GC\
+      \ -XX:+ExplicitGCInvokesConcurrent -XX:+ParallelRefProcEnabled -XX:+UseStringDeduplication\
+      \ -Dhudson.slaves.NodeProvisioner.initialDelay=0 -Dhudson.DNSMultiCast.disabled=true"
+    livenessInitialDelaySeconds: 300
+    livenessPeriodSeconds: 10
+    livenessTimeoutSeconds: 10
+    memory: 3072
+    ratio: 0.7
+    readinessFailureThreshold: 100
+    readinessInitialDelaySeconds: 30
+    readinessTimeoutSeconds: 5
+    terminationGracePeriodSeconds: 1200
