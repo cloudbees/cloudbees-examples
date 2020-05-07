@@ -1,0 +1,8 @@
+beekeeper:
+  enabled: true
+  securityWarnings:
+    enabledForCore: true
+    enabledForPlugins: false
+  upgrades:
+    autoDowngradePlugins: true
+    autoUpgradePlugins: false
