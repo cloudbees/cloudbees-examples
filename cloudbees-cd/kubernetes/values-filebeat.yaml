@@ -1,0 +1,767 @@
+
+# This configuration uses features that are not available in
+# version 7.0.x, which is defined in the chart by default.
+# So, we use the latest filebeat version, which includes
+# the necessary features.
+image:
+  tag: 7.3.1
+
+# filebeat debug
+#
+# turn on debug for everything (warning, it’s quite a lot)
+#args: ["-e", "-d", "*"]
+# turn on debug for published transactions
+#args: ["-e", "-d", "publish"]
+
+config:
+
+# This is a requirement for AWS Elastic service
+# https://github.com/elastic/beats/issues/8086#issuecomment-528836282
+  setup.ilm.enabled: false
+
+# Disable all modules by default
+  filebeat.modules: {}
+
+# Disable the default logs from /var/log/*.log
+# They will come without 'cbflow.component' field and
+# their addition will fail because of 'output.elasticsearch.index'
+# pattern. If we want to see system logs from physical hosts, then
+# these inputs must be configured to include the 'cbflow.component'
+# field.
+  filebeat.inputs: {}
+
+  filebeat.autodiscover:
+    providers:
+      - type: kubernetes
+        templates:
+
+          - condition.equals:
+              kubernetes.container.name: "flow-web"
+            config:
+              - type: docker
+                containers.ids:
+                  - ${data.kubernetes.container.id}
+                multiline.pattern: '^\d\d\d\d(-\d\d){2} \d\d(:\d\d){2}\.\d+' #2019-09-13 21:34:43.179571
+                multiline.negate: true
+                multiline.match: after
+                timeout: 10s
+                fields_under_root: true
+                fields:
+                  cbflow.component: "web"
+                processors:
+                  - if:
+                      regexp:
+                        message: '^\d\d\d\d(-\d\d){2} \d\d(:\d\d){2}\.\d+ \* '
+                    then:
+                      - dissect:
+                          tokenizer: "%{timestamp} * %{message}"
+                          field: "message"
+                          target_prefix: "log"
+                      - if:
+                          regexp:
+                            log.message: '^ERROR:'
+                        then:
+                          - add_fields:
+                              target: ''
+                              fields:
+                                log.level: "ERROR"
+                        else:
+                          - if:
+                              regexp:
+                                log.message: '^WARNING:'
+                            then:
+                              - add_fields:
+                                  target: ''
+                                  fields:
+                                    log.level: "WARN"
+                            else:
+                              - add_fields:
+                                  target: ''
+                                  fields:
+                                    log.level: "STATUS"
+                    else:
+                      - if:
+                          regexp:
+                            message: '^\d\d\d\d(-\d\d){2} \d\d(:\d\d){2}\.\d+ \| [a-z0-9_-]+:[a-z]+ \| pid \d+ \|'
+                        then:
+# error logs
+# 2019-09-13 21:35:49.470053 | php7:error | pid 402 | [client 192.168.37.161:22840] script '/opt/cbflow/apache/htdocs/elrekt.php' not found or unable to stat
+                          - dissect:
+                              tokenizer: "%{timestamp} | %{level} | %{thread} | %{message}"
+                              field: "message"
+                              target_prefix: "log"
+                          - script:
+                              lang: javascript
+                              source: >
+                                  function process(ev) {
+                                      var level = ev.Get("log.level");
+                                      if (level !== null) {
+                                          var ar = level.split(':');
+                                          if (ar.length !== 2) {
+                                              throw "wrong array length for log.level: " + level;
+                                          }
+                                          ev.Put("log.module", ar[0]);
+                                          if (ar[1] === 'error') {
+                                              ev.Put("log.level", "ERROR");
+                                          } else if (ar[1] === 'warning') {
+                                              ev.Put("log.level", "WARN");
+                                          } else if (ar[1] === 'debug') {
+                                              ev.Put("log.level", "DEBUG");
+                                          } else if (ar[1] === 'notice') {
+                                              ev.Put("log.level", "INFO");
+                                          } else if (ar[1] === 'info') {
+                                              ev.Put("log.level", "INFO");
+                                          } else if (ar[1] === 'alert') {
+                                              ev.Put("log.level", "ALERT");
+                                          } else if (ar[1] === 'emerg') {
+                                              ev.Put("log.level", "CRIT");
+                                          } else if (ar[1] === 'crit') {
+                                              ev.Put("log.level", "CRIT");
+                                          } else if (ar[1].indexOf('trace') === 0) {
+                                              ev.Put("log.level", "TRACE");
+                                          } else {
+                                              ev.Put("log.level", ar[1]);
+                                          }
+                                      }
+                                      return ev;
+                                  };
+                                  function test() {
+                                      var ev;
+                                      ev = process(new Event({log: {level: "php7:error"}}));
+                                      if (ev.Get("log.module") !== "php7") {
+                                          throw "expected log.module === php7";
+                                      }
+                                      if (ev.Get("log.level") !== "ERROR") {
+                                          throw "expected log.level === ERROR";
+                                      }
+                                      ev = process(new Event({log: {level: "php7:warning"}}));
+                                      if (ev.Get("log.level") !== "WARN") {
+                                          throw "expected log.level === WARN";
+                                      }
+                                      ev = process(new Event({log: {level: "php7:debug"}}));
+                                      if (ev.Get("log.level") !== "DEBUG") {
+                                          throw "expected log.level === DEBUG";
+                                      }
+                                      ev = process(new Event({log: {level: "php7:notice"}}));
+                                      if (ev.Get("log.level") !== "INFO") {
+                                          throw "expected log.level === INFO";
+                                      }
+                                      ev = process(new Event({log: {level: "php7:info"}}));
+                                      if (ev.Get("log.level") !== "INFO") {
+                                          throw "expected log.level === INFO";
+                                      }
+                                      ev = process(new Event({log: {level: "php7:alert"}}));
+                                      if (ev.Get("log.level") !== "ALERT") {
+                                          throw "expected log.level === ALERT";
+                                      }
+                                      ev = process(new Event({log: {level: "php7:emerg"}}));
+                                      if (ev.Get("log.level") !== "CRIT") {
+                                          throw "expected log.level === CRIT";
+                                      }
+                                      ev = process(new Event({log: {level: "php7:crit"}}));
+                                      if (ev.Get("log.level") !== "CRIT") {
+                                          throw "expected log.level === CRIT";
+                                      }
+                                      ev = process(new Event({log: {level: "php7:trace"}}));
+                                      if (ev.Get("log.level") !== "TRACE") {
+                                          throw "expected log.level === TRACE";
+                                      }
+                                      ev = process(new Event({log: {level: "php7:trace8"}}));
+                                      if (ev.Get("log.level") !== "TRACE") {
+                                          throw "expected log.level === TRACE";
+                                      }
+                                  };
+                        else:
+# access logs
+# 2019-09-13 21:35:43.177728 | 127.0.0.1 | - | "GET /commander/favicon.ico HTTP/1.1" 200 1446 199 - 140562223949632
+                          - dissect:
+                              tokenizer: "%{timestamp} | %{address} | %{user} | %{message}"
+                              field: "message"
+                              target_prefix: "log"
+                          - add_fields:
+                              target: ''
+                              fields:
+                                log.level: "INFO"
+                  - timestamp:
+                      field: "log.timestamp"
+                      layouts:
+                        - '2006-01-02 15:04:05.999999'
+                      test:
+                        - '2019-09-13 21:35:43.177728'
+
+          - condition.equals:
+              kubernetes.container.name: "flow-devopsinsight"
+            config:
+              - type: docker
+                containers.ids:
+                  - ${data.kubernetes.container.id}
+                multiline.pattern: '^\[\d\d\d\d(-\d\d){2}T\d\d(:\d\d){2},\d\d\d\]' #[2018-08-16T14:28:00,871]
+                multiline.negate: true
+                multiline.match: after
+                timeout: 10s
+                fields_under_root: true
+                fields:
+                  cbflow.component: "devopsinsight"
+                processors:
+                  - if:
+                      regexp:
+                        message: '^\[\d\d\d\d(-\d\d){2}T\d\d(:\d\d){2},\d\d\d\] \* '
+                    then:
+                      - dissect:
+                          tokenizer: "%{timestamp} * %{message}"
+                          field: "message"
+                          target_prefix: "log"
+                      - if:
+                          regexp:
+                            log.message: '^ERROR:'
+                        then:
+                          - add_fields:
+                              target: ''
+                              fields:
+                                log.level: "ERROR"
+                        else:
+                          - if:
+                              regexp:
+                                log.message: '^WARNING:'
+                            then:
+                              - add_fields:
+                                  target: ''
+                                  fields:
+                                    log.level: "WARN"
+                            else:
+                              - add_fields:
+                                  target: ''
+                                  fields:
+                                    log.level: "STATUS"
+                    else:
+                      - if:
+                          regexp:
+                            message: '^\[\d\d\d\d(-\d\d){2}T\d\d(:\d\d){2},\d\d\d\]\[[A-Z]+ *\]\[\S+ *\] \[\S+\] '
+                        then:
+# ES logs
+# [2019-09-12T16:48:08,819][INFO ][o.e.c.r.a.AllocationService] [flow-devopsinsight-0] updating number_of_replicas to [0] for indices [searchguard]
+                          - dissect:
+                              tokenizer: "[%{timestamp}][%{level}][%{class}] [%{node}] %{message}"
+                              field: "message"
+                              target_prefix: "log"
+                        else:
+# LS logs
+# [2019-09-12T16:49:36,901][WARN ][logstash.config.source.multilocal] Ignoring the 'pipelines.yml' file because modules or command line options are specified
+                          - dissect:
+                              tokenizer: "[%{timestamp}][%{level}][%{class}] %{message}"
+                              field: "message"
+                              target_prefix: "log"
+                      - script:
+                          lang: javascript
+                          source: >
+                              function process(ev) {
+                                  var field;
+                                  field = ev.Get("log.level");
+                                  if (field !== null) {
+                                      ev.Put("log.level", field.trim());
+                                  }
+                                  return ev;
+                              };
+                              function test() {
+                                  var ev;
+                                  // check not parsed event
+                                  ev = process(new Event({}));
+                                  // check trim
+                                  ev = process(new Event({log: {level: "  INFO  "}}));
+                                  if (ev.Get("log.level") !== "INFO") {
+                                      throw "expected log.level === 'INFO'";
+                                  }
+                              };
+# the comma in fractional seconds must be replaced with a dot
+# because it is not supported by the golang time package
+# https://github.com/golang/go/issues/6189
+                  - script:
+                      lang: javascript
+                      source: >
+                          function process(ev) {
+                              var ts = ev.Get("log.timestamp");
+                              if (ts !== null) {
+                                  ev.Put("log.timestamp", ts.replace(/,/g, '.'));
+                              }
+                              return ev;
+                          };
+                  - timestamp:
+                      field: "log.timestamp"
+                      layouts:
+                        - '2006-01-02T15:04:05.999'
+                      test:
+                        - '2019-09-12T16:49:36.901'
+
+          - condition.equals:
+              kubernetes.container.name: "flow-server"
+            config:
+              - type: docker
+                containers.ids:
+                  - ${data.kubernetes.container.id}
+                multiline.pattern: '^\d\d\d\d(-\d\d){2}T\d\d(:\d\d){2}\.\d\d\d|^[A-Z]+ +\| (wrapper|jvm \d+) +\| \d\d\d\d(/\d\d){2} \d\d(:\d\d){2}\.\d\d\d' #2018-07-11T21:09:52.360
+                                                                                                                                                                       # INFO   | jvm 1    | 2019/09/05 13:25:40.518
+                multiline.negate: true
+                multiline.match: after
+                timeout: 10s
+                fields_under_root: true
+                fields:
+                  cbflow.component: "server"
+                processors:
+                  - if:
+                      regexp:
+                        message: '^\d\d\d\d(-\d\d){2}T\d\d(:\d\d){2}\.\d\d\d \* '
+                    then:
+                      - dissect:
+                          tokenizer: "%{timestamp} * %{message}"
+                          field: "message"
+                          target_prefix: "log"
+                      - if:
+                          regexp:
+                            log.message: '^ERROR:'
+                        then:
+                          - add_fields:
+                              target: ''
+                              fields:
+                                log.level: "ERROR"
+                        else:
+                          - if:
+                              regexp:
+                                log.message: '^WARNING:'
+                            then:
+                              - add_fields:
+                                  target: ''
+                                  fields:
+                                    log.level: "WARN"
+                            else:
+                              - add_fields:
+                                  target: ''
+                                  fields:
+                                    log.level: "STATUS"
+                    else:
+                      - if:
+                          regexp:
+                            message: '^\d\d\d\d(-\d\d){2}T\d\d(:\d\d){2}\.\d\d\d \| '
+                        then:
+                          - if:
+                              regexp:
+                                message: '^\d\d\d\d(-\d\d){2}T\d\d(:\d\d){2}\.\d\d\d \| [A-Z]+ +\|'
+                            then:
+# server logs (not clustered)
+# 2019-09-16T14:28:52.249 | INFO  | Thread-1                       |          |                                      |                                                                             | ServerStatus                   | serverStatusManager is running
+                              - dissect:
+                                  tokenizer: "%{timestamp} | %{level} | %{thread} | %{context} | %{job} | %{ndc} | %{class} | %{message}"
+                                  field: "message"
+                                  target_prefix: "log"
+                            else:
+# server logs (clustered)
+# 2019-09-05T13:25:42.317 | flow-server-7d9d8d844b-4x5xw | INFO  | Thread-1                       |          |                                      |                                                                             | Bootstrap                      | Initializing
+                              - dissect:
+                                  tokenizer: "%{timestamp} | %{node} | %{level} | %{thread} | %{context} | %{job} | %{ndc} | %{class} | %{message}"
+                                  field: "message"
+                                  target_prefix: "log"
+                        else:
+# service logs
+# INFO   | jvm 1    | 2019/09/05 13:25:31.469 | WrapperManager: Initializing...
+                          - dissect:
+                              tokenizer: "%{level} | %{thread} | %{timestamp} | %{message}"
+                              field: "message"
+                              target_prefix: "log"
+                      - script:
+                          lang: javascript
+                          source: >
+                              function process(ev) {
+                                  var field;
+                                  field = ev.Get("log.level");
+                                  if (field !== null) {
+                                      ev.Put("log.level", field.trim());
+                                  }
+                                  return ev;
+                              };
+                              function test() {
+                                  var ev;
+                                  // check not parsed event
+                                  ev = process(new Event({}));
+                                  // check trim
+                                  ev = process(new Event({log: {level: "  INFO  "}}));
+                                  if (ev.Get("log.level") !== "INFO") {
+                                      throw "expected log.level === 'INFO'";
+                                  }
+                              };
+                  - timestamp:
+                      field: "log.timestamp"
+                      layouts:
+                        - '2006-01-02T15:04:05.999'
+                        - '2006/01/02 15:04:05.999'
+                      test:
+                        - '2019-09-05T13:25:42.317'
+                        - '2019/09/05 13:25:31.469'
+
+          - condition.equals:
+              kubernetes.container.name: "flow-repository"
+            config:
+              - type: docker
+                containers.ids:
+                  - ${data.kubernetes.container.id}
+                multiline.pattern: '^\d\d\d\d(-\d\d){2}T\d\d(:\d\d){2}\.\d\d\d|^[A-Z]+ +\| (wrapper|jvm \d+) +\| \d\d\d\d(/\d\d){2} \d\d(:\d\d){2}\.\d\d\d' #2018-07-11T21:09:52.360
+                                                                                                                                                                       # INFO   | jvm 1    | 2019/09/05 13:25:40.518
+                multiline.negate: true
+                multiline.match: after
+                timeout: 10s
+                fields_under_root: true
+                fields:
+                  cbflow.component: "repository"
+                processors:
+                  - if:
+                      regexp:
+                        message: '^\d\d\d\d(-\d\d){2}T\d\d(:\d\d){2}\.\d\d\d \* '
+                    then:
+                      - dissect:
+                          tokenizer: "%{timestamp} * %{message}"
+                          field: "message"
+                          target_prefix: "log"
+                      - if:
+                          regexp:
+                            log.message: '^ERROR:'
+                        then:
+                          - add_fields:
+                              target: ''
+                              fields:
+                                log.level: "ERROR"
+                        else:
+                          - if:
+                              regexp:
+                                log.message: '^WARNING:'
+                            then:
+                              - add_fields:
+                                  target: ''
+                                  fields:
+                                    log.level: "WARN"
+                            else:
+                              - add_fields:
+                                  target: ''
+                                  fields:
+                                    log.level: "STATUS"
+                    else:
+                      - if:
+                          regexp:
+                            message: '^\d\d\d\d(-\d\d){2}T\d\d(:\d\d){2}\.\d\d\d \| '
+                        then:
+# repository logs
+# 2019-09-15T20:29:08.350 | INFO  | StatisticsTimer                |          |                                      |                                                                             | RepositoryServerImpl           | All timers by name:
+                          - dissect:
+                              tokenizer: "%{timestamp} | %{level} | %{thread} | %{context} | %{job} | %{ndc} | %{class} | %{message}"
+                              field: "message"
+                              target_prefix: "log"
+                        else:
+# service logs
+# INFO   | jvm 1    | 2019/09/05 13:25:31.469 | WrapperManager: Initializing...
+                          - dissect:
+                              tokenizer: "%{level} | %{thread} | %{timestamp} | %{message}"
+                              field: "message"
+                              target_prefix: "log"
+                      - script:
+                          lang: javascript
+                          source: >
+                              function process(ev) {
+                                  var field;
+                                  field = ev.Get("log.level");
+                                  if (field !== null) {
+                                      ev.Put("log.level", field.trim());
+                                  }
+                                  return ev;
+                              };
+                              function test() {
+                                  var ev;
+                                  // check not parsed event
+                                  ev = process(new Event({}));
+                                  // check trim
+                                  ev = process(new Event({log: {level: "  INFO  "}}));
+                                  if (ev.Get("log.level") !== "INFO") {
+                                      throw "expected log.level === 'INFO'";
+                                  }
+                              };
+                  - timestamp:
+                      field: "log.timestamp"
+                      layouts:
+                        - '2006-01-02T15:04:05.999'
+                        - '2006/01/02 15:04:05.999'
+                      test:
+                        - '2019-09-15T20:29:08.350'
+                        - '2019/09/05 13:25:31.469'
+
+          - condition.equals:
+              kubernetes.container.name: "flow-agent"
+            config:
+              - type: docker
+                containers.ids:
+                  - ${data.kubernetes.container.id}
+                multiline.pattern: '^\d\d\d\d(-\d\d){2}T\d\d(:\d\d){2}\.\d\d\d' #2018-07-11T21:09:52.360
+                multiline.negate: true
+                multiline.match: after
+                timeout: 10s
+                fields_under_root: true
+                fields:
+                  cbflow.component: "agent"
+                processors:
+                  - if:
+                      regexp:
+                        message: '^\d\d\d\d(-\d\d){2}T\d\d(:\d\d){2}\.\d\d\d \* '
+                    then:
+                      - dissect:
+                          tokenizer: "%{timestamp} * %{message}"
+                          field: "message"
+                          target_prefix: "log"
+                      - if:
+                          regexp:
+                            log.message: '^ERROR:'
+                        then:
+                          - add_fields:
+                              target: ''
+                              fields:
+                                log.level: "ERROR"
+                        else:
+                          - if:
+                              regexp:
+                                log.message: '^WARNING:'
+                            then:
+                              - add_fields:
+                                  target: ''
+                                  fields:
+                                    log.level: "WARN"
+                            else:
+                              - add_fields:
+                                  target: ''
+                                  fields:
+                                    log.level: "STATUS"
+                    else:
+                      - if:
+                          regexp:
+                            message: '^\d\d\d\d(-\d\d){2}T\d\d(:\d\d){2}\.\d\d\d \| [A-Z]+ +\| 0x[0-9a-f]+ \| '
+                        then:
+# c++ agent messages
+# 2019-09-10T20:51:22.275 | DEBUG | 0x7f3f1c5ea700 | Handling ping message for request-id: ping-1-flow-bound-agent:7800
+                          - dissect:
+                              tokenizer: "%{timestamp} | %{level} | %{thread} | %{message}"
+                              field: "message"
+                              target_prefix: "log"
+                        else:
+# jagent messages
+# 2019-09-10T18:56:31.993 | DEBUG | pool-001-005                   |          |                                      |                                                                             | MasterAgentHandler             | No certificates found: javax.net.ssl.SSLPeerUnverifiedException: peer not authenticated
+                          - dissect:
+                              tokenizer: "%{timestamp} | %{level} | %{thread} | %{context} | %{job} | %{ndc} | %{class} | %{message}"
+                              field: "message"
+                              target_prefix: "log"
+                      - script:
+                          lang: javascript
+                          source: >
+                              function process(ev) {
+                                  var field;
+                                  field = ev.Get("log.level");
+                                  if (field !== null) {
+                                      ev.Put("log.level", field.trim());
+                                  }
+                                  return ev;
+                              };
+                              function test() {
+                                  var ev;
+                                  // check not parsed event
+                                  ev = process(new Event({}));
+                                  // check trim
+                                  ev = process(new Event({log: {level: "  INFO  "}}));
+                                  if (ev.Get("log.level") !== "INFO") {
+                                      throw "expected log.level === 'INFO'";
+                                  }
+                              };
+                  - timestamp:
+                      field: "log.timestamp"
+                      layouts:
+                        - '2006-01-02T15:04:05.999'
+                      test:
+                        - '2019-09-10T18:56:31.993'
+
+          - condition.equals:
+              kubernetes.container.name: "zookeeper"
+            config:
+              - type: docker
+                containers.ids:
+                  - ${data.kubernetes.container.id}
+                multiline.pattern: '^\d\d\d\d(-\d\d){2} \d\d(:\d\d){2},\d\d\d \[' #2019-09-09 23:07:54,242
+                multiline.negate: true
+                multiline.match: after
+                timeout: 10s
+                fields_under_root: true
+                fields:
+                  cbflow.component: "zookeeper"
+                processors:
+# 2019-09-10 22:58:12,503 [myid:1] - INFO  [NIOWorkerThread-1:NIOServerCnxn@518] - Processing ruok command from /127.0.0.1:56682
+                  - dissect:
+                      tokenizer: "%{timestamp} [%{thread}] - %{level} [%{class}] - %{message}"
+                      field: "message"
+                      target_prefix: "log"
+                  - script:
+                      lang: javascript
+                      source: >
+                          function process(ev) {
+                              var field;
+                              field = ev.Get("log.level");
+                              if (field !== null) {
+                                  ev.Put("log.level", field.trim());
+                              }
+                              return ev;
+                          };
+                          function test() {
+                              var ev;
+                              // check not parsed event
+                              ev = process(new Event({}));
+                              // check trim
+                              ev = process(new Event({log: {level: "  INFO  "}}));
+                              if (ev.Get("log.level") !== "INFO") {
+                                  throw "expected log.level === 'INFO'";
+                              }
+                          };
+# the comma in fractional seconds must be replaced with a dot
+# because it is not supported by the golang time package
+# https://github.com/golang/go/issues/6189
+                  - script:
+                      lang: javascript
+                      source: >
+                          function process(ev) {
+                              var ts = ev.Get("log.timestamp");
+                              if (ts !== null) {
+                                  ev.Put("log.timestamp", ts.replace(/,/g, '.'));
+                              }
+                              return ev;
+                          };
+                  - timestamp:
+                      field: "log.timestamp"
+                      layouts:
+                        - '2006-01-02 15:04:05.999'
+                      test:
+                        - '2019-09-10 22:58:12.503'
+
+          - condition.equals:
+              kubernetes.container.name: "filebeat"
+            config:
+              - type: docker
+                containers.ids:
+                  - ${data.kubernetes.container.id}
+                multiline.pattern: '^\d\d\d\d(-\d\d){2}T\d\d(:\d\d){2}\.\d\d\dZ\t' #2019-09-09T23:07:49.519Z
+                multiline.negate: true
+                multiline.match: after
+                timeout: 10s
+                fields_under_root: true
+                fields:
+                  cbflow.component: "filebeat"
+                processors:
+                  - if:
+                      regexp:
+                        message: '^[0-9:\.TZ-]+\t[A-Z]+\t\['
+                    then:
+# 2019-09-10T21:32:27.721Z  INFO  [index-management]  idxmgmt/std.go:289  Loaded index template.
+                      - dissect:
+                          tokenizer: "%{timestamp}\t%{level}\t[%{class}]\t%{source_line}\t%{message}"
+                          field: "message"
+                          target_prefix: "log"
+                    else:
+# 2019-09-10T21:35:29.126Z  INFO  template/load.go:88 Template cbf-template already exists and will not be overwritten.
+                      - dissect:
+                          tokenizer: "%{timestamp}\t%{level}\t%{source_line}\t%{message}"
+                          field: "message"
+                          target_prefix: "log"
+                  - script:
+                      lang: javascript
+                      source: >
+                          function process(ev) {
+                              var field;
+                              field = ev.Get("log.level");
+                              if (field !== null) {
+                                  ev.Put("log.level", field.trim());
+                              }
+                              return ev;
+                          };
+                          function test() {
+                              var ev;
+                              // check not parsed event
+                              ev = process(new Event({}));
+                              // check trim
+                              ev = process(new Event({log: {level: "  INFO  "}}));
+                              if (ev.Get("log.level") !== "INFO") {
+                                  throw "expected log.level === 'INFO'";
+                              }
+                          };
+                  - timestamp:
+                      field: "log.timestamp"
+                      layouts:
+                        - '2006-01-02T15:04:05.999Z'
+                      test:
+                        - '2019-09-10T21:35:29.126Z'
+
+# Conditions are not processes in the order defined by this configuration.
+# Therefore, in order to classify the other logs as 'other', we must
+# explicity indicate that the containers don't match the known names.
+# The default fallback option is still (as of 2019-09-10) not implemented:
+# https://github.com/elastic/beats/issues/6084
+          - condition.not:
+              or:
+                - equals:
+                    kubernetes.container.name: "flow-web"
+                - equals:
+                    kubernetes.container.name: "flow-devopsinsight"
+                - equals:
+                    kubernetes.container.name: "flow-server"
+                - equals:
+                    kubernetes.container.name: "flow-repository"
+                - equals:
+                    kubernetes.container.name: "flow-agent"
+                - equals:
+                    kubernetes.container.name: "zookeeper"
+                - equals:
+                    kubernetes.container.name: "filebeat"
+            config:
+              - type: docker
+                containers.ids:
+                  - ${data.kubernetes.container.id}
+                fields_under_root: true
+                fields:
+                  cbflow.component: "other"
+                processors:
+                  - convert:
+                      fields:
+                        - {from: "message", to: "log.message"}
+
+  processors:
+    - add_cloud_metadata:
+    - add_kubernetes_metadata:
+        in_cluster: true
+
+  output.file:
+    enabled: false
+
+  output.elasticsearch:
+    index: "cbf-%{[cbflow.component]}-%{+yyyy.MM.dd}"
+#    index: "cbf-temp-%{+yyyy.MM.dd}"
+
+#    hosts:
+#      - https://search-k8s-demo-bmke5e6wrcink7eowru6wzuxxy.us-east-1.es.amazonaws.com:443
+
+    hosts:
+      - http://elasticsearch-master:9200
+
+#    hosts:
+#      - https://cloudbees-devopsinsight:9200
+#    username: "reportuser"
+#    password: "changeme"
+#    ssl:
+#      verification_mode: "none"
+
+# setup.template.name and setup.template.pattern have to be set if index name is modified
+  setup:
+    template:
+      enabled: true
+      name: "cbf-template"
+      pattern: "cbf-*"
+
+# disable elastic beat-exporter for Prometheus
+monitoring:
+  enabled: false
+
