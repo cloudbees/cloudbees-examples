@@ -29,7 +29,12 @@ Of note:
 The following table is a brief summary of each of the example projects.
 
 |Directory|Description  |
-|:---|:-|
-|pipeline-template-examples|This repository includes a sample Pipeline Template Catalog. The demos folder includes examples of how to customize a template.yaml file.  |
+|:---|:---|
+|cloudbees-build-test-automation|Example files referenced by CloudBees Build and Test Automation documentation.|
+|cloudbees-cd|Example files referenced by CloudBees CD documentation.|
+|cloudbees-ci|Example files referenced by CloudBees CI documentation.|
+|cloudbees-feature-flags|Example files referenced by CloudBees Feature Flags documentation.|
+|cloudbees-sdm|Example files for CloudBees SDM.|
+|pipeline-template-examples|This repository includes a sample Pipeline Template Catalog. The demos folder includes examples of how to customize a template.yaml file.|
 |helm-custom-value-file-examples|Custom Property Value Files for the CloudBees Core for Modern Platforms Helm installation.|
 |flow-on-kubernetes|Sample property value files for CloudBees Flow on Kubernetes Helm installation.|
