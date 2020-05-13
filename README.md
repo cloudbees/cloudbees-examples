@@ -1,5 +1,5 @@
 # Welcome
-Welcome to the CloudBees examples repository. This repository is a place for storing tutorials, examples, and other learning materials to complement mentions in product documentation. 
+Welcome to the CloudBees examples repository. This repository is a place for storing tutorials, examples, and other learning materials to complement mentions in product documentation.
 Of note:
 
 * It is owned and managed by the docs team.
@@ -15,21 +15,26 @@ Of note:
   git mv origfile.yaml newfile.yaml
   git commit -m "commit message"
   git push
-  
+
   // create link to old file
   ln  newfile.yaml origfile.yaml
-  
+
   // add, commit, and push the symlink
   git add origfile.yaml
-  git commit -m "created symlink to origfile.yaml"
+  git commit -m "created symlink to the original file"
   git push
   ```
 
-## Examples summary
+## In this repo
 The following table is a brief summary of each of the example projects.
 
 |Directory|Description  |
-|:---|:-|
-|pipeline-template-examples|This repository includes a sample Pipeline Template Catalog. The demos folder includes examples of how to customize a template.yaml file.  |
+|:---|:---|
+|cloudbees-build-test-automation|Example files referenced by CloudBees Build and Test Automation documentation.|
+|cloudbees-cd|Example files referenced by CloudBees CD documentation.|
+|cloudbees-ci|Example files referenced by CloudBees CI documentation.|
+|cloudbees-feature-flags|Example files referenced by CloudBees Feature Flags documentation.|
+|cloudbees-sdm|Example files for CloudBees SDM.|
+|pipeline-template-examples|This repository includes a sample Pipeline Template Catalog. The demos folder includes examples of how to customize a template.yaml file.|
 |helm-custom-value-file-examples|Custom Property Value Files for the CloudBees Core for Modern Platforms Helm installation.|
 |flow-on-kubernetes|Sample property value files for CloudBees Flow on Kubernetes Helm installation.|
