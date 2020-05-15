@@ -1,0 +1,82 @@
+demoMode: true
+
+##---------------------------------------------
+## Flow storage configuration section
+##---------------------------------------------
+
+storage:
+  volumes:
+    serverPlugins:
+      accessMode: ReadWriteOnce
+      # Storage class for plugins directory. Currently it has to be shared across server and web replicas.
+      # Server and web are co-located using hard affinity rule for demoMode. StorageClass is null here to ensure the same behavior across all cloud providers
+      # (it forces storage class to fall back to  "default" disk based ReadWriteOnce platform specific storage class)
+      storageClass: null
+      storage: 5Gi
+
+    repositoryStorage:
+      storage: 10Gi
+
+##---------------------------------------------
+## Flow components/workloads configuration section
+##---------------------------------------------
+server:
+  resources:
+    limits:
+      cpu: 1.5
+    requests:
+      cpu: 0.5
+
+# No zookeeper for demo mode
+zookeeper:
+  enabled: false
+
+# Install mariadb chart for demo mode 
+# and create a database and user for Flow to use. 
+# Note that the database user name and password 
+# specified in the `initdbScripts` section must
+# match the values in the `database` section below.
+
+mariadb:
+  fullnameOverride: mariadb
+  replication:
+    enabled: false
+  securityContext:
+    enabled: true
+  volumePermissions:
+    enabled: true
+  initdbScripts:
+    demo-db.sql: |-
+      CREATE DATABASE IF NOT EXISTS demo CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+      CREATE DATABASE IF NOT EXISTS demo_upgrade CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+      CREATE USER 'flow'@'%' IDENTIFIED BY 'flow_pass';
+      GRANT ALL PRIVILEGES ON demo.* TO 'flow'@'%';
+      GRANT ALL PRIVILEGES ON demo_upgrade.* TO 'flow'@'%';
+      FLUSH PRIVILEGES;
+
+database:
+  dbName: "demo"
+  dbUser: "flow"
+  dbPassword: "flow_pass"
+  dbType: "mariadb"
+  dbPort: 3306
+  clusterEndpoint: "mariadb"
+
+##---------------------------------------------
+## Flow server admin credentials section
+##---------------------------------------------
+
+flowCredentials:
+  ## Name of the secret containing the admin user password to use. If set, the admin user password
+  ## will be read from the secret instead of the plain-text `adminPassword` (not recommended for production).
+  ##
+  ## The data field must contain base64 encoded value for key 'CBF_SERVER_ADMIN_PASSWORD'.
+  ## E.g., kubectl create secret generic flow-admin-secret --from-literal=CBF_SERVER_ADMIN_PASSWORD='rrx!*d$z75Dsb'
+  ##
+  ## Uncomment the following line to set the name of the secret to use to read the admin user password.
+  # existingSecret: flow-admin-secret
+  ##
+  ## IMPORTANT: This is clearly not meant for production use and is only meant for demo environments
+  ## where security may not be a concern. Use of `existingSecret` is preferred.
+  adminPassword: changeme
+
