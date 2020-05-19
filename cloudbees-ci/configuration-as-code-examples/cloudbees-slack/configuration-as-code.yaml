@@ -1,0 +1,24 @@
+cloudbees-slack-integration:
+  config:
+    # Token stored as Secret
+    slackToken: "{ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ012345678901234567890=}"
+    # Slack workspace identifier
+    slackWorkspace: "SLACK_WORKSPACE_ID"
+    # List of configured users
+    users:
+      - id: "91190eb7-e2f5-48e3-962e-4a7ad21f4d0f" # This value is created by the CloudBees Slack plugin after the user information has been saved. It is a unique id that is for the plugin’s internal use only. For CasC this value is used instead of auto-generating a new one.
+        jenkins: "jenkins-user-1" # This is the user’s Jenkins ID which can be found in their profile information on the Master.
+        optedIn: true # Boolean value to determine if the user will receive Slack notifications.
+        slack: "user1@acme.com" # Email used to join the Slack workspace.
+        slackID: "SLACK_ID_1" # Unique user identifier within the workspace. It has to be valid for the workspace or the notification won't reach the user.
+        slackName: "Bob" # Name used to refer the user. It comes from the workspace configuration.
+        slackWorkspace: "SLACK_WORKSPACE_ID" # Workspace for which the Slack id is valid. If it doesn't match the general slackWorkspace property, then the notification won't be sent. It is automatically recovered when the user is configured.
+        github: "github-id-user1" # GitHub identifier for the user. This is used to pull notifications when the user creates a PR and it is built.
+      - id: "3e94eeb5-c7ed-40b4-b5d3-6de17e3d29db"
+        jenkins: "jenkins-user-2"
+        optedIn: false
+        slack: "user2@acme.com"
+        slackID: "SLACK_ID_2"
+        slackName: "Joe"
+        slackWorkspace: "SLACK_WORKSPACE_ID"
+        github: "github-id-user2"
