@@ -1,0 +1,8 @@
+# This file shows how set some trigger restrictions using Configuration as Code.
+triggerRestrictions:
+  restrictions:
+    - "never"
+    - "gonna"
+    - "give"
+    - "you"
+    - "up"
