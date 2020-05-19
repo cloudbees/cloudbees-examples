@@ -1,5 +1,5 @@
-# This file shows how to setup two global skip groups using Configuration as Code. It also proves how to
-# apply such groups to a folder using Configuration as Code and the JobDSL plugin
+# This file shows how to set up two global skip groups using Configuration as Code. It also proves how to
+# apply such groups to a folder using Configuration as Code and the JobDSL plugin.
 unclassified:
   skipGroup:
     skipGroups:
