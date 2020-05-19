@@ -1,4 +1,4 @@
-# This file shows how to setup a global skip group using Configuration as Code.
+# This file shows how to set up a global skip group using Configuration as Code.
 unclassified:
   skipGroup:
     skipGroups:
