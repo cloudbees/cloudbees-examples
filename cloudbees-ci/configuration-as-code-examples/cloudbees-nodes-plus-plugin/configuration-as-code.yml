@@ -1,0 +1,26 @@
+jenkins:
+  nodes:
+    - permanent:
+        labelString: "test"
+        launcher:
+          jnlp:
+            workDirSettings:
+              disabled: false
+              failIfWorkDirIsMissing: false
+              internalDir: "remoting"
+        name: "grr"
+        nodeProperties:
+          - owners:
+              onFirstLaunchFailure: true
+              onLaunchFailure: false
+              onOffline: true
+              onOnline: true
+              onTemporaryOfflineApplied: true
+              onTemporaryOfflineRemoved: true
+              owners: |-
+                email@example.acme.org
+          - customProbe:
+              probeCommand: "echo hello world"
+        numExecutors: 1
+        remoteFS: "/tmp/jenkins"
+        retentionStrategy: "manualLaunchOnly"

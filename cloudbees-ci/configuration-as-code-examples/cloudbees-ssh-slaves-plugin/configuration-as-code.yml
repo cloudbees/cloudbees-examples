@@ -1,0 +1,72 @@
+credentials:
+  system:
+    domainCredentials:
+    - credentials:
+      - usernamePassword:
+          id: "ssh-agent"
+          password: "{AQAAABAAAAAQ1cQDVunBiqPWN0+/BG6TJA9B4zbuIdYxGy6ko3jbTGM=}"
+          scope: GLOBAL
+          username: "alice"
+jenkins:
+  nodes:
+  - permanent:
+      name: "blind-trust"
+      labelString: "test"
+      launcher:
+        nioSsh:
+          connectionDetails:
+            credentialsId: "ssh-agent"
+            displayEnvironment: false
+            keyVerificationStrategy: "blindlyTrust"
+            port: 22
+          host: "theagent"
+      numExecutors: 1
+      remoteFS: "/tmp/jenkins"
+      retentionStrategy: "always"
+  - permanent:
+      name: "known-hosts"
+      labelString: "test"
+      launcher:
+        nioSsh:
+          connectionDetails:
+            credentialsId: "ssh-agent"
+            displayEnvironment: false
+            keyVerificationStrategy: "knownHosts"
+            port: 22
+          host: "theagent"
+      numExecutors: 1
+      remoteFS: "/tmp/jenkins"
+      retentionStrategy: "always"
+  - permanent:
+      name: "manual-key-validation"
+      labelString: "test"
+      launcher:
+        nioSsh:
+          connectionDetails:
+            credentialsId: "ssh-agent"
+            displayEnvironment: false
+            keyVerificationStrategy:
+              manually:
+                key: |-
+                  abcgef1234567890
+            port: 22
+          host: "theagent"
+      numExecutors: 1
+      remoteFS: "/tmp/jenkins"
+      retentionStrategy: "always"
+  - permanent:
+      name: "trust-initial-connection-key"
+      labelString: "test"
+      launcher:
+        nioSsh:
+          connectionDetails:
+            credentialsId: "ssh-agent"
+            displayEnvironment: false
+            keyVerificationStrategy:
+              trustInitial:
+                manualVerification: true
+            port: 22
+          host: "theagent"
+      numExecutors: 1
+      remoteFS: "/tmp/jenkins"
+      retentionStrategy: "always"

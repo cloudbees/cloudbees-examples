@@ -1,0 +1,37 @@
+credentials:
+  cyberArk:
+    domainCredentials:
+      - credentials:
+          - cyberArkId:
+              description: "test ID"
+              id: "test-id"
+              scope: GLOBAL
+globalCredentialsConfiguration:
+  cyberArkGlobalConfiguration:
+    allowCustomAppIds: false
+    allowCustomFolders: false
+    appId: "Jenkins"
+    authentication:
+      usernamePassword:
+        password: "s3cr3t"
+        username: "user"
+    cacheRefreshAge: 1440
+    cacheRefreshAgeMillis: 86400000
+    cacheRefreshReason: "Jenkins property access request, password will be discarded\
+      \ unseen"
+    connectTimeout: 5
+    connectTimeoutMillis: 5000
+    folderStores: false
+    offlineCheckMinWait: 30
+    offlineCheckMinWaitMillis: 30000
+    passwordRetrievalReason: "Jenkins password access request"
+    requestTimeout: 10
+    requestTimeoutMillis: 10000
+    rootStore:
+      overrideAppId: false
+      safes:
+      - customFolder: false
+        folder: "Root"
+        safe: "safe1"
+    url: "https://cyberark.local"
+    verification: "blindTrustStore"

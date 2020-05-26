@@ -1,0 +1,22 @@
+kube:
+  podTemplatesConfiguration:
+    templates:
+      - containers:
+          - args: "cat"
+            command: "/bin/sh -c"
+            image: "nginx"
+            livenessProbe:
+              failureThreshold: 0
+              initialDelaySeconds: 0
+              periodSeconds: 0
+              successThreshold: 0
+              timeoutSeconds: 0
+            name: "container0"
+            ttyEnabled: true
+            workingDir: "/home/jenkins/agent"
+        hostNetwork: false
+        name: "template0"
+        yamlMergeStrategy: "override"
+      - hostNetwork: false
+        name: "template1"
+        yamlMergeStrategy: "override"
