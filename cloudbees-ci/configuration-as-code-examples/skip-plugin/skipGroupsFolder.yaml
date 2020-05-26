@@ -1,0 +1,25 @@
+# This file shows how to set up two global skip groups using Configuration as Code. It also proves how to
+# apply such groups to a folder using Configuration as Code and the JobDSL plugin.
+unclassified:
+  skipGroup:
+    skipGroups:
+      - description: "my group 1 for skipping jobs"
+        name: "group1"
+        until: 32503680000000
+      - description: "my group 2 for skipping jobs"
+        name: "group2"
+        until: 32503680000000
+jobs:
+  - script: >
+      folder('my-folder') {
+        properties {
+          skipFolderProperty {
+            until(32503680000000)
+            userId('anonymous')
+          }
+          skipGroupsFolderProperty {
+            enabled(true)
+            names(['group1', 'group2'])
+          }
+        }
+      }

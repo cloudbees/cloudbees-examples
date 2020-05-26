@@ -1,0 +1,10 @@
+# This file shows how to configure two labels, including a property to limit the number of concurrent executions, using Configuration as Code.
+labelAtoms:
+  - name: "label1"
+    properties:
+      - concurrentExecutionLimit:
+          limit: 2
+  - name: "label2"
+    properties:
+      - concurrentExecutionLimit:
+          limit: 4

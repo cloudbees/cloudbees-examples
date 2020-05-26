@@ -1,0 +1,7 @@
+# This file shows how to set up a global skip group using Configuration as Code.
+unclassified:
+  skipGroup:
+    skipGroups:
+      - description: "my group 1 for skipping jobs"
+        name: "group1"
+        until: 32503680000000

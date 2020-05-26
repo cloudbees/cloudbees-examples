@@ -1,0 +1,11 @@
+# This file shows how to enable the CloudBees Assurance Program using Configuration as Code.
+# With this configuration, the security warnings for the product and the plugins are enabled.
+# It also enables the automatic upgrade of the plugins, but disables the automatic downgrade of the plugins, as recommended in our documentation.
+beekeeper:
+  enabled: true
+  securityWarnings:
+    enabledForCore: true
+    enabledForPlugins: true
+  upgrades:
+    autoDowngradePlugins: false
+    autoUpgradePlugins: true
