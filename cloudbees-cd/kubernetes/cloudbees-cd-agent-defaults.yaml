@@ -6,7 +6,7 @@
 images:
   registry: "docker.io/cloudbees"
   imageRepository: "cbflow-agent"
-  tag: "9.2.0.139827_1.0.7_20191110"
+  tag: "10.0.0.142654_2.0.12_20200625"
   pullPolicy: IfNotPresent
 
 # Please state flow-server endpoint here. Please note that if installing in different namespace than server
@@ -113,3 +113,13 @@ flowCredentials:
   existingSecret:
   user: admin
   password:
+
+#---------------------------------------------
+# Pods security context
+#---------------------------------------------
+
+securityContext:
+  enabled: false
+  fsGroup: 1000
+  runAsUser: 1000
+
