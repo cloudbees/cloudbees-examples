@@ -7,7 +7,7 @@ images:
   registry: "docker.io/cloudbees"
 
   # Image tag of the image to pull
-  tag: "9.2.0.139827_1.0.7_20191110"
+  tag: "10.0.0.142654_2.0.12_20200625"
 
   # The image pull policy to use
   pullPolicy: IfNotPresent
@@ -361,6 +361,16 @@ flowLicense:
 # Pass existing secret name with license data here.
   existingSecret:
   licenseData:
+
+#---------------------------------------------
+# Pods security context
+#---------------------------------------------
+
+securityContext:
+  fsGroup: 1000
+  runAsUser: 1000
+  enabled: false
+
 
 #---------------------------------------------
 # Network isolation configuration
