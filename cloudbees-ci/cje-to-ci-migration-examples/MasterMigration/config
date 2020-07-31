@@ -1,0 +1,16 @@
+#!/bin/bash
+
+#VARIABLES
+
+# Kubernetes namespace for Master
+namespace=cloudbees-core
+
+#Name of the Master statefulset
+masterStatefulsetName=master123
+
+#Container with version if required, to use for the rescue pod
+rescueContainerImage=youImage
+
+#Download the backup artifact
+s3Bucket=core-backups
+backupFilePath=master/backup.tar.gz
