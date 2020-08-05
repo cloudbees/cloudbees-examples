@@ -1,0 +1,22 @@
+unclassified:
+  rules:
+    # List of request filtering rules
+    rules:
+      - # Regular expression matching URIs to be blocked
+        # Request URIs include any query string, start with a slash (/) and do not include protocol, host, port, context path, or fragment.
+        pattern: "/job/.+/ws/.*"
+        # Optional. List of parameters to ban for both GET and POST requests
+        bannedParameters:
+          - parameter: "foo"
+          - parameter: "bar"
+        # Optional. Response served when the rule is triggered. If not provided, response is 503 with the default 503 server page
+        response:
+          code: 200           # HTTP response status code
+          content: |-         # HTTP response body
+            <!DOCTYPE html>
+            <html>
+            <body>
+            Example Response
+            </body>
+            </html>
+          contentType: "text/html"  # HTTP response content type
