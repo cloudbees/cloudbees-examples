@@ -1,9 +1,9 @@
-unclassified:
+masterProvisioning:
   dockerImageDefinitionConfiguration:
     images:
       - imageTag: "cloudbees/cloudbees-core-mm"
         name: "latest"
-  kubernetesMasterProvisioning:
+  kubernetes:
     clusterEndpoints:
       - id: "default"
         jenkinsUrl: "http://host.docker.internal:8080/jenkins"
