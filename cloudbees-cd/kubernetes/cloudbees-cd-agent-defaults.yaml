@@ -6,7 +6,7 @@
 images:
   registry: "docker.io/cloudbees"
   imageRepository: "cbflow-agent"
-  tag: "10.0.0.142654_2.0.12_20200625"
+  tag: "10.0.1.143076_2.0.12_20200729"
   pullPolicy: IfNotPresent
 
 # Please state flow-server endpoint here. Please note that if installing in different namespace than server
@@ -92,7 +92,11 @@ storage:
       accessMode: ReadWriteOnce
       storage: 5Gi
 # In order to use any non "platform-default" or custom storage class just uncomment the line and and state required storageClass name
-#      storageClass: my-class
+#     storageClass: my-class
+#
+# If defined true if any agent is already deployed with shared workspace and pvc already exist
+      existingClaim: false
+
 
 resources:
   limits:
@@ -122,4 +126,3 @@ securityContext:
   enabled: false
   fsGroup: 1000
   runAsUser: 1000
-
