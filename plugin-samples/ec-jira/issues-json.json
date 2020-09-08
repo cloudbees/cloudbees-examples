@@ -1,0 +1,173 @@
+[
+   {
+         "fields" : {
+            "versions" : [],
+            "labels" : [],
+            "duedate" : null,
+            "timespent" : null,
+            "timeoriginalestimate" : null,
+            "updated" : "2017-10-24T00:32:32.000+0000",
+            "description" : null,
+            "lastViewed" : "2017-10-25T18:17:39.778+0000",
+            "status" : {
+               "name" : "To Do",
+               "description" : "",
+               "statusCategory" : {
+                  "name" : "To Do",
+                  "key" : "new",
+                  "colorName" : "blue-gray",
+                  "id" : 2,
+                  "self" : "<jira instance>/rest/api/2/statuscategory/2"
+               },
+               "iconUrl" : "<jira instance>/images/icons/status_generic.gif",
+               "id" : "10000",
+               "self" : "<jira instance>/rest/api/2/status/10000"
+            },
+            "creator" : {
+               "active" : true,
+               "self" : "<jira instance>/rest/api/2/user?username=admin",
+               "displayName" : "someone@mycompany.com",
+               "avatarUrls" : { ... },
+               "timeZone" : "Etc/UTC",
+               "name" : "admin",
+               "emailAddress" : "someone@mycompany.com",
+               "key" : "admin"
+            },
+            "aggregatetimespent" : null,
+            "resolution" : null,
+            "issuelinks" : [],
+            "summary" : "my summary",
+            "aggregatetimeoriginalestimate" : null,
+            "assignee" : {
+               "self" : "<jira instance>/rest/api/2/user?username=admin",
+               "active" : true,
+               "displayName" : "someone@mycompany.com",
+               "avatarUrls" : {
+                  "16x16" : "http://www.gravatar.com/avatar/4279de4b6038eb9a5318b296dc8e1c51?d=mm&s=16",
+                  "48x48" : "http://www.gravatar.com/avatar/4279de4b6038eb9a5318b296dc8e1c51?d=mm&s=48",
+                  "24x24" : "http://www.gravatar.com/avatar/4279de4b6038eb9a5318b296dc8e1c51?d=mm&s=24",
+                  "32x32" : "http://www.gravatar.com/avatar/4279de4b6038eb9a5318b296dc8e1c51?d=mm&s=32"
+               },
+               "timeZone" : "Etc/UTC",
+               "name" : "admin",
+               "key" : "admin",
+               "emailAddress" : "someone@mycompany.com"
+            },
+            "resolutiondate" : null,
+            "fixVersions" : [],
+            "subtasks" : [
+               {
+                  "id" : "10449",
+                  "fields" : {
+                     "priority" : {
+                        "iconUrl" : "<jira instance>/images/icons/priorities/medium.svg",
+                        "name" : "Medium",
+                        "id" : "3",
+                        "self" : "<jira instance>/rest/api/2/priority/3"
+                     },
+                     "summary" : "asd",
+                     "status" : {
+                        "statusCategory" : {
+                           "colorName" : "blue-gray",
+                           "self" : "<jira instance>/rest/api/2/statuscategory/2",
+                           "id" : 2,
+                           "key" : "new",
+                           "name" : "To Do"
+                        },
+                        "iconUrl" : "<jira instance>/images/icons/status_generic.gif",
+                        "description" : "",
+                        "name" : "To Do",
+                        "self" : "<jira instance>/rest/api/2/status/10000",
+                        "id" : "10000"
+                     },
+                     "issuetype" : {
+                        "id" : "10000",
+                        "self" : "<jira instance>/rest/api/2/issuetype/10000",
+                        "iconUrl" : "<jira instance>/images/icons/issuetypes/subtask_alternate.png",
+                        "subtask" : true,
+                        "name" : "Sub-task",
+                        "description" : "The sub-task of the issue"
+                     }
+                  },
+                  "self" : "<jira instance>/rest/api/2/issue/10449",
+                  "key" : "TEST-351"
+               }
+            ],
+            "issuetype" : {
+               "avatarId" : 10318,
+               "self" : "<jira instance>/rest/api/2/issuetype/10001",
+               "id" : "10001",
+               "description" : "A task that needs to be done.",
+               "name" : "Task",
+               "subtask" : false,
+               "iconUrl" : "<jira instance>/secure/viewavatar?size=xsmall&avatarId=10318&avatarType=issuetype"
+            },
+            "aggregateprogress" : {
+               "total" : 0,
+               "progress" : 0
+            },
+            "components" : [],
+            "timeestimate" : null,
+            "progress" : {
+               "progress" : 0,
+               "total" : 0
+            },
+            "watches" : {
+               "isWatching" : true,
+               "self" : "<jira instance>/rest/api/2/issue/TEST-2/watchers",
+               "watchCount" : 1
+            },
+            "project" : {
+               "self" : "<jira instance>/rest/api/2/project/10000",
+               "id" : "10000",
+               "avatarUrls" : {
+                  "16x16" : "<jira instance>/secure/projectavatar?size=xsmall&avatarId=10324",
+                  "48x48" : "<jira instance>/secure/projectavatar?avatarId=10324",
+                  "24x24" : "<jira instance>/secure/projectavatar?size=small&avatarId=10324",
+                  "32x32" : "<jira instance>/secure/projectavatar?size=medium&avatarId=10324"
+               },
+               "key" : "TEST",
+               "name" : "TEST"
+            },
+            "workratio" : -1,
+            "aggregatetimeestimate" : null,
+            "priority" : {
+               "name" : "Medium",
+               "iconUrl" : "<jira instance>/images/icons/priorities/medium.svg",
+               "self" : "<jira instance>/rest/api/2/priority/3",
+               "id" : "3"
+            },
+            "reporter" : {
+               "active" : true,
+               "self" : "<jira instance>/rest/api/2/user?username=admin",
+               "displayName" : "someone@mycompany.com",
+               "avatarUrls" : {
+                  "24x24" : "http://www.gravatar.com/avatar/4279de4b6038eb9a5318b296dc8e1c51?d=mm&s=24",
+                  "32x32" : "http://www.gravatar.com/avatar/4279de4b6038eb9a5318b296dc8e1c51?d=mm&s=32",
+                  "16x16" : "http://www.gravatar.com/avatar/4279de4b6038eb9a5318b296dc8e1c51?d=mm&s=16",
+                  "48x48" : "http://www.gravatar.com/avatar/4279de4b6038eb9a5318b296dc8e1c51?d=mm&s=48"
+               },
+               "timeZone" : "Etc/UTC",
+               "name" : "admin",
+               "emailAddress" : "someone@mycompany.com",
+               "key" : "admin"
+            },
+            "created" : "2017-10-24T00:32:32.000+0000",
+            "environment" : null,
+            "votes" : {
+               "hasVoted" : false,
+               "self" : "<jira instance>/rest/api/2/issue/TEST-2/votes",
+               "votes" : 0
+            }
+         },
+         "id" : "10100",
+         "self" : "<jira instance>/rest/api/2/issue/10100",
+         "expand" : "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+         "key" : "TEST-2"
+      }
+   ],
+   "startAt" : 0,
+   "total" : 1,
+   "expand" : "names,schema",
+   "maxResults" : 50
+}
