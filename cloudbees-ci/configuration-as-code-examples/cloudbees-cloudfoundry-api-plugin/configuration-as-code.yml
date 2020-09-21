@@ -1,0 +1,9 @@
+tool:
+  cloudFoundryCliInstallation:
+    installations:
+      - name: "cf-6.40.0"
+        properties:
+          - installSource:
+              installers:
+                - cloudFoundryCliInstaller:
+                    id: "6.40.0"
