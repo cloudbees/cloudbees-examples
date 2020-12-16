@@ -1,0 +1,14 @@
+# Agent options
+Agents:
+  Enabled: true
+  SeparateNamespace:
+    # If enabled, agents resources will be created in a separate namespace as well as bindings allowing masters to schedule them.
+    Enabled: true
+    # Namespace where to create agents resources. Defaults to ${namespace}-builds where ${namespace} is the namespace where the chart is installed.
+    Name: null
+    # If true, the second namespace will be created when installing this chart.
+    # Otherwise, the existing namespace should be labeled with "cloudbees.com/role: agents" in order for network policies to work.
+    Create: true
+  Image:
+    # Used to override the default docker image used for agents
+    dockerImage: cloudbees/cloudbees-core-agent:latest
