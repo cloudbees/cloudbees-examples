@@ -1,6 +1,6 @@
 # CloudBees CD examples
 
-Files in this folder complement mentions in [CloudBees CD product documentation](https://docs.cloudbees.com/docs/cloudbees-flow/latest/). As such, they are not standalone.
+Files in this folder complement mentions in [CloudBees CD product documentation](https://docs.cloudbees.com/docs/cloudbees-cd/latest/). As such, they are not standalone.
 
 ## In this folder
 This folder contains example values `.yaml` files for the CloudBees CD Helm Chart.
