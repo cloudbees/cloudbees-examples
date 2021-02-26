@@ -1,0 +1,3 @@
+tool:
+  cloudbeesPluginUsageAnalyzer:
+    enabled: false
