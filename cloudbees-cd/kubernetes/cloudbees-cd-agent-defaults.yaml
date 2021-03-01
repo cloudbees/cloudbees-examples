@@ -6,7 +6,7 @@
 images:
   registry: "docker.io/cloudbees"
   imageRepository: "cbflow-agent"
-  tag: "10.0.2.144701_2.1.4_20201130"
+  tag: "10.1.0.145850_2.1.12_20210224"
   pullPolicy: IfNotPresent
 
 # Please state flow-server endpoint here. Please note that if installing in different namespace than server
@@ -77,6 +77,10 @@ ecconfigure: "--agentInitMemoryMB=16 --agentMaxMemoryMB=64"
 # Master loglevel for com.electriccloud package
 logLevel: DEBUG
 
+
+service:
+  type: ClusterIP
+  clusterIP: "None"
 
 #---------------------------------------------
 # Flow agent storage and resources configuration section
