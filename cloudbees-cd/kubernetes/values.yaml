@@ -7,10 +7,25 @@ images:
   registry: "docker.io/cloudbees"
 
   # Image tag of the image to pull
-  tag: "10.0.0.142654_2.0.12_20200625"
+  tag: "10.1.0.145850_2.1.12_20210224"
 
   # The image pull policy to use
   pullPolicy: IfNotPresent
+
+  # Image pull secrets
+  # Enable this option when using a private registry.
+  # Secrets must be manually created in the namespace.
+  # imagePullSecrets: <secret-name>
+
+  # Optional array of imagePullSecrets containing private registry credentials
+  # Reference to one or more secrets to be used when pulling images
+  # Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  # imagePullSecrets:
+  # - name: "docker-registry"
+
+  imagePullSecrets:
+
+
 
 # The name of the Flow server, usually its fully-qualified domain name, from
 # which the server will be available for all agents (resources) and other
@@ -93,6 +108,36 @@ server:
   tolerations: []
   affinity: {}
 
+# Kubernetes Liveness and Readiness Probes
+  livenessProbe:
+    initialDelaySeconds: 90
+    periodSeconds: 60
+    failureThreshold: 10
+    timeoutSeconds: 10
+
+  readinessProbe:
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    failureThreshold: 10
+    timeoutSeconds: 10
+
+# Additional environment variables to set for flow-server
+  extraEnvs: []
+  # extraEnvs:
+  #   - name: FOO
+  #     value: "BAR"
+  #   - name: FOO
+  #     valueFrom:
+  #       secretKeyRef:
+  #         key: FOO
+  #         name: secret-resource
+
+# Enable or disable sending telemetry data to CloudBees
+# Note: this option only works for the very first installation during server initialization.
+# For an already initialized server, this can be configured in its settings.
+  telemetryData:
+    enabled: true
+
 #---------------------------------------------
 # Flow web server configuration section
 #---------------------------------------------
@@ -123,6 +168,18 @@ web:
   nodeSelector: {}
   tolerations: []
   affinity: {}
+
+# Additional environment variables to set for flow-web
+  extraEnvs: []
+  # extraEnvs:
+  #   - name: FOO
+  #     valueFrom:
+  #       secretKeyRef:
+  #         key: FOO
+  #         name: secret-resource
+  #   - name: FOO
+  #     value: BAR
+
 
 #---------------------------------------------
 # Flow repository configuration section
@@ -175,6 +232,18 @@ repository:
   tolerations: []
   affinity: {}
 
+# Additional environment variables to set for flow-repository
+  extraEnvs: []
+  # extraEnvs:
+  #   - name: FOO
+  #     valueFrom:
+  #       secretKeyRef:
+  #         key: FOO
+  #         name: secret-resource
+  #   - name: FOO
+  #     value: BAR
+
+
 #---------------------------------------------
 # Flow DevOps Insight configuration section
 #---------------------------------------------
@@ -215,9 +284,11 @@ dois:
 # the 'CBF_DOIS_ADMIN_PASSWORD' key.
 # If the password is an empty string, then user 'admin' will not be created
 # and administrative access will not be granted.
+# If reportUserPassword is an empty string, a random 20 characters password will be used
+
     existingSecret:
     adminPassword:
-    reportUserPassword: "changeme"
+    reportUserPassword:
 
 # The heap size in MB for Elasticsearch and Logstash services.
   esRam: 1024
@@ -227,7 +298,7 @@ dois:
   resources:
     limits:
       cpu: 1
-      memory: 2Gi
+      memory: 3Gi
     requests:
       cpu: 0.1
       memory: 2Gi
@@ -235,6 +306,23 @@ dois:
   nodeSelector: {}
   tolerations: []
   affinity: {}
+  # Adds openshift Node tuning label to DOIS Pods to configure vm.max_map_count value required to run Elasticsearch.
+  # refer https://developers.redhat.com/blog/2019/11/12/using-the-red-hat-openshift-tuned-operator-for-elasticsearch/
+  openshiftNodeTuning: false
+# Additional environment variables to set for DevOps Insight
+  extraEnvs: []
+  # extraEnvs:
+  #   - name: FOO
+  #     valueFrom:
+  #       secretKeyRef:
+  #         key: FOO
+  #         name: secret-resource
+  #   - name: FOO
+  #     value: BAR
+
+# Enable or disable the privileged sysctlInitContainer if the sysctl vm.max_map_count setting is set by another method
+  sysctlInitContainer:
+    enabled: true
 
 #---------------------------------------------
 # Flow bound agent configuration section
@@ -267,6 +355,19 @@ boundAgent:
   nodeSelector: {}
   tolerations: []
   affinity: {}
+
+
+# Additional environment variables to set for bound agent
+  extraEnvs: []
+  # extraEnvs:
+  #   - name: FOO
+  #     valueFrom:
+  #       secretKeyRef:
+  #         key: FOO
+  #         name: secret-resource
+  #   - name: FOO
+  #     value: BAR
+
 
 #---------------------------------------------
 # Flow storage configuration section
@@ -322,6 +423,7 @@ database:
 # server-secrets.yaml::dbSecret.
 
 #  existingSecret: <my-existing-secret>
+# If dbPassword is an empty string, a random 20 characters password will be used
 
   dbName:
   dbUser:
@@ -335,6 +437,12 @@ database:
 # `oracle` - Oracle.
   dbType:
 
+# External Mysql Connector URL to download during cloudbees flow installation
+  mysqlConnector:
+    enabled: true
+    externalUrl:
+
+
 #---------------------------------------------
 # Flow server credentials configuration section
 #---------------------------------------------
@@ -344,6 +452,8 @@ flowCredentials:
 # Either specify the secret where the admin user password is stored under
 # the 'CBF_SERVER_ADMIN_PASSWORD' key (recommended for production) or specify
 # the adminPassword.
+# If adminPassword is an empty string, a random 20 characters password will be used
+
   existingSecret:
   adminPassword:
 
@@ -371,6 +481,34 @@ securityContext:
   runAsUser: 1000
   enabled: false
 
+volumePermissions:
+  enabled: true
+
+podSecurityPolicy:
+  create: false
+  annotations: {}
+    ## Specify pod annotations
+    ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#apparmor
+    ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#seccomp
+    ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#sysctl
+    ##
+    # seccomp.security.alpha.kubernetes.io/allowedProfileNames: '*'
+    # seccomp.security.alpha.kubernetes.io/defaultProfileName: 'docker/default'
+    # apparmor.security.beta.kubernetes.io/defaultProfileName: 'runtime/default'
+
+#---------------------------------------------
+#  RBAC resources
+#---------------------------------------------
+
+rbac:
+  ## Specifies whether RBAC resources should be created
+  ##
+  create: false
+  serviceAccountName: cbflow
+  role:
+    ## Rules to create.
+    rules: []
+
 
 #---------------------------------------------
 # Network isolation configuration
@@ -394,7 +532,9 @@ networkIsolation:
 # applications as of now.
 zookeeper:
 
-  enabled: true
+  image:
+    tag: 3.6.2                # Container image tag for zookeeper container.
+
   fullnameOverride: zookeeper
   replicaCount: 3
 
@@ -477,4 +617,31 @@ nginx-ingress:
 ##---------------------------------------------
 ## Miscellaneous configuration section
 ##---------------------------------------------
-demoMode: false
+clusteredMode: true
+
+# Flag used to configure the cloudbees-sda chart.
+# Should not be used from a standalone cloudbees-flow installation.
+sda: false
+
+
+mariadb:
+  enabled:  false
+  fullnameOverride: mariadb
+  replication:
+    enabled: false
+  volumePermissions:
+    enabled: true
+  initdbScriptsConfigMap: mariadb-initdb-scripts
+  existingSecret: mariadb-initdb-secret
+  # must provide same user name same as database.dbUser(default it "flow")
+  db:
+    user: ""
+  rootUser:
+    # MariaDB admin password
+    # If password is an empty string, a random 10 characters password will be used
+    # ref: https://github.com/bitnami/bitnami-docker-mariadb#setting-the-root-password-on-first-run
+    #
+    password: ""
+  master:
+    nodeSelector:
+      kubernetes.io/os: linux
