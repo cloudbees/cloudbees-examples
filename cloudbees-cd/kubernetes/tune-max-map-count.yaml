@@ -1,0 +1,95 @@
+# https://docs.cloudbees.com/docs/cloudbees-cd/latest/install-trad/before-install#_checking_the_virtual_memory_areas_setting
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: tune-max-map-count
+spec:
+  selector:
+    matchLabels:
+      name: tune-max-map-count
+  template:
+    metadata:
+      labels:
+        name: tune-max-map-count
+    spec:
+      nodeSelector:
+        kubernetes.io/os: linux
+      serviceAccount: tune-max-map-count # if using PSP (below)
+      terminationGracePeriodSeconds: 3
+      containers:
+      - name: tune
+        image: busybox:stable
+        securityContext:
+          privileged: true
+          runAsUser: 0
+        resources:
+          requests:
+            cpu: 1m
+            memory: 1Mi
+        command:
+        - sh
+        - -c
+        - |
+          set -ex
+          sysctl -w vm.max_map_count=262144
+          sleep infinity
+# Delete the rest (and delete serviceAccount above) unless your cluster uses --enable-pod-security-policy:
+---
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  name: privileged-tune-max-map-count
+  annotations:
+    seccomp.security.alpha.kubernetes.io/allowedProfileNames: '*'
+spec:
+  privileged: true
+  allowPrivilegeEscalation: true
+  allowedCapabilities:
+  - '*'
+  volumes:
+  - '*'
+  hostNetwork: true
+  hostPorts:
+  - min: 0
+    max: 65535
+  hostIPC: true
+  hostPID: true
+  runAsUser:
+    rule: 'RunAsAny'
+  seLinux:
+    rule: 'RunAsAny'
+  supplementalGroups:
+    rule: 'RunAsAny'
+  fsGroup:
+    rule: 'RunAsAny'
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: tune-max-map-count
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: tune-max-map-count
+rules:
+- apiGroups:
+  - extensions
+  resources:
+  - podsecuritypolicies
+  verbs:
+  - use
+  resourceNames:
+  - privileged-tune-max-map-count
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: tune-max-map-count
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: tune-max-map-count
+subjects:
+- kind: ServiceAccount
+  name: tune-max-map-count
