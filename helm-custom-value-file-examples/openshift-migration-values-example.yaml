@@ -7,6 +7,7 @@ OperationsCenter:
   Platform: 'openshift'
   # Set the HostName for the Operation Center
   HostName: 'cloudbees-core.example.com'
+  ContextPath: null
   Ingress:
     tls:
     ## Set this to true in order to enable TLS on the ingress route
