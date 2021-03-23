@@ -31,13 +31,17 @@ server:
 zookeeper:
   enabled: false
 
+# clusteredMode has to be false to be able to use mariadb
+clusteredMode: false
+
 # Install mariadb chart for demo mode 
 # and create a database and user for Flow to use. 
 # Note that the database user name and password 
-# specified in the `initdbScripts` section must
+# specified in the `mariadb.db.user` and `mariadb.rootUser.password` value must
 # match the values in the `database` section below.
 
 mariadb:
+  enabled: true
   fullnameOverride: mariadb
   replication:
     enabled: false
@@ -45,14 +49,10 @@ mariadb:
     enabled: true
   volumePermissions:
     enabled: true
-  initdbScripts:
-    demo-db.sql: |-
-      CREATE DATABASE IF NOT EXISTS demo CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-      CREATE DATABASE IF NOT EXISTS demo_upgrade CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-      CREATE USER 'flow'@'%' IDENTIFIED BY 'flow_pass';
-      GRANT ALL PRIVILEGES ON demo.* TO 'flow'@'%';
-      GRANT ALL PRIVILEGES ON demo_upgrade.* TO 'flow'@'%';
-      FLUSH PRIVILEGES;
+  db:
+    user: "flow"
+  rootUser:
+    password: "flow_pass"
 
 database:
   dbName: "demo"
