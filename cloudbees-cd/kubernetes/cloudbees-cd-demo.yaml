@@ -1,4 +1,4 @@
-demoMode: true
+clusteredMode: false
 
 ##---------------------------------------------
 ## Flow storage configuration section
@@ -9,7 +9,7 @@ storage:
     serverPlugins:
       accessMode: ReadWriteOnce
       # Storage class for plugins directory. Currently it has to be shared across server and web replicas.
-      # Server and web are co-located using hard affinity rule for demoMode. StorageClass is null here to ensure the same behavior across all cloud providers
+      # Server and web are co-located using hard affinity rule for non clusteredMode. StorageClass is null here to ensure the same behavior across all cloud providers
       # (it forces storage class to fall back to  "default" disk based ReadWriteOnce platform specific storage class)
       storageClass: null
       storage: 5Gi
@@ -27,40 +27,24 @@ server:
     requests:
       cpu: 0.5
 
-# No zookeeper for demo mode
-zookeeper:
-  enabled: false
-
-# clusteredMode has to be false to be able to use mariadb
-clusteredMode: false
-
 # Install mariadb chart for demo mode 
 # and create a database and user for Flow to use. 
 # Note that the database user name and password 
-# specified in the `mariadb.db.user` and `mariadb.rootUser.password` value must
+# specified in the `initdbScripts` section must
 # match the values in the `database` section below.
 
 mariadb:
-  enabled: true
-  fullnameOverride: mariadb
-  replication:
-    enabled: false
-  securityContext:
-    enabled: true
-  volumePermissions:
-    enabled: true
+  enabled:  true
   db:
     user: "flow"
-  rootUser:
-    password: "flow_pass"
 
 database:
   dbName: "demo"
   dbUser: "flow"
-  dbPassword: "flow_pass"
   dbType: "mariadb"
   dbPort: 3306
   clusterEndpoint: "mariadb"
+# externalEndpoint: ""
 
 ##---------------------------------------------
 ## Flow server admin credentials section
@@ -78,5 +62,5 @@ flowCredentials:
   ##
   ## IMPORTANT: This is clearly not meant for production use and is only meant for demo environments
   ## where security may not be a concern. Use of `existingSecret` is preferred.
-  adminPassword: changeme
+  adminPassword:
 
