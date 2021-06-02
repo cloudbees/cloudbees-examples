@@ -1,0 +1,48 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: nfs-volume-permission-updates-{{ .Release.Name }}
+  labels:
+    app: nfs-volume-permission-updates
+    chart: {{ .Chart.Name }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+        app: nfs-permission-update
+        release: {{ .Release.Name }}
+    spec:
+{{- if .Values.podSecurityPolicy.enabled }}
+      serviceAccount: {{ .Release.Name }}
+{{- end }}
+      restartPolicy: Never
+      containers:
+          - name: tune
+            image: busybox:stable
+            securityContext:
+              privileged: true
+              runAsUser: 0
+            resources:
+              requests:
+                cpu: 1m
+                memory: 1Mi
+            command:
+            - sh
+            - -c
+            - |
+              set -ex
+              {{- if and .Values.permissions.user .Values.permissions.group }}
+              chown -R {{ .Values.permissions.user }}:{{ .Values.permissions.group }} /temp-pvc-path
+              {{- end }}
+              chmod -R {{  .Values.permissions.mode }} /temp-pvc-path/
+              sleep 1000
+            volumeMounts:
+            - name: nfs-pvc-mount
+              mountPath: /temp-pvc-path
+      volumes:
+        - name: nfs-pvc-mount
+          persistentVolumeClaim:
+            claimName: nfs-permission-update-pvc-{{ .Release.Name }}

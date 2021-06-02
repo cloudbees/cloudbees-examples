@@ -1,0 +1,5 @@
+apiVersion: v2
+name: nfs-permissions
+description: TODO
+version: 0.1.0
+appVersion: N/A

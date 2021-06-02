@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-permission-update-pvc-{{ .Release.Name }}
+spec:
+  accessModes:
+  - {{ .Values.nfs.accessMode | default "ReadWriteMany" }}
+  storageClassName: ""
+  volumeName: nfs-permission-update-pv-{{ .Release.Name }}
+  resources:
+    requests:
+      storage: {{ .Values.nfs.storage | default "5Gi" }}
