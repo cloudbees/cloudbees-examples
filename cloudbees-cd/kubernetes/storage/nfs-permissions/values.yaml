@@ -1,0 +1,24 @@
+# permissions user,group,mode to nfs volumes
+permissions:
+  user:
+  group:
+  mode: 770
+
+
+podSecurityPolicy:
+# Set to true if your cluster uses --enable-pod-security-policy:
+  enabled: false
+
+# TODO support https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
+# TODO configurable image (default busybox) & imagePullSecrets
+
+nfs:
+# storage size to mount for nfs
+  storage: 5Gi
+# NFS host
+# attach port to nfs if non-default port is used
+  host:
+# path to mount on nfs
+  path: "/"
+# accessMode to create PV . ReadWriteOnce, ReadWriteMany
+  accessMode: ReadWriteMany

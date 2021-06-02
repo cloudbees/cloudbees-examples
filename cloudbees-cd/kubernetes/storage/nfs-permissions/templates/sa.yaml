@@ -1,0 +1,6 @@
+{{- if .Values.podSecurityPolicy.enabled }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Release.Name }}
+{{- end -}}
