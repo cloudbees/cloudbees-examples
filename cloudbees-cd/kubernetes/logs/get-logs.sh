@@ -58,11 +58,14 @@ function usage
     cat <<EOF
 
     Usage:
+        ./get-logs.sh -n <Namespace> -c <Component>  -o <Output> -k <kubeconfig-file-path>
+
+    Options:
         -n Namespace: The name of the kubernetes namespace/project where CBCD/SDA is deployed
         -c (Optional) Component: The name of component to fetch logs. defaults to all
               all, flow-server, flow-web, flow-devopsinsight, flow-bound-agent, flow-agent
         -o (Optional)Output path to copy logs. default is /tmp.
-        -k (Optional)Kubeconfig file path to connect to k8s cluster.
+        -k (Optional)kubeconfig  file path to connect to k8s cluster.
 
     Examples:
         ./get-logs.sh -n flow-demo

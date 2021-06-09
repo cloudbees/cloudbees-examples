@@ -1,9 +1,14 @@
-Simple Log Utility to fetch/copy Logs from CBCD components from deployed namespaces. 
-Pre-Requisite:
-    kubectl installed and configured.
+
+# Simple Log Utility to fetch/copy Logs for CBCD components from deployed kubernetes/openshift namespaces. 
+
+## Prerequisite:
+    1. CBCD/SDA deployed on kubernetes platform.
+    2. Install  kubectl https://kubernetes.io/docs/tasks/tools/ 
 
 
-    ➜  logs git:(master) ✗ ./get-logs.sh -help
+## How it works
+
+    $> bash get-logs.sh -help
     
         Usage:
             -n Namespace: The name of the kubernetes namespace/project where CBCD/SDA is deployed
@@ -12,8 +17,8 @@ Pre-Requisite:
             -o (Optional)Output path to copy logs. default is /tmp.
             -k (Optional)Kubeconfig file path to connect to k8s cluster.
     
-        Examples:
-            ./get-logs.sh -n flow-demo
-            ./get-logs.sh -n flow-demo -c all -o /tmp/flow-logs
-            ./get-logs.sh -n flow-demo -c flow-server -o /tmp/flow-logs
-            ./get-logs.sh -n flow-demo -c flow-server -k /home/foo/kubeconfigfile
+ ##  Examples:
+        ./get-logs.sh -n <namespace> -c <Component>  -o <output-path> -k <kube-config path>
+        ./get-logs.sh -n flow-demo -c all -o /tmp/flow-logs
+        ./get-logs.sh -n flow-demo -c flow-server -o /tmp/flow-logs
+        ./get-logs.sh -n flow-demo -c flow-server -k /home/foo/kubeconfigfile
