@@ -61,7 +61,7 @@ function usage
         ./get-logs.sh -n <Namespace> -c <Component>  -o <Output> -k <kubeconfig-file-path>
 
     Options:
-        -n Namespace: The name of the kubernetes namespace/project where CBCD/SDA is deployed
+        -n Namespace: The name of the Kubernetes namespace/project where CD/RO or Software Delievery Automation is deployed
         -c (Optional) Component: The name of component to fetch logs. defaults to all
               all, flow-server, flow-web, flow-devopsinsight, flow-bound-agent, flow-agent
         -o (Optional)Output path to copy logs. default is /tmp.
