@@ -9,8 +9,8 @@ storage:
     serverPlugins:
       accessMode: ReadWriteOnce
       # Storage class for plugins directory. Currently it has to be shared across server and web replicas.
-      # Server and web are co-located using hard affinity rule for non clusteredMode. StorageClass is null here to ensure the same behavior across all cloud providers
-      # (it forces storage class to fall back to  "default" disk based ReadWriteOnce platform specific storage class)
+      # Server and web are co-located using hard affinity rule for non-clusteredMode. StorageClass is null here to ensure the same behavior across all cloud providers.
+      # (it forces storage class to fall back to  "default" disk-based ReadWriteOnce platform-specific storage class)
       storageClass: null
       storage: 5Gi
 
@@ -55,7 +55,7 @@ flowCredentials:
   ## will be read from the secret instead of the plain-text `adminPassword` (not recommended for production).
   ##
   ## The data field must contain base64 encoded value for key 'CBF_SERVER_ADMIN_PASSWORD'.
-  ## E.g., kubectl create secret generic flow-admin-secret --from-literal=CBF_SERVER_ADMIN_PASSWORD='rrx!*d$z75Dsb'
+  ## For example, kubectl create secret generic flow-admin-secret --from-literal=CBF_SERVER_ADMIN_PASSWORD='rrx!*d$z75Dsb'
   ##
   ## Uncomment the following line to set the name of the secret to use to read the admin user password.
   # existingSecret: flow-admin-secret
