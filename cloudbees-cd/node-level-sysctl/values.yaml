@@ -1,0 +1,13 @@
+# Example for Elasticsearch (https://github.com/elastic/cloud-on-k8s/blob/master/docs/orchestrating-elastic-stack-applications/elasticsearch/virtual-memory.asciidoc):
+# parameters:
+#   vm.max_map_count: '262144'
+# It is easiest to use a values file for this; otherwise a tricky syntax is needed:
+# --set "parameters.vm\.max_map_count=262144"
+parameters: {}
+
+podSecurityPolicy:
+# Set to true if your cluster uses --enable-pod-security-policy:
+  enabled: false
+
+# TODO support https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
+# TODO configurable image (default busybox) & imagePullSecrets
