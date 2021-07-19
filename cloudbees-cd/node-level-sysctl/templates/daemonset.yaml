@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  selector:
+    matchLabels:
+      name: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        name: {{ .Release.Name }}
+    spec:
+      nodeSelector:
+        kubernetes.io/os: linux
+{{- if .Values.podSecurityPolicy.enabled }}
+      serviceAccount: {{ .Release.Name }}
+{{- end }}
+      terminationGracePeriodSeconds: 3
+      containers:
+      - name: tune
+        image: busybox:stable
+        securityContext:
+          privileged: true
+          runAsUser: 0
+        resources:
+          requests:
+            cpu: 1m
+            memory: 1Mi
+        command:
+        - sh
+        - -c
+        - |
+          set -ex
+{{- range $k, $v := .Values.parameters }}
+          sysctl -w {{ $k }}={{ $v }}
+{{- end }}
+          sleep infinity
