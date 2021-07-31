@@ -1,4 +1,4 @@
-# A helm example values file for migrating a CloudBees Core for Modern Platfrom Install.
+# A helm example values file for migrating a CloudBees CI for Modern Platform install
 # Install an nginx-ingress controller
 nginx-ingress:
   # Change this to true, if you want to install the NGINX Ingress Controller
@@ -15,6 +15,6 @@ OperationsCenter:
       SecretName: core-example-com-tls
       Host: jenkins.cluster.local
 
-# Do not change these values. They are all set for migrating CloudBees Core. 
+# Do not change these values. They are all set for migrating CloudBees CI. 
 Persistence:
   ExistingClaim: 'jenkins-home-cjoc-0' 
