@@ -1,0 +1,111 @@
+##---------------------------------------------
+## Database configuration section
+##---------------------------------------------
+database:
+  ## 1. The database to use for CloudBees Flow installation.
+  ## The following database types are supported with Flow in a production environment:
+  ## mysql, oracle, or sqlserver
+  ##
+  ## The database type must be specified.
+  dbType:
+
+  ## 2. The name of the database to use with CloudBees Flow installation.
+  ##
+  ## The database name must be specified.
+  dbName:
+
+  ## 3. Name of the secret containing the database user credentials.
+  ## The data field must contain base64 encoded values for keys 'DB_USER' and 'DB_PASSWORD'.
+  ## E.g., kubectl create secret generic flow-db-secret --from-literal=DB_USER=flow_user --from-literal=DB_PASSWORD='S!*d$z5Dsb'
+  ##
+  ## Set the name of the secret that contains the database user credentials.
+  existingSecret: flow-db-secret
+
+  ## 4.(a) Database hostname if the database instance is running outside the cluster
+  ##
+  ## Either the database hostname (externalEndpoint) or the database service name (clusterEndpoint) must be specified.
+  ##
+  ## Uncomment the following line to set the database hostname.
+  # externalEndpoint: flowdb.example.com
+
+  ## 4.(b) Database service name if the database instance is running within the cluster. Use the service DNS name if
+  ## the database service is running in a different namespace in the cluster, e.g., my-sql-db-mysql.default.svc.cluster.local
+  ##
+  ## Either the database hostname (externalEndpoint) or the database service name (clusterEndpoint) must be specified.
+  ##
+  ## Uncomment the following line to set the database service name.
+  # clusterEndpoint: flow-db-mysql
+
+  ## 5. The database port to use.
+  ##
+  ## The database port must be specified.
+  dbPort:
+
+  # External Mysql Connector URL to download during cloudbees flow installation
+  mysqlConnector:
+    externalUrl:
+
+#---------------------------------------------
+# Ingress configuration section
+#---------------------------------------------
+ingress:
+# Whether to create an OpenShift Route rather than a generic Ingress.
+  route: true
+
+##---------------------------------------------
+## Flow storage configuration section
+##---------------------------------------------
+storage:
+  volumes:
+    serverPlugins:
+      ## A ReadWriteMany storage class used for plugins directory.
+      ## It is shared across all the Flow server and the web server
+      ## replicas.
+      storageClass: your-readwritemany-storage-class
+
+##---------------------------------------------
+## Flow server admin credentials section
+##---------------------------------------------
+
+flowCredentials:
+  ## Name of the secret containing the admin user password to use.
+  ## The data field must contain base64 encoded value for key 'CBF_SERVER_ADMIN_PASSWORD'.
+  ## E.g., kubectl create secret generic your-flow-admin-secret --from-literal=CBF_SERVER_ADMIN_PASSWORD='rrx!*d$z75Dsb'
+  ##
+  ## Set the name of the secret that contains the admin user password.
+  existingSecret:
+
+#---------------------------------------------
+# Flow DevOps Insight configuration section
+#---------------------------------------------
+
+dois:
+  openshiftNodeTuning: true
+  sysctlInitContainer:
+    enabled: false
+
+#---------------------------------------------
+# Volume configuration section
+#---------------------------------------------
+volumePermissions:
+  enabled: false
+
+#---------------------------------------------
+# Zookeeper configuration section
+#---------------------------------------------
+# Keep fsGroup and runAsUser empty so OCP will assign random user/group
+zookeeper:
+  securityContext:
+    fsGroup:
+    runAsUser:
+  image:
+    repository: cbflowtest/zookeeper     # Container image repository for zookeeper container.
+    tag: 3.6.2
+
+#---------------------------------------------
+# Flow ingress configuration section
+# OCP Uses routes so nginx-ingress should be disabled
+#---------------------------------------------
+nginx-ingress:
+  enabled: false
+
