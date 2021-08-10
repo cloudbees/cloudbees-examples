@@ -7,13 +7,15 @@ clusteredMode: false
 storage:
   volumes:
     serverPlugins:
-      accessMode: ReadWriteOnce
-      # Storage class for plugins directory. Currently it has to be shared across server and web replicas.
-      # Server and web are co-located using hard affinity rule for non clusteredMode. StorageClass is null here to ensure the same behavior across all cloud providers
-      # (it forces storage class to fall back to  "default" disk based ReadWriteOnce platform specific storage class)
-      storageClass: null
-      storage: 5Gi
-
+      name: flow-server-shared
+      accessMode: ReadWriteMany
+      ## A ReadWriteMany storage class used for plugins directory.
+      ## It is shared across all the Flow server and the web server
+      ## replicas.
+      storageClass: nfs-client
+      # In order to use any existing pvc. set existingClaim flag to true and
+      # set storage.volumes.serverPlugins.name to pvc name
+      existingClaim: false
     repositoryStorage:
       storage: 10Gi
 

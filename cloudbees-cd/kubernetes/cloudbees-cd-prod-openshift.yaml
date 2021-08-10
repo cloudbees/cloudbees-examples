@@ -58,10 +58,16 @@ ingress:
 storage:
   volumes:
     serverPlugins:
+      name: flow-server-shared
+      accessMode: ReadWriteMany
       ## A ReadWriteMany storage class used for plugins directory.
       ## It is shared across all the Flow server and the web server
       ## replicas.
-      storageClass: your-readwritemany-storage-class
+      storageClass: nfs-client
+      # In order to use any existing pvc. set existingClaim flag to true and
+      # set storage.volumes.serverPlugins.name to pvc name
+      existingClaim: false
+
 
 ##---------------------------------------------
 ## Flow server admin credentials section
