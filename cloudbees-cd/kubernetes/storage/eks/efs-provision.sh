@@ -58,11 +58,13 @@ function _create {
         echo "${bold}2) File System IP ====> ${green}${underline}$FS_IP${normal}"
         echo "${bold}3) Region         ====> ${green}${underline}$REGION${normal}"
         echo "+++++++++Deployment through helm+++++++++"
-        echo "${bold}1) helm repo add stable https://kubernetes-charts.storage.googleapis.com/${normal}"
+        echo "${bold}1) helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/"
         echo "${bold}2) helm repo update${normal}"
-        echo "${bold}3) helm install efs-provisioner stable/efs-provisioner --namespace kube-system --set efsProvisioner.efsFileSystemId=$FS_ID --set efsProvisioner.awsRegion=$REGION --set efsProvisioner.dnsName=$FS_IP${normal}"
+        echo "${bold}3) helm install efs-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner --namespace kube-system --set efsProvisioner.efsFileSystemId=$FS_ID --set efsProvisioner.awsRegion=$REGION --set efsProvisioner.dnsName=$FS_IP${normal}"
     fi
 }
+
+
 
 function _delete {
     _parse_args "$@"
