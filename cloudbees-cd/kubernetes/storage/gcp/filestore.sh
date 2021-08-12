@@ -57,9 +57,9 @@ function _create {
         echo "${bold}+++++++++Use below information to deploy helm chart+++++++++${normal}"
         echo "${bold}2) File System IP ====> ${green}${underline}$FS_IP${normal}"
         echo "+++++++++Deployment through helm+++++++++"
-        echo "${bold}1) helm repo add stable https://kubernetes-charts.storage.googleapis.com/${normal}"
+        echo "${bold}1) helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/"
         echo "${bold}2) helm repo update${normal}"
-        echo "${bold}3) helm install nfs-provisioner stable/nfs-client-provisioner --namespace kube-system --set nfs.server=$FS_IP --set nfs.path=/filestore${normal}"
+        echo "${bold}3) helm install nfs-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner --namespace kube-system --set nfs.server=$FS_IP --set nfs.path=/filestore${normal}"
     fi
 }
 
