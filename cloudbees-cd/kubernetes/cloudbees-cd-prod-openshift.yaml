@@ -66,7 +66,7 @@ storage:
       storageClass: nfs-client
       # In order to use any existing pvc. set existingClaim flag to true and
       # set storage.volumes.serverPlugins.name to pvc name
-      existingClaim: false
+      existingClaim: true
 
 
 ##---------------------------------------------
