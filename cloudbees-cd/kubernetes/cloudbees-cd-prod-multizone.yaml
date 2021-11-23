@@ -4,7 +4,7 @@
 database:
   ## 1. The database to use for CloudBees Flow installation.
   ## The following database types are supported with Flow in a production environment:
-  ## mysql, oracle, or sqlserver
+  ## mysql, oracle, postgresql or sqlserver
   ##
   ## The database type must be specified.
   dbType:
