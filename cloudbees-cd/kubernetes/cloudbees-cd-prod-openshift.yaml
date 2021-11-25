@@ -58,16 +58,10 @@ ingress:
 storage:
   volumes:
     serverPlugins:
-      name: flow-server-shared
-      accessMode: ReadWriteMany
       ## A ReadWriteMany storage class used for plugins directory.
       ## It is shared across all the Flow server and the web server
       ## replicas.
-      storageClass: nfs-client
-      # In order to use any existing pvc. set existingClaim flag to true and
-      # set storage.volumes.serverPlugins.name to pvc name
-      existingClaim: true
-
+      storageClass: your-readwritemany-storage-class
 
 ##---------------------------------------------
 ## Flow server admin credentials section
@@ -104,9 +98,6 @@ zookeeper:
   securityContext:
     fsGroup:
     runAsUser:
-  image:
-    repository: cbflowtest/zookeeper     # Container image repository for zookeeper container.
-    tag: 3.6.2
 
 #---------------------------------------------
 # Flow ingress configuration section

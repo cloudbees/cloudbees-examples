@@ -7,15 +7,13 @@ clusteredMode: false
 storage:
   volumes:
     serverPlugins:
-      name: flow-server-shared
-      accessMode: ReadWriteMany
-      ## A ReadWriteMany storage class used for plugins directory.
-      ## It is shared across all the Flow server and the web server
-      ## replicas.
-      storageClass: nfs-client
-      # In order to use any existing pvc. set existingClaim flag to true and
-      # set storage.volumes.serverPlugins.name to pvc name
-      existingClaim: false
+      accessMode: ReadWriteOnce
+      # Storage class for plugins directory. Currently it has to be shared across server and web replicas.
+      # Server and web are co-located using hard affinity rule for non clusteredMode. StorageClass is null here to ensure the same behavior across all cloud providers
+      # (it forces storage class to fall back to  "default" disk based ReadWriteOnce platform specific storage class)
+      storageClass: null
+      storage: 5Gi
+
     repositoryStorage:
       storage: 10Gi
 
@@ -51,9 +49,9 @@ ingress:
 # Whether to create an OpenShift Route rather than a generic Ingress.
   route: true
 
-# Install mariadb chart for demo mode 
-# and create a database and user for Flow to use. 
-# Note that the database user name and password 
+# Install mariadb chart for demo mode
+# and create a database and user for Flow to use.
+# Note that the database user name and password
 # specified in the `initdbScripts` section must
 # match the values in the `database` section below.
 

@@ -26,12 +26,12 @@ replicas: 1
 
 ## The Flow server where the agent(s) will be registered as resource(s).
 ##
-## Defaults to the Flow server service 'flow-server' expected to be in the
+## Defaults to the name of the Flow server service 'flow-server' expected to be in the
 ## same namespace as the agent(s) being installed.
 ## If installing in a different namespace than the server, then the
 ## server endpoint should be set as "flow-server.<namespace>".
 ##
-serverEndpoint: flow-server
+# serverEndpoint: flow-server
 
 flowCredentials:
 
@@ -44,6 +44,4 @@ flowCredentials:
   ## E.g., kubectl create secret generic your-flow-user-secret --from-literal=CBF_SERVER_USER='admin' --from-literal=CBF_SERVER_PASSWORD='rrx!*d$z75Dsb'
   ##
   ## Set the name of the secret that contains the Flow user credentials.
-  # existingSecret: your-flow-user-secret
-  password: changeme
-  
+  existingSecret: your-flow-user-secret

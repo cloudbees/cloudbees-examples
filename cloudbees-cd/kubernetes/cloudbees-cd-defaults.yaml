@@ -7,7 +7,7 @@ images:
   registry: "docker.io/cloudbees"
 
   # Image tag of the image to pull
-  tag: "10.2.0.148735_2.1.22_20210527"
+  tag: "10.3.2.151906_3.0.37_20211116"
 
   # The image pull policy to use
   pullPolicy: IfNotPresent
@@ -55,6 +55,10 @@ ingress:
     nginx.ingress.kubernetes.io/proxy-body-size: "10G"
     nginx.ingress.kubernetes.io/secure-backends: "false"
 
+# Should be set to the same value as nginx-ingress.controller.ingressClass if enabled.
+# Set to alb if using EKS and need to deploy ALB load balancer with alb controller enabled.
+#  class: alb
+
 # Certificate for WEB ingress.
 #
 # Normally should be set when helm install executes using `--set-file
@@ -67,6 +71,14 @@ ingress:
     existingSecret:
     key:
     crt:
+
+# Whether to create an OpenShift Route rather than a generic Ingress.
+  route: false
+
+# Enables specific settings depending on the platform
+# platform specific values are: `eks`, `aws`, `gke`, `aks`, `openshift`
+# Note: `openshift` maps to OpenShift 4.x
+platform: standard
 
 #---------------------------------------------
 # Flow server configuration section
@@ -138,6 +150,16 @@ server:
   telemetryData:
     enabled: true
 
+# expose As flow requires server to be exposed as externally available
+# services needs to ports 8443 and 61613 to be open to the
+# outer world. Creates extra Kubernetes service with type LoadBalancer
+  externalService:
+    enabled: false
+
+# Enable or disable creating init container for volume permissions for server
+  volumesPermissionsInitContainer:
+    enabled: true
+
 #---------------------------------------------
 # Flow web server configuration section
 #---------------------------------------------
@@ -180,6 +202,9 @@ web:
   #   - name: FOO
   #     value: BAR
 
+  # Enable shared plugin volume mount (PVC) on flow-web pods.
+  # Mounts empty dir instead if sharedPluginsEnabled is false
+  sharedPluginsEnabled: true
 
 #---------------------------------------------
 # Flow repository configuration section
@@ -243,6 +268,15 @@ repository:
   #   - name: FOO
   #     value: BAR
 
+# expose As flow requires repository to be exposed as externally available
+# services needs to ports 8200 to be open to the
+# outer world. Creates extra Kubernetes service with type LoadBalancer
+  externalService:
+    enabled: false
+
+# Enable or disable creating init container for volume permissions for repository
+  volumesPermissionsInitContainer:
+    enabled: true
 
 #---------------------------------------------
 # Flow DevOps Insight configuration section
@@ -324,6 +358,28 @@ dois:
   sysctlInitContainer:
     enabled: true
 
+# Enable or disable creating init container for volume permissions for dois
+  volumesPermissionsInitContainer:
+    enabled: true
+
+# Enable or disable creating init container for volume permissions for dois
+  backup:
+    enabled: false
+    schedule_cron: "0 */12 * * *"
+    location: "es-backups"
+    imageRepository: cbflow-tools
+    restoreSnapshot: false
+
+# expose As flow requires dois to be exposed as externally available
+# services needs to ports 9200 , 9500 to be open to the
+# outer world. Creates extra Kubernetes service with type LoadBalancer
+  externalService:
+    enabled: false
+# Flow DOIS LoadBalancer service annotations for creating internal LoadBalancer on GCP, AWS
+    annotations:
+#      networking.gke.io/load-balancer-type: "Internal"
+#      service.beta.kubernetes.io/aws-load-balancer-internal: "0.0.0.0/0"
+
 #---------------------------------------------
 # Flow bound agent configuration section
 #---------------------------------------------
@@ -368,6 +424,10 @@ boundAgent:
   #   - name: FOO
   #     value: BAR
 
+# Enable or disable creating init container for volume permissions for boundagent
+  volumesPermissionsInitContainer:
+    enabled: true
+
 
 #---------------------------------------------
 # Flow storage configuration section
@@ -384,6 +444,9 @@ storage:
 # server and web replicas. Has to be ReadWriteMany accessible.
       storageClass:
       storage: 5Gi
+# In order to use any existing pvc. set existingClaim flag to true and
+# set storage.volumes.serverPlugins.name to pvc name.
+      existingClaim: false
 
     repositoryStorage:
       name: flow-repo-artifacts
@@ -392,6 +455,9 @@ storage:
 # In order to use any non "platform-default" or custom storage class just
 # state required storageClass name.
       storageClass:
+# In order to use any existing pvc. set existingClaim flag to true and
+# set storage.volumes.repositoryStorage.name to pvc name.
+      existingClaim: false
 
     doisStorage:
       name: elasticsearch-data
@@ -400,6 +466,21 @@ storage:
 # In order to use any non "platform-default" or custom storage class just
 # state required storageClass name.
       storageClass:
+
+    boundAgentStorage:
+# set enable to  true in order to use Persistent Volume for bound agent workspace
+      enabled: false
+      name: flow-bound-agent-workspace
+      accessMode: ReadWriteOnce
+      storage: 5Gi
+# In order to use any non "platform-default" or custom storage class just
+# state required storageClass name.
+      storageClass:
+# In order to use any existing pvc. set existingClaim flag to true and
+# set storage.volumes.boundAgentStorage.name to pvc name.
+      existingClaim: false
+
+
 
 #---------------------------------------------
 # Flow server database configuration section
@@ -434,7 +515,7 @@ database:
 
 # database type for flow persistence to work with.
 # One of: `mysql` - MYSQL, `mariadb` - MariaDB, `sqlserver` - MSSQLServer,
-# `oracle` - Oracle.
+# `oracle` - Oracle, `postgresql` - PostgreSql.
   dbType:
 
 # External Mysql Connector URL to download during cloudbees flow installation
@@ -504,7 +585,7 @@ rbac:
   ## Specifies whether RBAC resources should be created
   ##
   create: false
-  serviceAccountName: cbflow
+  serviceAccountName:
   role:
     ## Rules to create.
     rules: []
@@ -533,7 +614,8 @@ networkIsolation:
 zookeeper:
 
   image:
-    tag: 3.6.2                # Container image tag for zookeeper container.
+    repository: docker.io/cloudbees/cbflow-tools # Container image repository for zookeeper container.
+    tag: "10.3.2.151906_3.0.37_20211116"         # Container image tag for zookeeper container.
 
   fullnameOverride: zookeeper
   replicaCount: 3
@@ -546,7 +628,7 @@ zookeeper:
   resources:
     limits:
       cpu: "250m"
-      memory: "512Mi"
+      memory: "1Gi"
     requests:
       memory: "512Mi"
       cpu: "250m"
@@ -564,11 +646,11 @@ zookeeper:
 nginx-ingress:
 
   enabled: true
-  
+
   defaultBackend:
     service:
       omitClusterIP: true
-# To omit the clusterIP from the controller service 
+# To omit the clusterIP from the controller service
   controller:
     ingressClass: flow-ingress
 # publishService Allows customization of the external service the ingress will
@@ -610,9 +692,13 @@ nginx-ingress:
     8200: "{{ .Release.Namespace }}/flow-repository:8200"
     8443: "{{ .Release.Namespace }}/flow-server:8443"
     61613: "{{ .Release.Namespace }}/flow-server:61613"
-    9200: "{{ .Release.Namespace }}/flow-devopsinsight:9200"
-    9500: "{{ .Release.Namespace }}/flow-devopsinsight:9500"
 
+##  Additional TCP ports to access DOIS more specifically Elasticsearch over ingress endpoint.
+##  7800: "{{ .Release.Namespace }}/gateway-external-agent-flow-agents:7800"
+##  9200: "{{ .Release.Namespace }}/flow-devopsinsight:9200"
+##  9500: "{{ .Release.Namespace }}/flow-devopsinsight:9500"
+## Additional port to enable external agents to connect to flow-server.
+##  8000: "{{ .Release.Namespace }}/flow-server:8000"
 
 ##---------------------------------------------
 ## Miscellaneous configuration section
@@ -645,3 +731,47 @@ mariadb:
   master:
     nodeSelector:
       kubernetes.io/os: linux
+
+# cloudbees-flow-agent chart configurations used for creating the
+# internal agent for the gateway
+internalGatewayAgent:
+    enabled: false
+    releaseNamePrefix: gateway-default-agent
+    resourceName: gateway-default-agent
+    replicas: 1
+    trustedAgent: false
+    service:
+      # External DNS hostname that the default agents would use to communicate
+      # with the external gateway agent
+      publicHostName: gateway-default-agent-flow-agents
+    flowCredentials:
+      # enable serverSecretReference to re-use flow-server secrets in agents chart
+      serverSecretReference: true
+
+# cloudbees-flow-agent chart configurations used for creating the
+# external agent for the gateway
+externalGatewayAgent:
+    enabled: false
+    releaseNamePrefix: gateway-external-agent
+    resourceName: gateway-external-agent
+    replicas: 1
+    trustedAgent: false
+    zoneName: external
+    service:
+      # External DNS hostname that the external agents would use to communicate
+      # with the external gateway agent
+      publicHostName:
+
+    # configure gateway using external gateway agent
+    gateway:
+      # configure gateway using this agent
+      enabled: true
+      # Name of the gateway to create
+      name: external
+      # Name of gateway agent to pair with as gateway resource 2
+      pairedResourceName: gateway-default-agent
+
+    flowCredentials:
+      # enable serverSecretReference to re-use flow-server secrets in agents chart
+      serverSecretReference: true
+
