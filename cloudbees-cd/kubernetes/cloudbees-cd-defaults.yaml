@@ -7,7 +7,7 @@ images:
   registry: "docker.io/cloudbees"
 
   # Image tag of the image to pull
-  tag: "10.3.2.151906_3.0.37_20211116"
+  tag: "10.3.3.152331_3.0.44_20211208"
 
   # The image pull policy to use
   pullPolicy: IfNotPresent
@@ -615,7 +615,7 @@ zookeeper:
 
   image:
     repository: docker.io/cloudbees/cbflow-tools # Container image repository for zookeeper container.
-    tag: "10.3.2.151906_3.0.37_20211116"         # Container image tag for zookeeper container.
+    tag: "10.3.3.152331_3.0.44_20211208"         # Container image tag for zookeeper container.
 
   fullnameOverride: zookeeper
   replicaCount: 3
