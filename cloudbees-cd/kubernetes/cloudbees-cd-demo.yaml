@@ -23,9 +23,9 @@ storage:
 server:
   resources:
     limits:
-      cpu: 1.5
+      cpu: 3
     requests:
-      cpu: 0.5
+      cpu: 2
 
 # Install mariadb chart for demo mode 
 # and create a database and user for Flow to use. 
