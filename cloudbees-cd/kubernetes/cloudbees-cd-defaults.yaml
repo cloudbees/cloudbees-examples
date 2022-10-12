@@ -54,16 +54,10 @@ ingress:
     nginx.ingress.kubernetes.io/proxy-body-size: "10G"
     nginx.ingress.kubernetes.io/secure-backends: "false"
 
-# Add below annotations if you are using EKS + ALB
-#  alb.ingress.kubernetes.io/scheme: internet-facing
-#  alb.ingress.kubernetes.io/certificate-arn: "<acm certificate arn>"
-
 
 # Should be set to the same value as nginx-ingress.controller.ingressClass if enabled.
-# Should be set to the same value as ingress-nginx.controller.ingressClassResource.name if enabled.
 # Set to alb if using EKS and need to deploy ALB load balancer with alb controller enabled.
 #  class: alb
-  class: flow-ingress
 
 # Certificate for WEB ingress.
 #
@@ -248,6 +242,7 @@ web:
   # Enable shared plugin volume mount (PVC) on flow-web pods.
   # Mounts empty dir instead if sharedPluginsEnabled is false
   sharedPluginsEnabled: true
+
 
   ## specify additional volumes to mount in the web container
   additionalVolumes: []

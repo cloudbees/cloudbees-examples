@@ -54,16 +54,11 @@ ingress:
     nginx.ingress.kubernetes.io/proxy-body-size: "10G"
     nginx.ingress.kubernetes.io/secure-backends: "false"
 
-# Add below annotations if you are using EKS + ALB
-#  alb.ingress.kubernetes.io/scheme: internet-facing
-#  alb.ingress.kubernetes.io/certificate-arn: "<acm certificate arn>"
 
 
 # Should be set to the same value as nginx-ingress.controller.ingressClass if enabled.
-# Should be set to the same value as ingress-nginx.controller.ingressClassResource.name if enabled.
 # Set to alb if using EKS and need to deploy ALB load balancer with alb controller enabled.
 #  class: alb
-  class: flow-ingress
 
 # Certificate for WEB ingress.
 #
@@ -504,7 +499,6 @@ dois:
 
       # region of s3 or gcs bucket e.g us-east-1
       region:
-
 
 # expose As flow requires dois to be exposed as externally available
 # services needs to ports 9200 , 9500 to be open to the
@@ -949,7 +943,6 @@ ingress-nginx:
 ##  9500: "{{ .Release.Namespace }}/flow-devopsinsight:9500"
 ## Additional port to enable external agents to connect to flow-server.
 ##  8000: "{{ .Release.Namespace }}/flow-server:8000"
-
 
 ##---------------------------------------------
 ## Miscellaneous configuration section

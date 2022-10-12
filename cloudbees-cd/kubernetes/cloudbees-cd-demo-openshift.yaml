@@ -23,9 +23,31 @@ storage:
 server:
   resources:
     limits:
-      cpu: 2
+      cpu: 1.5
     requests:
-      cpu: 2
+      cpu: 0.5
+
+#---------------------------------------------
+# Flow DevOps Insight configuration section
+#---------------------------------------------
+
+dois:
+  openshiftNodeTuning: true
+  sysctlInitContainer:
+    enabled: false
+
+#---------------------------------------------
+# Volume configuration section
+#---------------------------------------------
+volumePermissions:
+  enabled: false
+
+#---------------------------------------------
+# Ingress configuration section
+#---------------------------------------------
+ingress:
+# Whether to create an OpenShift Route rather than a generic Ingress.
+  route: true
 
 # Install mariadb chart for demo mode
 # and create a database and user for Flow to use.
@@ -37,6 +59,11 @@ mariadb:
   enabled:  true
   db:
     user: "flow"
+  volumePermissions:
+    enabled: false
+  securityContext:
+    enabled: false
+
 
 database:
   dbName: "demo"
@@ -64,31 +91,9 @@ flowCredentials:
   ## where security may not be a concern. Use of `existingSecret` is preferred.
   adminPassword:
 
-
 #---------------------------------------------
-# Ingress configuration section
+# Flow ingress configuration section
+# OCP Uses routes so nginx-ingress should be disabled
 #---------------------------------------------
-
-ingress:
-  enabled: true
-  host: your-flow-domain-name.domain
-  ## This section is just an example that ingress can be configured with
-  ## certificate for TLS.
-  certificate:
-    existingSecret:
-    key:
-    crt:
-
-##----------------------------------------------------
-## Flow multizone gateway pair configuration section
-##----------------------------------------------------
-
-internalGatewayAgent:
-  enabled: true
-
-externalGatewayAgent:
-  enabled: true
-  service:
-    ## Set the host name same as ingress.host .
-    publicHostName: your-flow-domain-name.domain
-
+nginx-ingress:
+  enabled: false

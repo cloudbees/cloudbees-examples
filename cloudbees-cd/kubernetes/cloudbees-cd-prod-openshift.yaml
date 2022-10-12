@@ -4,7 +4,7 @@
 database:
   ## 1. The database to use for CloudBees Flow installation.
   ## The following database types are supported with Flow in a production environment:
-  ## mysql, oracle, postgresql or sqlserver
+  ## mysql, oracle, or sqlserver
   ##
   ## The database type must be specified.
   dbType:
@@ -45,6 +45,13 @@ database:
   mysqlConnector:
     externalUrl:
 
+#---------------------------------------------
+# Ingress configuration section
+#---------------------------------------------
+ingress:
+# Whether to create an OpenShift Route rather than a generic Ingress.
+  route: true
+
 ##---------------------------------------------
 ## Flow storage configuration section
 ##---------------------------------------------
@@ -66,33 +73,36 @@ flowCredentials:
   ## E.g., kubectl create secret generic your-flow-admin-secret --from-literal=CBF_SERVER_ADMIN_PASSWORD='rrx!*d$z75Dsb'
   ##
   ## Set the name of the secret that contains the admin user password.
-  existingSecret: your-flow-admin-secret
-
+  existingSecret:
 
 #---------------------------------------------
-# Ingress configuration section
+# Flow DevOps Insight configuration section
 #---------------------------------------------
 
-ingress:
-  enabled: true
-  host: your-flow-domain-name.domain
-  ## This section is just an example that ingress can be configured with
-  ## certificate for TLS.
-  certificate:
-    existingSecret:
-    key:
-    crt:
+dois:
+  openshiftNodeTuning: true
+  sysctlInitContainer:
+    enabled: false
 
-##----------------------------------------------------
-## Flow multizone gateway pair configuration section
-##----------------------------------------------------
+#---------------------------------------------
+# Volume configuration section
+#---------------------------------------------
+volumePermissions:
+  enabled: false
 
-internalGatewayAgent:
-  enabled: true
+#---------------------------------------------
+# Zookeeper configuration section
+#---------------------------------------------
+# Keep fsGroup and runAsUser empty so OCP will assign random user/group
+zookeeper:
+  securityContext:
+    fsGroup:
+    runAsUser:
 
-externalGatewayAgent:
-  enabled: true
-  service:
-    ## Set the host name same as ingress.host .
-    publicHostName: your-flow-domain-name.domain
+#---------------------------------------------
+# Flow ingress configuration section
+# OCP Uses routes so nginx-ingress should be disabled
+#---------------------------------------------
+nginx-ingress:
+  enabled: false
 
