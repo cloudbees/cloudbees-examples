@@ -6,7 +6,7 @@
 images:
   registry: "docker.io/cloudbees"
   imageRepository: "cbflow-agent"
-  tag: "10.3.2.151906_3.0.37_20211116"
+  tag: "10.9.0.157496_3.2.22_20220929"
   pullPolicy: IfNotPresent
 
   # Image pull secrets
@@ -147,7 +147,7 @@ resources:
 flowCredentials:
   ## In case of Existing Secret Name of the secret containing the Flow user credentials to use.
   ## The data field must contain base64 encoded value for keys 'CBF_SERVER_USER' and 'CBF_SERVER_PASSWORD'.
-  ## E.g., kubectl create secret generic your-flow-user-secret --from-literal=CBF_SERVER_USER='admin' --from-literal=CBF_SERVER_PASSWORD='XXXXXXX'
+  ## E.g., kubectl create secret generic your-flow-user-secret --from-literal=CBF_SERVER_USER='admin' --from-literal=CBF_SERVER_ADMIN_PASSWORD='XXXXXXX' -n your-release-namespace
   ##
   existingSecret:
   serverSecretReference: false
@@ -199,4 +199,9 @@ gateway:
   # Name of gateway agent to pair with as gateway resource 2
   pairedResourceName: gateway-default-agent
 
+additionalContainers:
+  #   - name: container-name
+  #     image: image:version
+  #     command:
+  #       - "/container-command"
 

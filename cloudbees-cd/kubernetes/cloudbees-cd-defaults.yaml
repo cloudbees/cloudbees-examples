@@ -7,7 +7,7 @@ images:
   registry: "docker.io/cloudbees"
 
   # Image tag of the image to pull
-  tag: "10.3.3.152331_3.0.44_20211208"
+  tag: "10.9.0.157496_3.2.22_20220929"
 
   # The image pull policy to use
   pullPolicy: IfNotPresent
@@ -48,12 +48,12 @@ ingress:
 # Flow web ingress annotations, here we use nginx but any other ingress
 # supporting sticky sessions will suffice.
   annotations:
-    kubernetes.io/ingress.class: "flow-ingress"
     nginx.ingress.kubernetes.io/affinity: "cookie"
     nginx.ingress.kubernetes.io/session-cookie-name: "route"
     nginx.ingress.kubernetes.io/session-cookie-hash: "sha1"
     nginx.ingress.kubernetes.io/proxy-body-size: "10G"
     nginx.ingress.kubernetes.io/secure-backends: "false"
+
 
 # Should be set to the same value as nginx-ingress.controller.ingressClass if enabled.
 # Set to alb if using EKS and need to deploy ALB load balancer with alb controller enabled.
@@ -113,7 +113,7 @@ server:
       cpu: 4
       memory: 6Gi
     requests:
-      cpu: 1.5
+      cpu: 2
       memory: 6Gi
 
   nodeSelector: {}
@@ -132,6 +132,18 @@ server:
     periodSeconds: 10
     failureThreshold: 10
     timeoutSeconds: 10
+
+  ## specify additional volumes to mount in the server container
+  additionalVolumes: []
+
+  ## specify where the additional volumes are mounted in the server container
+  additionalVolumeMounts: []
+
+  additionalContainers:
+  #   - name: container-name
+  #     image: image:version
+  #     command:
+  #       - "/container-command"
 
 # Additional environment variables to set for flow-server
   extraEnvs: []
@@ -159,6 +171,31 @@ server:
 # Enable or disable creating init container for volume permissions for server
   volumesPermissionsInitContainer:
     enabled: true
+# Horizontal Pod Autoscaling configuration for server,
+# This is only supported when clusteredMode=true
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 3
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+    templates: []
+    # Custom or additional autoscaling metrics
+    # ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#support-for-custom-metrics
+    # - type: Pods
+    #   pods:
+    #     metric:
+    #       name: server_process_requests_total
+    #     target:
+    #       type: AverageValue
+    #       averageValue: 10000m
+
+
+jobInit:
+  annotations: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
 
 #---------------------------------------------
 # Flow web server configuration section
@@ -206,6 +243,38 @@ web:
   # Mounts empty dir instead if sharedPluginsEnabled is false
   sharedPluginsEnabled: true
 
+
+  ## specify additional volumes to mount in the web container
+  additionalVolumes: []
+
+  ## specify where the additional volumes are mounted in the web container
+  additionalVolumeMounts: []
+
+  additionalContainers:
+  #   - name: container-name
+  #     image: image:version
+  #     command:
+  #       - "/container-command"
+
+# Horizontal Pod Autoscaling configuration for web
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 3
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+    templates: []
+    # Custom or additional autoscaling metrics
+    # ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#support-for-custom-metrics
+    # - type: Pods
+    #   pods:
+    #     metric:
+    #       name: server_process_requests_total
+    #     target:
+    #       type: AverageValue
+    #       averageValue: 10000m
+
+
 #---------------------------------------------
 # Flow repository configuration section
 #---------------------------------------------
@@ -248,7 +317,7 @@ repository:
   resources:
     requests:
       cpu: 0.25
-      memory: 512Mi
+      memory: 1024Mi
     limits:
       cpu: 0.25
       memory: 1024Mi
@@ -277,6 +346,37 @@ repository:
 # Enable or disable creating init container for volume permissions for repository
   volumesPermissionsInitContainer:
     enabled: true
+
+  ## specify additional volumes to mount in the repository container
+  additionalVolumes: []
+
+  ## specify where the additional volumes are mounted in the repository container
+  additionalVolumeMounts: []
+
+  additionalContainers:
+  #   - name: container-name
+  #     image: image:version
+  #     command:
+  #       - "/container-command"
+
+# Horizontal Pod Autoscaling configuration for server
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 3
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+    templates: []
+    # Custom or additional autoscaling metrics
+    # ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#support-for-custom-metrics
+    # - type: Pods
+    #   pods:
+    #     metric:
+    #       name: repository_process_requests_total
+    #     target:
+    #       type: AverageValue
+    #       averageValue: 10000m
+
 
 #---------------------------------------------
 # Flow DevOps Insight configuration section
@@ -326,8 +426,6 @@ dois:
 
 # The heap size in MB for Elasticsearch and Logstash services.
   esRam: 1024
-  lsInitRam: 512
-  lsMaxRam: 512
 
   resources:
     limits:
@@ -354,6 +452,14 @@ dois:
   #   - name: FOO
   #     value: BAR
 
+#  DOIS Liveness and Readiness Probes variables
+  healthProbeReadinessPeriodSeconds: 5
+  healthProbeReadinessFailureThreshold: 3
+  healthProbeReadinessInitialDelaySeconds: 60
+  healthProbeLivenessPeriodSeconds: 20
+  healthProbeLivenessFailureThreshold: 3
+  healthProbeLivenessInitialDelaySeconds: 60
+
 # Enable or disable the privileged sysctlInitContainer if the sysctl vm.max_map_count setting is set by another method
   sysctlInitContainer:
     enabled: true
@@ -366,9 +472,34 @@ dois:
   backup:
     enabled: false
     schedule_cron: "0 */12 * * *"
-    location: "es-backups"
+    retentionDays: 15
+    location: "/es-backups"
     imageRepository: cbflow-tools
     restoreSnapshot: false
+    restoreSnapshotName:
+    externalRepo:
+      # enable in case need to take backup in s3 or gcs
+      enabled: false
+      # type can be s3 or gcs
+      type: s3
+      # Name of Bucket in s3 or gcs
+      bucketName:
+      # Either specify the secret where the AWS or GCS credentials stored as per below keys  or provide in values file with secret
+      # Create secret for AWS S3 with permission to read/write to bucket policy with Keys AWS_ACCESS_KEY and AWS_SECRET_KEY
+      # e.g kubectl create secret generic s3awssecret --from-literal=AWS_ACCESS_KEY="XXXXX" --from-literal=AWS_SECRET_KEY="XXXXX"
+      # Create secret for GCS with permission to read/write to bucket policy with service account key file with KEY GCS_SA_KEY
+      # e.g kubectl create secret generic gcssasecret --from-file=GCS_SA_KEY=/tmp/gke-credentials.json
+      existingSecret:
+      secret:
+        # provide only if type s3
+        awsAccessKey:
+        awsSecretKey:
+        # provide only if type gcs
+        gcsSaKey:
+
+      # region of s3 or gcs bucket e.g us-east-1
+      region:
+
 
 # expose As flow requires dois to be exposed as externally available
 # services needs to ports 9200 , 9500 to be open to the
@@ -379,6 +510,51 @@ dois:
     annotations:
 #      networking.gke.io/load-balancer-type: "Internal"
 #      service.beta.kubernetes.io/aws-load-balancer-internal: "0.0.0.0/0"
+
+# DOIS Supported Certificates
+  certificates:
+    ca:
+      crt:
+      key:
+    sign:
+      crt:
+      key:
+    node:
+      crt:
+      key:
+    admin:
+      crt:
+      key:
+      dname:
+    bundle:
+# Either specify the secret where the certificates ca, sign,node
+# admin,bundle will be stored (recommended for production) or specify above
+    existingSecret:
+# When using the existingSecret secret use below keys,
+#     store the 'ca.crt' value under CBF_DOIS_CA_CRT key
+#     store the 'ca.key' value under CBF_DOIS_CA_KEY key
+#     store the 'sign.crt' value under CBF_DOIS_SIGN_CRT key
+#     store the 'sign.key' value under CBF_DOIS_SIGN_KEY key
+#     store the 'node.crt' value under CBF_DOIS_NODE_CRT key
+#     store the 'node.key' value under CBF_DOIS_NODE_KEY key
+#     store the 'admin.crt' value under CBF_DOIS_ADMIN_CRT key
+#     store the 'admin.key' value under CBF_DOIS_ADMIN_KEY key
+#     store the 'bundle' value under CBF_DOIS_CRT_BUNDLE key
+# do not store admin.dnname in secret instead pass it as value
+
+# For multiple dois replicas user needs to define one of the below supported certificates .
+#      1. certificates.bundle is defined
+#      2. certificates.ca.crt and certificates.ca.key are defined
+#      3. certificates.ca.crt and certificates.sign.crt and certificates.sign.key are defined
+#      4. certificates.ca.crt and certificates.sign.crt and certificates.node.crt and certificates.node.key
+#         and certificates.admin.crt and certificates.admin.key are defined.
+#
+
+  additionalContainers:
+  #   - name: container-name
+  #     image: image:version
+  #     command:
+  #       - "/container-command"
 
 #---------------------------------------------
 # Flow bound agent configuration section
@@ -428,6 +604,17 @@ boundAgent:
   volumesPermissionsInitContainer:
     enabled: true
 
+  ## specify additional volumes to mount in the bound agent container
+  additionalVolumes: []
+
+  ## specify where the additional volumes are mounted in the bound agent container
+  additionalVolumeMounts: []
+
+  additionalContainers:
+  #   - name: container-name
+  #     image: image:version
+  #     command:
+  #       - "/container-command"
 
 #---------------------------------------------
 # Flow storage configuration section
@@ -542,8 +729,12 @@ flowCredentials:
 # Flow server license configuration optional section
 #---------------------------------------------
 
-# Optional section to allow for setting up license with flow server during
-# init phase. Allows for either create a secret from this chart or supply
+# Automations of licence installations or upgrades
+# should be made using the the following API:
+# https://docs.cloudbees.com/docs/cloudbees-cd-api/latest/flow-api/apiserver
+
+# This optional section is to allow for setting up license with flow server during
+# first initialization only. Allows for either create a secret from this chart or supply
 # own pre-created one pre-created secret must have a single field named
 # CBF_LICENSE with value containing license file contents.
 
@@ -586,6 +777,7 @@ rbac:
   ##
   create: false
   serviceAccountName:
+  annotations: {}
   role:
     ## Rules to create.
     rules: []
@@ -615,7 +807,7 @@ zookeeper:
 
   image:
     repository: docker.io/cloudbees/cbflow-tools # Container image repository for zookeeper container.
-    tag: "10.3.3.152331_3.0.44_20211208"         # Container image tag for zookeeper container.
+    tag: "10.9.0.157496_3.2.22_20220929"         # Container image tag for zookeeper container.
 
   fullnameOverride: zookeeper
   replicaCount: 3
@@ -645,7 +837,7 @@ zookeeper:
 
 nginx-ingress:
 
-  enabled: true
+  enabled: false
 
   defaultBackend:
     service:
@@ -699,6 +891,60 @@ nginx-ingress:
 ##  9500: "{{ .Release.Namespace }}/flow-devopsinsight:9500"
 ## Additional port to enable external agents to connect to flow-server.
 ##  8000: "{{ .Release.Namespace }}/flow-server:8000"
+
+
+
+# ingress-nginx.enabled -- Installs the [ingress-nginx](https://github.com/kubernetes/ingress-nginx/tree/master/charts/ingress-nginx) controller (optional).
+# Enable this section if you don't have an existing installation of ingress-nginx controller
+ingress-nginx:
+  enabled: true
+  controller:
+    service:
+      externalTrafficPolicy: Local
+    ingressClassResource:
+      name: flow-ingress
+
+    # publishService Allows customization of the external service the ingress will
+# be bound to via DNS.
+    publishService:
+      enabled: true
+    scope:
+      enabled: true
+# as we already use 8443 port for flow-server tcp expose , changed default admissionWebhooks port to 8445
+    admissionWebhooks:
+      port: 8445
+
+#    extraArgs:
+# Additional log messages that may be useful for debugging:
+# shows details using diff about the changes in the configuration in nginx
+#      v: 2
+# shows details about the service, Ingress rule, endpoint changes and it
+# dumps the nginx configuration in JSON format
+#      v: 3
+# configures NGINX in debug mode
+#      v: 5
+
+    config:
+# Ingress must support long-running requests without resetting the connection.
+# By default, nginx reset connections to TCP/UDP services after 600 seconds of
+# inactivity between two successive read or write operations. This setting
+# extends the timeout to 4000 seconds.
+      proxy-stream-timeout: "4000s"
+# Increasing the detail of the error log. This can be useful for debugging.
+#      error-log-level: debug
+
+  tcp:
+    8200: "{{ .Release.Namespace }}/flow-repository:8200"
+    8443: "{{ .Release.Namespace }}/flow-server:8443"
+    61613: "{{ .Release.Namespace }}/flow-server:61613"
+
+##  Additional TCP ports to access DOIS more specifically Elasticsearch over ingress endpoint.
+##  7800: "{{ .Release.Namespace }}/gateway-external-agent-flow-agents:7800"
+##  9200: "{{ .Release.Namespace }}/flow-devopsinsight:9200"
+##  9500: "{{ .Release.Namespace }}/flow-devopsinsight:9500"
+## Additional port to enable external agents to connect to flow-server.
+##  8000: "{{ .Release.Namespace }}/flow-server:8000"
+
 
 ##---------------------------------------------
 ## Miscellaneous configuration section
@@ -775,3 +1021,33 @@ externalGatewayAgent:
       # enable serverSecretReference to re-use flow-server secrets in agents chart
       serverSecretReference: true
 
+gitops:
+  enabled: false
+  repo:
+# Either specify the secret where the gitToken is stored under
+# the 'CBF_GIT_TOKEN' key (recommended for production) or specify
+  gitToken:
+  existingSecret:
+
+# CD Sidecar injector (optional)
+# Useful when running infrastructure (GitHub Enterprise, Nexus, etc.) using a self-signed certificate.
+# It allows you to inject certificate bundles in pods running in CloudBees CD so that they can trust provided certificates
+# without having to build custom docker images.
+# label your namespace with sidecar-injector-cd=enabled to enable sidecar-injector to work
+#   kubectl label namespace mynamespace sidecar-injector-cd=enabled
+# Use helm inspect readme cloudbees/cloudbees-sidecar-injector to read more on this optional components
+# Note: If you are using SDA and CI  has sidecarinjector enabled you cant enable cdsidecarinjector.
+# As We refer  to same chart and it contains conflicting  names.
+cdsidecarinjector:
+  # cdsidecarinjector.enabled -- Whether to enable installation of Sidecar Injector
+  enabled: false
+  caBundleName: ca-bundles
+  injectionCaCertificates:
+    - /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
+
+  injectionJavaKeystore:
+    - /opt/cbflow/jre/lib/security/cacerts # Alpine/Debian/Ubuntu/Gentoo etc.
+
+  namespaceLabel: sidecar-injector
+  annotationPrefix: com.cloudbees.sidecar-injector
+  batchApiVersion: batch/v1 # Use batch/v1beta1 if using Kubernetes < 1.22
