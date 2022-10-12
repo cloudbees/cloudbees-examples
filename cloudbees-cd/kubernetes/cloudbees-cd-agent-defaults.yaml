@@ -6,8 +6,21 @@
 images:
   registry: "docker.io/cloudbees"
   imageRepository: "cbflow-agent"
-  tag: "10.2.0.148735_2.1.22_20210527"
+  tag: "10.9.0.157496_3.2.22_20220929"
   pullPolicy: IfNotPresent
+
+  # Image pull secrets
+  # Enable this option when using a private registry.
+  # Secrets must be manually created in the namespace.
+  # imagePullSecrets: <secret-name>
+
+  # Optional array of imagePullSecrets containing private registry credentials
+  # Reference to one or more secrets to be used when pulling images
+  # Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  # imagePullSecrets:
+  # - name: "docker-registry"
+
+  imagePullSecrets:
 
 # Please state flow-server endpoint here. Please note that if installing in different namespace than server
 # service name has to be stated in form "service-name.namespace"
@@ -35,10 +48,14 @@ resourcePools:
 #
 resourceName:
 
+# Release name prefix added to support this chart to launch as multiple subchart in CD deployment
+# keep this empty for standalone deployments
+releaseNamePrefix:
+
 # Number of replicas
 replicas: 1
 
-# The default is to deploy all pods serially. By setting this to parallel 
+# The default is to deploy all pods serially. By setting this to parallel
 # all pods are started at the same time.
 podManagementPolicy: "Parallel"
 
@@ -81,7 +98,15 @@ logLevel: DEBUG
 service:
   type: ClusterIP
   clusterIP: "None"
+# External DNS hostname to set to as agent service name. For Gateway Agent configuration.
+  publicHostName: null
 
+
+# Gateway Agents needs ports 7800  to be open to the
+# outer world to communicate with external agents.
+# Creates extra Kubernetes service with type LoadBalancer
+externalService:
+  enabled: false
 #---------------------------------------------
 # Flow agent storage and resources configuration section
 #---------------------------------------------
@@ -114,13 +139,22 @@ resources:
 # Flow server credentials configuration section
 #---------------------------------------------
 
+
 # Flow server credentials to use in order to register with agent as a resource on the Flow server.
 # 'admin' user is used by default. You may user a different user if desired. The user must have
 # `modify` permissions on `resources` on the Flow server.
+# serverSecretReference is added to support case where agents need to refer  flow servers existing admin credentials
 flowCredentials:
+  ## In case of Existing Secret Name of the secret containing the Flow user credentials to use.
+  ## The data field must contain base64 encoded value for keys 'CBF_SERVER_USER' and 'CBF_SERVER_PASSWORD'.
+  ## E.g., kubectl create secret generic your-flow-user-secret --from-literal=CBF_SERVER_USER='admin' --from-literal=CBF_SERVER_ADMIN_PASSWORD='XXXXXXX' -n your-release-namespace
+  ##
   existingSecret:
+  serverSecretReference: false
   user: admin
   password:
+
+
 
 #---------------------------------------------
 # Pods security context
@@ -130,3 +164,44 @@ securityContext:
   enabled: false
   fsGroup: 1000
   runAsUser: 1000
+
+rbac:
+  ## Specifies whether RBAC resources should be created
+  ##
+  create: false
+  serviceAccountName:
+  role:
+    ## Rules to create.
+    rules: []
+
+
+volumePermissions:
+  enabled: true
+
+podSecurityPolicy:
+  create: false
+  annotations: {}
+    ## Specify pod annotations
+    ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#apparmor
+    ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#seccomp
+    ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#sysctl
+    ##
+    # seccomp.security.alpha.kubernetes.io/allowedProfileNames: '*'
+    # seccomp.security.alpha.kubernetes.io/defaultProfileName: 'docker/default'
+    # apparmor.security.beta.kubernetes.io/defaultProfileName: 'runtime/default'
+
+
+gateway:
+  # install this agent as gateway agent
+  enabled: false
+  # Name of the gateway to create
+  name: external
+  # Name of gateway agent to pair with as gateway resource 2
+  pairedResourceName: gateway-default-agent
+
+additionalContainers:
+  #   - name: container-name
+  #     image: image:version
+  #     command:
+  #       - "/container-command"
+
