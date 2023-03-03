@@ -98,11 +98,3 @@ zookeeper:
   securityContext:
     fsGroup:
     runAsUser:
-
-#---------------------------------------------
-# Flow ingress configuration section
-# OCP Uses routes so nginx-ingress should be disabled
-#---------------------------------------------
-nginx-ingress:
-  enabled: false
-

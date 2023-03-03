@@ -90,10 +90,3 @@ flowCredentials:
   ## IMPORTANT: This is clearly not meant for production use and is only meant for demo environments
   ## where security may not be a concern. Use of `existingSecret` is preferred.
   adminPassword:
-
-#---------------------------------------------
-# Flow ingress configuration section
-# OCP Uses routes so nginx-ingress should be disabled
-#---------------------------------------------
-nginx-ingress:
-  enabled: false
