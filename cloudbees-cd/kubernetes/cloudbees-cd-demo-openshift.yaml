@@ -90,3 +90,6 @@ flowCredentials:
   ## IMPORTANT: This is clearly not meant for production use and is only meant for demo environments
   ## where security may not be a concern. Use of `existingSecret` is preferred.
   adminPassword:
+
+ingress-nginx:
+  enabled: false
