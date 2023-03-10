@@ -91,9 +91,5 @@ flowCredentials:
   ## where security may not be a concern. Use of `existingSecret` is preferred.
   adminPassword:
 
-#---------------------------------------------
-# Flow ingress configuration section
-# OCP Uses routes so nginx-ingress should be disabled
-#---------------------------------------------
-nginx-ingress:
+ingress-nginx:
   enabled: false

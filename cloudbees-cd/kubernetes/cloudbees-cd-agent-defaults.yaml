@@ -6,7 +6,7 @@
 images:
   registry: "docker.io/cloudbees"
   imageRepository: "cbflow-agent"
-  tag: "10.9.0.157496_3.2.22_20220929"
+  tag: "2023.03.0.161439_3.2.38_20230307"
   pullPolicy: IfNotPresent
 
   # Image pull secrets
@@ -98,7 +98,7 @@ logLevel: DEBUG
 service:
   type: ClusterIP
   clusterIP: "None"
-# External DNS hostname to set to as agent service name. For Gateway Agent configuration.
+  # External DNS hostname to set to as agent service name. For Gateway Agent configuration.
   publicHostName: null
 
 
@@ -120,10 +120,10 @@ storage:
       name: flow-agent-workspace
       accessMode: ReadWriteOnce
       storage: 5Gi
-# In order to use any non "platform-default" or custom storage class just uncomment the line and and state required storageClass name
-#     storageClass: my-class
-#
-# If defined true if any agent is already deployed with shared workspace and pvc already exist
+      # In order to use any non "platform-default" or custom storage class just uncomment the line and and state required storageClass name
+      #     storageClass: my-class
+      #
+      # If defined true if any agent is already deployed with shared workspace and pvc already exist
       existingClaim: false
 
 
@@ -134,6 +134,17 @@ resources:
   requests:
     cpu: 0.25
     memory: 512Mi
+
+# Additional environment variables to set for agent
+extraEnvs: []
+# extraEnvs:
+#   - name: FOO
+#     valueFrom:
+#       secretKeyRef:
+#         key: FOO
+#         name: secret-resource
+#   - name: FOO
+#     value: BAR
 
 #---------------------------------------------
 # Flow server credentials configuration section
@@ -178,30 +189,40 @@ rbac:
 volumePermissions:
   enabled: true
 
-podSecurityPolicy:
-  create: false
-  annotations: {}
-    ## Specify pod annotations
-    ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#apparmor
-    ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#seccomp
-    ## Ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/#sysctl
-    ##
-    # seccomp.security.alpha.kubernetes.io/allowedProfileNames: '*'
-    # seccomp.security.alpha.kubernetes.io/defaultProfileName: 'docker/default'
-    # apparmor.security.beta.kubernetes.io/defaultProfileName: 'runtime/default'
-
-
 gateway:
   # install this agent as gateway agent
   enabled: false
   # Name of the gateway to create
   name: external
   # Name of gateway agent to pair with as gateway resource 2
-  pairedResourceName: gateway-default-agent
+  pairedResourceName:
 
 additionalContainers:
-  #   - name: container-name
-  #     image: image:version
-  #     command:
-  #       - "/container-command"
+#   - name: container-name
+#     image: image:version
+#     command:
+#       - "/container-command"
 
+# Horizontal Pod Autoscaling configuration for agent,
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+  templates: []
+  # Custom or additional autoscaling metrics
+  # ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#support-for-custom-metrics
+  # - type: Pods
+  #   pods:
+  #     metric:
+  #       name: server_process_requests_total
+  #     target:
+  #       type: AverageValue
+  #       averageValue: 10000m
+
+## specify additional volumes to mount in the agent container
+additionalVolumes: []
+
+## specify where the additional volumes are mounted in the agent container
+additionalVolumeMounts: []

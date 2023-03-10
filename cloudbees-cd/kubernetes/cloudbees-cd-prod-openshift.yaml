@@ -93,16 +93,12 @@ volumePermissions:
 #---------------------------------------------
 # Zookeeper configuration section
 #---------------------------------------------
-# Keep fsGroup and runAsUser empty so OCP will assign random user/group
+# To find out allowed fsGroup and runAsUser values, check your namespace "openshift.io/sa.scc.uid-range" annotation
+# E.g., kubectl get namespace your-namespace -o=jsonpath="{.metadata.annotations.openshift\.io\/sa\.scc\.uid-range}" | cut -f1 -d/
 zookeeper:
   securityContext:
     fsGroup:
     runAsUser:
 
-#---------------------------------------------
-# Flow ingress configuration section
-# OCP Uses routes so nginx-ingress should be disabled
-#---------------------------------------------
-nginx-ingress:
+ingress-nginx:
   enabled: false
-
