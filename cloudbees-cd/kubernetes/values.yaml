@@ -7,7 +7,7 @@ images:
   registry: "docker.io/cloudbees"
 
   # Image tag of the image to pull
-  tag: "2023.02.0.160256_3.2.35_20230201"
+  tag: "2023.03.0.161439_3.2.38_20230307"
 
   # The image pull policy to use
   pullPolicy: IfNotPresent
