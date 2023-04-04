@@ -7,7 +7,7 @@ images:
   registry: "docker.io/cloudbees"
 
   # Image tag of the image to pull
-  tag: "2023.03.0.161439_3.2.38_20230307"
+  tag: "2023.04.0.162208_3.2.38_20230330"
 
   # The image pull policy to use
   pullPolicy: IfNotPresent
@@ -45,8 +45,8 @@ ingress:
 
   host:
 
-  # Flow web ingress annotations, here we use nginx but any other ingress
-  # supporting sticky sessions will suffice.
+# Flow web ingress annotations, here we use nginx but any other ingress
+# supporting sticky sessions will suffice.
   annotations:
     nginx.ingress.kubernetes.io/affinity: "cookie"
     nginx.ingress.kubernetes.io/affinity-mode: "persistent"
@@ -59,31 +59,31 @@ ingress:
 
 
 
-  # Add below annotations if you are using EKS + ALB
-  #  alb.ingress.kubernetes.io/scheme: internet-facing
-  #  alb.ingress.kubernetes.io/certificate-arn: "<acm certificate arn>"
+# Add below annotations if you are using EKS + ALB
+#  alb.ingress.kubernetes.io/scheme: internet-facing
+#  alb.ingress.kubernetes.io/certificate-arn: "<acm certificate arn>"
 
 
-  # Should be set to the same value as nginx-ingress.controller.ingressClass if enabled.
-  # Should be set to the same value as ingress-nginx.controller.ingressClassResource.name if enabled.
-  # Set to alb if using EKS and need to deploy ALB load balancer with alb controller enabled.
-  #  class: alb
+# Should be set to the same value as nginx-ingress.controller.ingressClass if enabled.
+# Should be set to the same value as ingress-nginx.controller.ingressClassResource.name if enabled.
+# Set to alb if using EKS and need to deploy ALB load balancer with alb controller enabled.
+#  class: alb
   class: flow-ingress
 
-  # Certificate for WEB ingress.
-  #
-  # Normally should be set when helm install executes using `--set-file
-  # ingress.certificate.key=path/to/key` `--set-file
-  # ingress.certificate.crt=path/to/certificate`.
-  #
-  # This section is just an example that ingress can be configured with
-  # certificate for TLS.
+# Certificate for WEB ingress.
+#
+# Normally should be set when helm install executes using `--set-file
+# ingress.certificate.key=path/to/key` `--set-file
+# ingress.certificate.crt=path/to/certificate`.
+#
+# This section is just an example that ingress can be configured with
+# certificate for TLS.
   certificate:
     existingSecret:
     key:
     crt:
 
-  # Whether to create an OpenShift Route rather than a generic Ingress.
+# Whether to create an OpenShift Route rather than a generic Ingress.
   route: false
 
 # Enables specific settings depending on the platform
@@ -97,26 +97,26 @@ platform: standard
 
 server:
 
-  # Flag that dictates whether this workload and its accompanying services are
-  # to be installed.
+# Flag that dictates whether this workload and its accompanying services are
+# to be installed.
   enabled: true
   imageRepository: cbflow-server
   replicas: 1
 
-  # expose As flow requires repository to be exposed as externally available
-  # services ingress needs to ports 8443 and 61613  to be open to the
-  # outer world.
+# expose As flow requires repository to be exposed as externally available
+# services ingress needs to ports 8443 and 61613  to be open to the
+# outer world.
   expose: true
 
-  # Master loglevel for com.electriccloud package.
+# Master loglevel for com.electriccloud package.
   logLevel: DEBUG
 
   zk:
     host: zookeeper
     port: 2181
 
-  # This line is interpreted as if passsed to ecconfigure utility within
-  # the container.
+# This line is interpreted as if passsed to ecconfigure utility within
+# the container.
   ecconfigure: "--serverInitMemoryMB=4096 --serverMaxMemoryMB=4096"
 
   resources:
@@ -131,7 +131,7 @@ server:
   tolerations: []
   affinity: {}
 
-  # Kubernetes Liveness and Readiness Probes
+# Kubernetes Liveness and Readiness Probes
   livenessProbe:
     initialDelaySeconds: 90
     periodSeconds: 60
@@ -156,7 +156,7 @@ server:
   #     command:
   #       - "/container-command"
 
-  # Additional environment variables to set for flow-server
+# Additional environment variables to set for flow-server
   extraEnvs: []
   # extraEnvs:
   #   - name: FOO
@@ -167,23 +167,23 @@ server:
   #         key: FOO
   #         name: secret-resource
 
-  # Enable or disable sending telemetry data to CloudBees
-  # Note: this option only works for the very first installation during server initialization.
-  # For an already initialized server, this can be configured in its settings.
+# Enable or disable sending telemetry data to CloudBees
+# Note: this option only works for the very first installation during server initialization.
+# For an already initialized server, this can be configured in its settings.
   telemetryData:
     enabled: true
 
-  # expose As flow requires server to be exposed as externally available
-  # services needs to ports 8443 and 61613 to be open to the
-  # outer world. Creates extra Kubernetes service with type LoadBalancer
+# expose As flow requires server to be exposed as externally available
+# services needs to ports 8443 and 61613 to be open to the
+# outer world. Creates extra Kubernetes service with type LoadBalancer
   externalService:
     enabled: false
 
-  # Enable or disable creating init container for volume permissions for server
+# Enable or disable creating init container for volume permissions for server
   volumesPermissionsInitContainer:
     enabled: true
-  # Horizontal Pod Autoscaling configuration for server,
-  # This is only supported when clusteredMode=true
+# Horizontal Pod Autoscaling configuration for server,
+# This is only supported when clusteredMode=true
   autoscaling:
     enabled: false
     minReplicas: 1
@@ -217,8 +217,8 @@ jobInit:
 
 web:
 
-  # Flag that dictates whether this workload and its accompanying services are
-  # to be installed.
+# Flag that dictates whether this workload and its accompanying services are
+# to be installed.
   enabled: true
   imageRepository: cbflow-web
   replicas: 1
@@ -226,8 +226,8 @@ web:
   service:
     type: ClusterIP
 
-  # This line is interpreted as if passsed to ecconfigure utility within
-  # the container.
+# This line is interpreted as if passsed to ecconfigure utility within
+# the container.
   ecconfigure: ""
 
   resources:
@@ -242,7 +242,7 @@ web:
   tolerations: []
   affinity: {}
 
-  # Additional environment variables to set for flow-web
+# Additional environment variables to set for flow-web
   extraEnvs: []
   # extraEnvs:
   #   - name: FOO
@@ -269,7 +269,7 @@ web:
   #     command:
   #       - "/container-command"
 
-  # Horizontal Pod Autoscaling configuration for web
+# Horizontal Pod Autoscaling configuration for web
   autoscaling:
     enabled: false
     minReplicas: 1
@@ -294,38 +294,38 @@ web:
 
 repository:
 
-  # Flag that dictates whether this workload and its accompanying services are
-  # to be installed.
+# Flag that dictates whether this workload and its accompanying services are
+# to be installed.
   enabled: true
   imageRepository: cbflow-repository
   replicas: 1
 
-  # expose As flow requires repository to be exposed as externally available
-  # services ingress needs to ports 8200 to be open to the outer world.
+# expose As flow requires repository to be exposed as externally available
+# services ingress needs to ports 8200 to be open to the outer world.
   expose: true
 
-  # The zone (must exist in CloudBees Flow server instance) that will be assigned
-  # to the repository instance created in the Flow server to represent this
-  # repository instance.
+# The zone (must exist in CloudBees Flow server instance) that will be assigned
+# to the repository instance created in the Flow server to represent this
+# repository instance.
   zoneName:
 
-  # The endpoint for Flow repository service.
-  #
-  # This setting will be ignored if Flow server is enabled. In this case,
-  # the service name will be determined automatically based on .serverName value.
-  #
-  # If Flow server is disabled and the repository should be connected to
-  # Flow server outside of this deployment, then this setting is mandatory.
-  #
-  # Usual helm templates are acceptable for this setting.
+# The endpoint for Flow repository service.
+#
+# This setting will be ignored if Flow server is enabled. In this case,
+# the service name will be determined automatically based on .serverName value.
+#
+# If Flow server is disabled and the repository should be connected to
+# Flow server outside of this deployment, then this setting is mandatory.
+#
+# Usual helm templates are acceptable for this setting.
   serviceEndpoint:
 
-  # Master loglevel for com.electriccloud package
+# Master loglevel for com.electriccloud package
   logLevel: DEBUG
 
-  # This line is interpreted as if passed to ecconfigure utility within
-  # the container.
-  ecconfigure: "--repositoryInitMemoryMB=256 --repositoryMaxMemoryMB=512"
+# This line is interpreted as if passed to ecconfigure utility within
+# the container.
+  ecconfigure: "--repositoryInitMemoryMB=512 --repositoryMaxMemoryMB=1024"
 
   resources:
     requests:
@@ -333,13 +333,13 @@ repository:
       memory: 1024Mi
     limits:
       cpu: 0.25
-      memory: 1024Mi
+      memory: 2048Mi
 
   nodeSelector: {}
   tolerations: []
   affinity: {}
 
-  # Additional environment variables to set for flow-repository
+# Additional environment variables to set for flow-repository
   extraEnvs: []
   # extraEnvs:
   #   - name: FOO
@@ -350,13 +350,13 @@ repository:
   #   - name: FOO
   #     value: BAR
 
-  # expose As flow requires repository to be exposed as externally available
-  # services needs to ports 8200 to be open to the
-  # outer world. Creates extra Kubernetes service with type LoadBalancer
+# expose As flow requires repository to be exposed as externally available
+# services needs to ports 8200 to be open to the
+# outer world. Creates extra Kubernetes service with type LoadBalancer
   externalService:
     enabled: false
 
-  # Enable or disable creating init container for volume permissions for repository
+# Enable or disable creating init container for volume permissions for repository
   volumesPermissionsInitContainer:
     enabled: true
 
@@ -372,7 +372,7 @@ repository:
   #     command:
   #       - "/container-command"
 
-  # Horizontal Pod Autoscaling configuration for server
+# Horizontal Pod Autoscaling configuration for server
   autoscaling:
     enabled: false
     minReplicas: 1
@@ -397,47 +397,47 @@ repository:
 
 dois:
 
-  # Flag that dictates whether this workload and its accompanying services are
-  # to be installed.
+# Flag that dictates whether this workload and its accompanying services are
+# to be installed.
   enabled: true
   imageRepository: cbflow-dois
-  # Number or Elasticsearch nodes
+# Number or Elasticsearch nodes
   replicas: 1
 
-  # expose As flow requires devopsinsight to be exposed as externally available
-  # services ingress needs to ports 9200 and 9500 to be open to the outer world.
+# expose As flow requires devopsinsight to be exposed as externally available
+# services ingress needs to ports 9200 and 9500 to be open to the outer world.
   expose: true
 
-  # The DOIS service endpoint which will be configured on the remote
-  # CloudBees Flow server.
-  # Here we assume that the remote CloudBees Flow server is located in the same
-  # k8s cluster.
+# The DOIS service endpoint which will be configured on the remote
+# CloudBees Flow server.
+# Here we assume that the remote CloudBees Flow server is located in the same
+# k8s cluster.
   serviceEndpoint: "flow-devopsinsight.{{ .Release.Namespace }}"
 
-  # The name of the Elasticsearch cluster.
+# The name of the Elasticsearch cluster.
   esClusterName:
-  # Minimum number of master-eligible nodes that must be visible in order to
-  # form an Elasticsearch cluster.
+# Minimum number of master-eligible nodes that must be visible in order to
+# form an Elasticsearch cluster.
   esMinMasterNodes: 1
-  # The number of primary shards that an index should have.
+# The number of primary shards that an index should have.
   esNumberOfShards:
 
   credentials:
-    # Either specify the secret where the report user password and the admin user
-    # password will be stored (recommended for production) or specify
-    # the reportUserPassword and adminPassword values.
-    # When using the secret, store the 'reportUser' password under
-    # the 'CBF_DOIS_PASSWORD' key and the 'admin' password under
-    # the 'CBF_DOIS_ADMIN_PASSWORD' key.
-    # If the password is an empty string, then user 'admin' will not be created
-    # and administrative access will not be granted.
-    # If reportUserPassword is an empty string, a random 20 characters password will be used
+# Either specify the secret where the report user password and the admin user
+# password will be stored (recommended for production) or specify
+# the reportUserPassword and adminPassword values.
+# When using the secret, store the 'reportUser' password under
+# the 'CBF_DOIS_PASSWORD' key and the 'admin' password under
+# the 'CBF_DOIS_ADMIN_PASSWORD' key.
+# If the password is an empty string, then user 'admin' will not be created
+# and administrative access will not be granted.
+# If reportUserPassword is an empty string, a random 20 characters password will be used
 
     existingSecret:
     adminPassword:
     reportUserPassword:
 
-  # The heap size in MB for Elasticsearch and Logstash services.
+# The heap size in MB for Elasticsearch and Logstash services.
   esRam: 1024
 
   resources:
@@ -454,7 +454,7 @@ dois:
   # Adds openshift Node tuning label to DOIS Pods to configure vm.max_map_count value required to run Elasticsearch.
   # refer https://developers.redhat.com/blog/2019/11/12/using-the-red-hat-openshift-tuned-operator-for-elasticsearch/
   openshiftNodeTuning: false
-  # Additional environment variables to set for DevOps Insight
+# Additional environment variables to set for DevOps Insight
   extraEnvs: []
   # extraEnvs:
   #   - name: FOO
@@ -465,7 +465,7 @@ dois:
   #   - name: FOO
   #     value: BAR
 
-  #  DOIS Liveness and Readiness Probes variables
+#  DOIS Liveness and Readiness Probes variables
   healthProbeReadinessPeriodSeconds: 5
   healthProbeReadinessFailureThreshold: 3
   healthProbeReadinessInitialDelaySeconds: 60
@@ -473,15 +473,15 @@ dois:
   healthProbeLivenessFailureThreshold: 3
   healthProbeLivenessInitialDelaySeconds: 60
 
-  # Enable or disable the privileged sysctlInitContainer if the sysctl vm.max_map_count setting is set by another method
+# Enable or disable the privileged sysctlInitContainer if the sysctl vm.max_map_count setting is set by another method
   sysctlInitContainer:
     enabled: true
 
-  # Enable or disable creating init container for volume permissions for dois
+# Enable or disable creating init container for volume permissions for dois
   volumesPermissionsInitContainer:
     enabled: true
 
-  # Enable or disable creating init container for volume permissions for dois
+# Enable or disable creating init container for volume permissions for dois
   backup:
     # Note: changing enabled on a previous install requires the deletion of the statefulset prior to upgrading.
     # e.g. kubectl delete statefulset flow-devopsinsight
@@ -518,17 +518,17 @@ dois:
       region:
 
 
-  # expose As flow requires dois to be exposed as externally available
-  # services needs to ports 9200 , 9500 to be open to the
-  # outer world. Creates extra Kubernetes service with type LoadBalancer
+# expose As flow requires dois to be exposed as externally available
+# services needs to ports 9200 , 9500 to be open to the
+# outer world. Creates extra Kubernetes service with type LoadBalancer
   externalService:
     enabled: false
-    # Flow DOIS LoadBalancer service annotations for creating internal LoadBalancer on GCP, AWS
+# Flow DOIS LoadBalancer service annotations for creating internal LoadBalancer on GCP, AWS
     annotations:
-  #      networking.gke.io/load-balancer-type: "Internal"
-  #      service.beta.kubernetes.io/aws-load-balancer-internal: "0.0.0.0/0"
+#      networking.gke.io/load-balancer-type: "Internal"
+#      service.beta.kubernetes.io/aws-load-balancer-internal: "0.0.0.0/0"
 
-  # DOIS Supported Certificates
+# DOIS Supported Certificates
   certificates:
     ca:
       crt:
@@ -544,28 +544,28 @@ dois:
       key:
       dname:
     bundle:
-    # Either specify the secret where the certificates ca, sign,node
-    # admin,bundle will be stored (recommended for production) or specify above
+# Either specify the secret where the certificates ca, sign,node
+# admin,bundle will be stored (recommended for production) or specify above
     existingSecret:
-  # When using the existingSecret secret use below keys,
-  #     store the 'ca.crt' value under CBF_DOIS_CA_CRT key
-  #     store the 'ca.key' value under CBF_DOIS_CA_KEY key
-  #     store the 'sign.crt' value under CBF_DOIS_SIGN_CRT key
-  #     store the 'sign.key' value under CBF_DOIS_SIGN_KEY key
-  #     store the 'node.crt' value under CBF_DOIS_NODE_CRT key
-  #     store the 'node.key' value under CBF_DOIS_NODE_KEY key
-  #     store the 'admin.crt' value under CBF_DOIS_ADMIN_CRT key
-  #     store the 'admin.key' value under CBF_DOIS_ADMIN_KEY key
-  #     store the 'bundle' value under CBF_DOIS_CRT_BUNDLE key
-  # do not store admin.dnname in secret instead pass it as value
+# When using the existingSecret secret use below keys,
+#     store the 'ca.crt' value under CBF_DOIS_CA_CRT key
+#     store the 'ca.key' value under CBF_DOIS_CA_KEY key
+#     store the 'sign.crt' value under CBF_DOIS_SIGN_CRT key
+#     store the 'sign.key' value under CBF_DOIS_SIGN_KEY key
+#     store the 'node.crt' value under CBF_DOIS_NODE_CRT key
+#     store the 'node.key' value under CBF_DOIS_NODE_KEY key
+#     store the 'admin.crt' value under CBF_DOIS_ADMIN_CRT key
+#     store the 'admin.key' value under CBF_DOIS_ADMIN_KEY key
+#     store the 'bundle' value under CBF_DOIS_CRT_BUNDLE key
+# do not store admin.dnname in secret instead pass it as value
 
-  # For multiple dois replicas user needs to define one of the below supported certificates .
-  #      1. certificates.bundle is defined
-  #      2. certificates.ca.crt and certificates.ca.key are defined
-  #      3. certificates.ca.crt and certificates.sign.crt and certificates.sign.key are defined
-  #      4. certificates.ca.crt and certificates.sign.crt and certificates.node.crt and certificates.node.key
-  #         and certificates.admin.crt and certificates.admin.key are defined.
-  #
+# For multiple dois replicas user needs to define one of the below supported certificates .
+#      1. certificates.bundle is defined
+#      2. certificates.ca.crt and certificates.ca.key are defined
+#      3. certificates.ca.crt and certificates.sign.crt and certificates.sign.key are defined
+#      4. certificates.ca.crt and certificates.sign.crt and certificates.node.crt and certificates.node.key
+#         and certificates.admin.crt and certificates.admin.key are defined.
+#
 
   additionalContainers:
   #   - name: container-name
@@ -586,11 +586,11 @@ boundAgent:
   imageRepository: cbflow-agent
   replicas: 1
 
-  # Master loglevel for com.electriccloud package.
+# Master loglevel for com.electriccloud package.
   logLevel: DEBUG
 
-  # This line is interpreted as if passsed to ecconfigure utility within the
-  # container.
+# This line is interpreted as if passsed to ecconfigure utility within the
+# container.
   ecconfigure: "--agentInitMemoryMB=256 --agentMaxMemoryMB=256"
 
   resources:
@@ -606,7 +606,7 @@ boundAgent:
   affinity: {}
 
 
-  # Additional environment variables to set for bound agent
+# Additional environment variables to set for bound agent
   extraEnvs: []
   # extraEnvs:
   #   - name: FOO
@@ -617,7 +617,7 @@ boundAgent:
   #   - name: FOO
   #     value: BAR
 
-  # Enable or disable creating init container for volume permissions for boundagent
+# Enable or disable creating init container for volume permissions for boundagent
   volumesPermissionsInitContainer:
     enabled: true
 
@@ -644,44 +644,44 @@ storage:
     serverPlugins:
       name: flow-server-shared
       accessMode: ReadWriteMany
-      # Storage class for plugins directory. Currently it has to be shared across all
-      # server and web replicas. Has to be ReadWriteMany accessible.
+# Storage class for plugins directory. Currently it has to be shared across all
+# server and web replicas. Has to be ReadWriteMany accessible.
       storageClass:
       storage: 5Gi
-      # In order to use any existing pvc. set existingClaim flag to true and
-      # set storage.volumes.serverPlugins.name to pvc name.
+# In order to use any existing pvc. set existingClaim flag to true and
+# set storage.volumes.serverPlugins.name to pvc name.
       existingClaim: false
 
     repositoryStorage:
       name: flow-repo-artifacts
       accessMode: ReadWriteOnce
       storage: 20Gi
-      # In order to use any non "platform-default" or custom storage class just
-      # state required storageClass name.
+# In order to use any non "platform-default" or custom storage class just
+# state required storageClass name.
       storageClass:
-      # In order to use any existing pvc. set existingClaim flag to true and
-      # set storage.volumes.repositoryStorage.name to pvc name.
+# In order to use any existing pvc. set existingClaim flag to true and
+# set storage.volumes.repositoryStorage.name to pvc name.
       existingClaim: false
 
     doisStorage:
       name: elasticsearch-data
       accessMode: ReadWriteOnce
       storage: 10Gi
-      # In order to use any non "platform-default" or custom storage class just
-      # state required storageClass name.
+# In order to use any non "platform-default" or custom storage class just
+# state required storageClass name.
       storageClass:
 
     boundAgentStorage:
-      # set enable to  true in order to use Persistent Volume for bound agent workspace
+# set enable to  true in order to use Persistent Volume for bound agent workspace
       enabled: false
       name: flow-bound-agent-workspace
       accessMode: ReadWriteOnce
       storage: 5Gi
-      # In order to use any non "platform-default" or custom storage class just
-      # state required storageClass name.
+# In order to use any non "platform-default" or custom storage class just
+# state required storageClass name.
       storageClass:
-      # In order to use any existing pvc. set existingClaim flag to true and
-      # set storage.volumes.boundAgentStorage.name to pvc name.
+# In order to use any existing pvc. set existingClaim flag to true and
+# set storage.volumes.boundAgentStorage.name to pvc name.
       existingClaim: false
 
 
@@ -695,34 +695,34 @@ storage:
 
 database:
 
-  #  externalEndpoint: "my.db.somewhere.com"
+#  externalEndpoint: "my.db.somewhere.com"
 
-  # Please use this option if your database is residing in the same k8s cluster
-  # as flow notation is <db-service>.<namespace> If deploying into the same
-  # namespace `.<namespace>` part can be omitted.
+# Please use this option if your database is residing in the same k8s cluster
+# as flow notation is <db-service>.<namespace> If deploying into the same
+# namespace `.<namespace>` part can be omitted.
 
-  #  clusterEndpoint: "<db-service>.<namespace>"
+#  clusterEndpoint: "<db-service>.<namespace>"
 
-  # Please use this option if you have or are planning to deploy credentials
-  # secret yourself. The layout has to be the same as that of
-  # server-secrets.yaml::dbSecret.
+# Please use this option if you have or are planning to deploy credentials
+# secret yourself. The layout has to be the same as that of
+# server-secrets.yaml::dbSecret.
 
-  #  existingSecret: <my-existing-secret>
-  # If dbPassword is an empty string, a random 20 characters password will be used
+#  existingSecret: <my-existing-secret>
+# If dbPassword is an empty string, a random 20 characters password will be used
 
   dbName:
   dbUser:
   dbPassword:
 
-  # Remote database port to connect to.
+# Remote database port to connect to.
   dbPort:
 
-  # database type for flow persistence to work with.
-  # One of: `mysql` - MYSQL, `mariadb` - MariaDB, `sqlserver` - MSSQLServer,
-  # `oracle` - Oracle, `postgresql` - PostgreSql.
+# database type for flow persistence to work with.
+# One of: `mysql` - MYSQL, `mariadb` - MariaDB, `sqlserver` - MSSQLServer,
+# `oracle` - Oracle, `postgresql` - PostgreSql.
   dbType:
 
-  # External Mysql Connector URL to download during cloudbees flow installation
+# External Mysql Connector URL to download during cloudbees flow installation
   mysqlConnector:
     enabled: true
     externalUrl:
@@ -734,10 +734,10 @@ database:
 
 flowCredentials:
 
-  # Either specify the secret where the admin user password is stored under
-  # the 'CBF_SERVER_ADMIN_PASSWORD' key (recommended for production) or specify
-  # the adminPassword.
-  # If adminPassword is an empty string, a random 20 characters password will be used
+# Either specify the secret where the admin user password is stored under
+# the 'CBF_SERVER_ADMIN_PASSWORD' key (recommended for production) or specify
+# the adminPassword.
+# If adminPassword is an empty string, a random 20 characters password will be used
 
   existingSecret:
   adminPassword:
@@ -757,7 +757,7 @@ flowCredentials:
 
 flowLicense:
 
-  # Pass existing secret name with license data here.
+# Pass existing secret name with license data here.
   existingSecret:
   licenseData:
 
@@ -800,10 +800,34 @@ rbac:
 #---------------------------------------------
 
 networkIsolation:
+  ## Enabled network policies for CloudBees CD/RO components. Set `networkPolicies.enabled: false` to 
+  ## implement custom network policies. 
+  ## IMPORTANT: If `networkPolicies.enabled: false`, you must provide the `additionalIngressSelector` for
+  ## CloudBees CD/RO components. 
+  ## For more information on network policies, refer to:
+  ## https://docs.cloudbees.com/docs/cloudbees-cd/latest/install-k8s/cdro-k8s-how-tos
+  networkPolicies:
+    enabled: true
 
-  # `allowFromCidr` defines CIDR which is allowed to make connection to all
-  # exposed flow endpoints.
+# `allowFromCidr` defines CIDR which is allowed to make connection to all
+# exposed flow endpoints.
   allowFromCidr: "0.0.0.0/0"
+
+# additional ingress selectors for network policies
+#    additionalIngressSelector:
+#    - namespaceSelector:
+#        matchLabels:
+#          kubernetes.io/metadata.name: kube-system
+  web:
+    additionalIngressSelector: []
+  server:
+    additionalIngressSelector: []
+  zookeeper:
+    additionalIngressSelector: []
+  repository:
+    additionalIngressSelector: []
+  dois:
+    additionalIngressSelector: []
 
 #---------------------------------------------
 # Zookeeper configuration section
@@ -819,7 +843,7 @@ zookeeper:
 
   image:
     repository: docker.io/cloudbees/cbflow-tools # Container image repository for zookeeper container.
-    tag: "2023.02.0.160256_3.2.35_20230201"      # Container image tag for zookeeper container.
+    tag: "2023.04.0.162208_3.2.38_20230330"      # Container image tag for zookeeper container.
 
   fullnameOverride: zookeeper
   replicaCount: 3
@@ -854,39 +878,39 @@ nginx-ingress:
   defaultBackend:
     service:
       omitClusterIP: true
-  # To omit the clusterIP from the controller service
+# To omit the clusterIP from the controller service
   controller:
     ingressClass: flow-ingress
-    # publishService Allows customization of the external service the ingress will
-    # be bound to via DNS.
+# publishService Allows customization of the external service the ingress will
+# be bound to via DNS.
     publishService:
       enabled: true
     scope:
       enabled: true
 
-    #    extraArgs:
-    # Additional log messages that may be useful for debugging:
-    # shows details using diff about the changes in the configuration in nginx
-    #      v: 2
-    # shows details about the service, Ingress rule, endpoint changes and it
-    # dumps the nginx configuration in JSON format
-    #      v: 3
-    # configures NGINX in debug mode
-    #      v: 5
+#    extraArgs:
+# Additional log messages that may be useful for debugging:
+# shows details using diff about the changes in the configuration in nginx
+#      v: 2
+# shows details about the service, Ingress rule, endpoint changes and it
+# dumps the nginx configuration in JSON format
+#      v: 3
+# configures NGINX in debug mode
+#      v: 5
 
     config:
-      # Ingress must support long-running requests without resetting the connection.
-      # By default, nginx reset connections to TCP/UDP services after 600 seconds of
-      # inactivity between two successive read or write operations. This setting
-      # extends the timeout to 4000 seconds.
+# Ingress must support long-running requests without resetting the connection.
+# By default, nginx reset connections to TCP/UDP services after 600 seconds of
+# inactivity between two successive read or write operations. This setting
+# extends the timeout to 4000 seconds.
       proxy-stream-timeout: "4000s"
-    # Increasing the detail of the error log. This can be useful for debugging.
-    #      error-log-level: debug
+# Increasing the detail of the error log. This can be useful for debugging.
+#      error-log-level: debug
 
-    # Ingress must support long-running requests without resetting the connection.
-    # By default, AWS ELB resets connections after 60 seconds of inactivity. With
-    # this annotation, the timeout will be increased to 4000 seconds. This is
-    # the maximum timeout supported by AWS ELB.
+# Ingress must support long-running requests without resetting the connection.
+# By default, AWS ELB resets connections after 60 seconds of inactivity. With
+# this annotation, the timeout will be increased to 4000 seconds. This is
+# the maximum timeout supported by AWS ELB.
     service:
       annotations:
         service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: 4000
@@ -917,33 +941,33 @@ ingress-nginx:
       name: flow-ingress
 
     # publishService Allows customization of the external service the ingress will
-    # be bound to via DNS.
+# be bound to via DNS.
     publishService:
       enabled: true
     scope:
       enabled: true
-    # as we already use 8443 port for flow-server tcp expose , changed default admissionWebhooks port to 8445
+# as we already use 8443 port for flow-server tcp expose , changed default admissionWebhooks port to 8445
     admissionWebhooks:
       port: 8445
 
-    #    extraArgs:
-    # Additional log messages that may be useful for debugging:
-    # shows details using diff about the changes in the configuration in nginx
-    #      v: 2
-    # shows details about the service, Ingress rule, endpoint changes and it
-    # dumps the nginx configuration in JSON format
-    #      v: 3
-    # configures NGINX in debug mode
-    #      v: 5
+#    extraArgs:
+# Additional log messages that may be useful for debugging:
+# shows details using diff about the changes in the configuration in nginx
+#      v: 2
+# shows details about the service, Ingress rule, endpoint changes and it
+# dumps the nginx configuration in JSON format
+#      v: 3
+# configures NGINX in debug mode
+#      v: 5
 
     config:
-      # Ingress must support long-running requests without resetting the connection.
-      # By default, nginx reset connections to TCP/UDP services after 600 seconds of
-      # inactivity between two successive read or write operations. This setting
-      # extends the timeout to 4000 seconds.
+# Ingress must support long-running requests without resetting the connection.
+# By default, nginx reset connections to TCP/UDP services after 600 seconds of
+# inactivity between two successive read or write operations. This setting
+# extends the timeout to 4000 seconds.
       proxy-stream-timeout: "4000s"
-  # Increasing the detail of the error log. This can be useful for debugging.
-  #      error-log-level: debug
+# Increasing the detail of the error log. This can be useful for debugging.
+#      error-log-level: debug
 
   tcp:
     8200: "{{ .Release.Namespace }}/flow-repository:8200"
@@ -993,62 +1017,62 @@ mariadb:
 # cloudbees-flow-agent chart configurations used for creating the
 # internal agent for the gateway
 internalGatewayAgent:
-  enabled: false
-  releaseNamePrefix: gateway-default-agent
-  resourceName: gateway-default-agent
-  replicas: 1
-  trustedAgent: false
-  flowCredentials:
-    # enable serverSecretReference to re-use flow-server secrets in agents chart
-    serverSecretReference: true
-  autoscaling:
     enabled: false
-    minReplicas: 1
-    maxReplicas: 2
-    targetCPUUtilizationPercentage: 80
-    targetMemoryUtilizationPercentage: 80
-  gateway:
-    # considering this as internal gateway agent
-    enabled: true
+    releaseNamePrefix: gateway-default-agent
+    resourceName: gateway-default-agent
+    replicas: 1
+    trustedAgent: false
+    flowCredentials:
+      # enable serverSecretReference to re-use flow-server secrets in agents chart
+      serverSecretReference: true
+    autoscaling:
+      enabled: false
+      minReplicas: 1
+      maxReplicas: 2
+      targetCPUUtilizationPercentage: 80
+      targetMemoryUtilizationPercentage: 80
+    gateway:
+      # considering this as internal gateway agent
+      enabled: true
 
 # cloudbees-flow-agent chart configurations used for creating the
 # external agent for the gateway
 externalGatewayAgent:
-  enabled: false
-  releaseNamePrefix: gateway-external-agent
-  resourceName: gateway-external-agent
-  replicas: 1
-  trustedAgent: false
-  zoneName: external
-  service:
-    # External DNS hostname that the external agents would use to communicate
-    # with the external gateway agent
-    publicHostName:
-
-  # configure gateway using external gateway agent
-  gateway:
-    # configure gateway using this agent
-    enabled: true
-    # Name of the gateway to create
-    name: external
-    # Name of gateway agent to pair with as gateway resource 2
-    pairedResourceName: gateway-default-agent
-
-  flowCredentials:
-    # enable serverSecretReference to re-use flow-server secrets in agents chart
-    serverSecretReference: true
-  autoscaling:
     enabled: false
-    minReplicas: 1
-    maxReplicas: 2
-    targetCPUUtilizationPercentage: 80
-    targetMemoryUtilizationPercentage: 80
+    releaseNamePrefix: gateway-external-agent
+    resourceName: gateway-external-agent
+    replicas: 1
+    trustedAgent: false
+    zoneName: external
+    service:
+      # External DNS hostname that the external agents would use to communicate
+      # with the external gateway agent
+      publicHostName:
+
+    # configure gateway using external gateway agent
+    gateway:
+      # configure gateway using this agent
+      enabled: true
+      # Name of the gateway to create
+      name: external
+      # Name of gateway agent to pair with as gateway resource 2
+      pairedResourceName: gateway-default-agent
+
+    flowCredentials:
+      # enable serverSecretReference to re-use flow-server secrets in agents chart
+      serverSecretReference: true
+    autoscaling:
+      enabled: false
+      minReplicas: 1
+      maxReplicas: 2
+      targetCPUUtilizationPercentage: 80
+      targetMemoryUtilizationPercentage: 80
 
 gitops:
   enabled: false
   repo:
-  # Either specify the secret where the gitToken is stored under
-  # the 'CBF_GIT_TOKEN' key (recommended for production) or specify
+# Either specify the secret where the gitToken is stored under
+# the 'CBF_GIT_TOKEN' key (recommended for production) or specify
   gitToken:
   existingSecret:
 
