@@ -1,131 +1,146 @@
-# Default values for cloudbees-flow-agent chart
-#
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
+### --------------------------------------------
+### Common images configurations section
+### --------------------------------------------
 
 images:
+  ## Image registry to pull CloudBees CD/RO images from.
+  ## Example: registry: "123456789012.dkr.ecr.us-east-1.amazonaws.com"
   registry: "docker.io/cloudbees"
+  ## The `imageRepository` in the `images.registry` to pull the agent image from.
   imageRepository: "cbflow-agent"
-  tag: "2023.03.0.161439_3.2.38_20230307"
+  ## CloudBees CD/RO flow-server image tag to pull.
+  tag: "2023.04.0.162443_3.2.41_20230407"
+
+  ## The image pull policy to use:
   pullPolicy: IfNotPresent
 
-  # Image pull secrets
-  # Enable this option when using a private registry.
-  # Secrets must be manually created in the namespace.
-  # imagePullSecrets: <secret-name>
-
-  # Optional array of imagePullSecrets containing private registry credentials
-  # Reference to one or more secrets to be used when pulling images
-  # Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  # imagePullSecrets:
-  # - name: "docker-registry"
-
+  ## Enable `imagePullSecrets` if you are using a private registry.
+  ## Secrets must be manually created or already exist in the namespace.
+  ## `imagePullSecrets: <secret-name>`
   imagePullSecrets:
 
-# Please state flow-server endpoint here. Please note that if installing in different namespace than server
-# service name has to be stated in form "service-name.namespace"
-# Here we assume the same namespace
+  ## (OPTIONAL) Create an array of `imagePullSecrets` containing private registry credentials.
+  ## when you have one or more secrets to use when pulling images.
+  ## NOTE: Only one instance of `imagePullSecrets:` can be present.
+  ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+#  imagePullSecrets:
+#    - name: "docker-registry"
+
+## The name of the CloudBees CD/RO flow-server you are installing the agent for.
+## Usually, a fully-qualified domain name, where the server
+## is available for all agents (resources) and other components.
+## By default, it is the internal cluster hostname for the K8S flow-server
+## service. However, the CloudBees CD/RO flow-server will not be fully
+## accessible to non-cluster components if this is the default.
+
+## NOTE: If you are installing this agent in different namespace than
+## flow-server, you must provide the `serverEndpoint` as `service-name.namespace`.
+## Here it is assumed the server and agent are in the same namespace.
+
 serverEndpoint: flow-server
 
-#---------------------------------------------
-# Flow agent configuration section
-#---------------------------------------------
+### --------------------------------------------
+### Flow agent configuration section
+### ---------------------------------------------
 
-# List of resource pools agents will try to register with upon coming up and registering with server
+## Provide the resource pools you want your agents to attempt to register
+## with when initializing and connecting with the flow-server.
 resourcePools:
 
-# Flow resource name which agents of this deployment will be assigned to (defaults to hostname)
-#
-# Ordinary helm template values are allowed here. For example: {{ .Release.Name }},
-# {{ .Release.Namespace }} etc. Also, 2 special templates are allowed here:
-#
-#     {{ hostname }} - will be replaced by the actual resource hostname
-#     {{ ordinalIndex }} - will be replaced by a serial replica index in StatefulSet
-#
-# Sample:
-#
-#     resourceName: "myResource - {{ .Release.Name }} - {{ ordinalIndex }}"
-#
+## Flow resource name that agents in this deployment will be assigned to (defaults to hostname).
+## You can use ordinary Helm template values.
+## For example:
+##  {{ .Release.Name }}, {{ .Release.Namespace }}, etc.
+##
+## Additionally, the following special templates are allowed here:
+##     {{ hostname }} - will be replaced by the actual resource hostname
+##     {{ ordinalIndex }} - will be replaced by a serial replica index in StatefulSet
+##
+## Example resourceName:
+##     resourceName: "myResource - {{ .Release.Name }} - {{ ordinalIndex }}"
+##
 resourceName:
 
-# Release name prefix added to support this chart to launch as multiple subchart in CD deployment
-# keep this empty for standalone deployments
+## Release name prefix added to support this chart to launch as multiple sub-chart in CD deployment
+##  NOTE: Leave `releaseNamePrefix` empty for standalone deployments.
 releaseNamePrefix:
 
-# Number of replicas
+## Number of agent replicas to create.
 replicas: 1
 
-# The default is to deploy all pods serially. By setting this to parallel
-# all pods are started at the same time.
+## The default is to deploy all pods one at a time. By setting `podManagementPolicy: "Parallel"`
+## all pods are started at the same time.
 podManagementPolicy: "Parallel"
 
-# The zone (must exist in CloudBees Flow server instance) for
-# the resources created in the Flow server for the agent(s).
+## The zone for resources created in the flow-server for the agent(s).
+## This zone must exist in your flow-server instance.
 zoneName:
 
-# The default workspace (must exist in CloudBees Flow server instance) for
-# the resources created in the Flow server for the agent(s).
+## The zone for workspace created in the flow-server for the agent(s).
+## This zone must exist in your flow-server instance.
 workspaceName:
 
-# Set to true to configure the agent as a trusted agent,
-# restricting the agent to one CloudBees Flow server deployment
+## Set `trustedAgent: true` to configure the agent as a trusted agent.
+## NOTE This restricts the agent to one flow-server deployment.
 trustedAgent: false
 
-# Type of resource to create on the remote CloudBees
-# Flow server. This argument is relevant only when the
-# CloudBees Flow server is using a mixed-mode license
-# (concurrent resources and registered hosts).
-# Valid options for this argument are 'concurrent'
-# or 'registered'.
+## Type of resource to create on the remote flow-server.
+##  This argument is relevant only when the
+## flow-server is using a mixed-mode license with
+## concurrent resources and registered hosts.
+##
+## Valid options for `resourceType` are:
+## `resourceType: concurrent`
+## or
+## `resourceType: registered`
 resourceType:
 
-#---------------------------------------------
-# Pod scheduling settings
-#---------------------------------------------
+### --------------------------------------------
+### Pod scheduling settings
+### ---------------------------------------------
 
 nodeSelector: {}
 tolerations: []
 affinity: {}
 
-
-# This line is interpreted as if passsed to ecconfigure utility within the container
+## Interpreted as if passed to the CloudBees ecconfigure utility within the container.
 ecconfigure: "--agentInitMemoryMB=16 --agentMaxMemoryMB=64"
 
-# Master loglevel for com.electriccloud package
+## The default loglevel for the agent.
 logLevel: DEBUG
-
 
 service:
   type: ClusterIP
   clusterIP: "None"
-  # External DNS hostname to set to as agent service name. For Gateway Agent configuration.
+  ## External DNS hostname to set to as the agent service name.
+  ## Used for Gateway Agent configuration.
   publicHostName: null
 
 
-# Gateway Agents needs ports 7800  to be open to the
-# outer world to communicate with external agents.
-# Creates extra Kubernetes service with type LoadBalancer
+## Gateway Agents require port `7800` (by default) to be open externally
+## to communicate with external agents.
+## Creates extra Kubernetes service with type LoadBalancer
 externalService:
   enabled: false
-#---------------------------------------------
-# Flow agent storage and resources configuration section
-#---------------------------------------------
 
-# Agent workspace volume related settings: volume-name,
-# access-mode (either nfs(aka ReadWriteMany) or thrditional volume mount(aka ReadWriteOnce))
-# and storage amount
+### --------------------------------------------
+### Flow agent storage and resources configuration section
+### ---------------------------------------------
+
 storage:
   volumes:
     agentWorkspace:
       name: flow-agent-workspace
+      ## `access-mode` is either:
+      ## NFS: `accessMode: ReadWriteMany`
+      ## Traditional volume mount `accessMode: ReadWriteOnce`
       accessMode: ReadWriteOnce
       storage: 5Gi
-      # In order to use any non "platform-default" or custom storage class just uncomment the line and and state required storageClass name
-      #     storageClass: my-class
-      #
-      # If defined true if any agent is already deployed with shared workspace and pvc already exist
-      existingClaim: false
+      ## To use any  custom storage class just uncomment the line and state required storageClass name
+      #      storageClass: my-class
 
+      ## Configure `existingClaim: true` if you have agents already deployed with a shared workspace or PVC.
+      existingClaim: false
 
 resources:
   limits:
@@ -135,7 +150,7 @@ resources:
     cpu: 0.25
     memory: 512Mi
 
-# Additional environment variables to set for agent
+## Additional environment variables to set for agent.
 extraEnvs: []
 # extraEnvs:
 #   - name: FOO
@@ -146,30 +161,27 @@ extraEnvs: []
 #   - name: FOO
 #     value: BAR
 
-#---------------------------------------------
-# Flow server credentials configuration section
-#---------------------------------------------
+### --------------------------------------------
+### Flow server credentials configuration section
+### ---------------------------------------------
 
-
-# Flow server credentials to use in order to register with agent as a resource on the Flow server.
-# 'admin' user is used by default. You may user a different user if desired. The user must have
-# `modify` permissions on `resources` on the Flow server.
-# serverSecretReference is added to support case where agents need to refer  flow servers existing admin credentials
+## CloudBees flow-server credentials used to register the agent as a resource on the flow-server.
 flowCredentials:
-  ## In case of Existing Secret Name of the secret containing the Flow user credentials to use.
-  ## The data field must contain base64 encoded value for keys 'CBF_SERVER_USER' and 'CBF_SERVER_PASSWORD'.
+  ## If you are using an `existingSecret`, provide the name of the secret containing the flow-user credentials.
+  ## The data field must contain base64 encoded values for keys 'CBF_SERVER_USER' and 'CBF_SERVER_PASSWORD'.
+  ## You can modify and use the following command to create them:
   ## E.g., kubectl create secret generic your-flow-user-secret --from-literal=CBF_SERVER_USER='admin' --from-literal=CBF_SERVER_ADMIN_PASSWORD='XXXXXXX' -n your-release-namespace
-  ##
   existingSecret:
+  ## `serverSecretReference` is added to support case where agents need to refer  flow servers existing admin credentials
   serverSecretReference: false
+  ## `flowCredentials.user: admin` is used by default, you can specify a different user if desired.
+  ## IMPORTANT: The `flowCredentials.user` must have `modify` permissions for `resources` on the flow-server.
   user: admin
   password:
 
-
-
-#---------------------------------------------
-# Pods security context
-#---------------------------------------------
+### --------------------------------------------
+### Pods security context
+### ---------------------------------------------
 
 securityContext:
   enabled: false
@@ -177,12 +189,11 @@ securityContext:
   runAsUser: 1000
 
 rbac:
-  ## Specifies whether RBAC resources should be created
-  ##
+  ## Specifies if RBAC resources should be created.
   create: false
   serviceAccountName:
   role:
-    ## Rules to create.
+    ## RBAC rules to create.
     rules: []
 
 
@@ -190,20 +201,20 @@ volumePermissions:
   enabled: true
 
 gateway:
-  # install this agent as gateway agent
+  ## Install this agent as a gateway agent.
   enabled: false
-  # Name of the gateway to create
+  ## Name of the gateway to create.
   name: external
-  # Name of gateway agent to pair with as gateway resource 2
+  ## Name of the gateway agent to pair with as gateway resource 2.
   pairedResourceName:
-
+## Specify additional containers to mount for agent.
 additionalContainers:
-#   - name: container-name
-#     image: image:version
+#  - name: container-name
+#    image: image:version
 #     command:
-#       - "/container-command"
+#        - "/container-command"
 
-# Horizontal Pod Autoscaling configuration for agent,
+## Horizontal Pod Autoscaling configuration for agent.
 autoscaling:
   enabled: false
   minReplicas: 1
@@ -211,18 +222,18 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: 80
   templates: []
-  # Custom or additional autoscaling metrics
-  # ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#support-for-custom-metrics
-  # - type: Pods
-  #   pods:
-  #     metric:
-  #       name: server_process_requests_total
-  #     target:
-  #       type: AverageValue
-  #       averageValue: 10000m
+    ## Specify custom or additional autoscaling metrics.
+  ## Ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#support-for-custom-metrics
+#    - type: Pods
+#      pods:
+#       metric:
+#         name: server_process_requests_total
+#       target:
+#         type: AverageValue
+#         averageValue: 10000m
 
-## specify additional volumes to mount in the agent container
+## Specify additional volumes to mount in the agent container.
 additionalVolumes: []
 
-## specify where the additional volumes are mounted in the agent container
+## Specify where your additional volumes are mounted in the agent container.
 additionalVolumeMounts: []
