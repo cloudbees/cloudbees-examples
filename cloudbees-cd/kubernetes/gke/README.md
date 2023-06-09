@@ -11,10 +11,7 @@ Pre-requisites:
 
 ### Create GKE cluster
 - Set environment variables
-
-https://github.com/semiroz/cloudbees-examples/blob/870f22a043a228451fdd6d1768a5253e3d90fbe1/cloudbees-cd/kubernetes/gke/demo.env#L1-L9     
-
-    ```bash
+     ```bash
       # Set zone. e.g. us-east1-a
       GCP_ZONE=<zone>
   
@@ -29,7 +26,7 @@ https://github.com/semiroz/cloudbees-examples/blob/870f22a043a228451fdd6d1768a52
 
       # Set machine type, e.g. n1-standard-4 is enough for demo deployment
       GKE_CLUSTER_MACHINE_TYPE=<machine-type>
-
+  ```
 - Create GKE cluster
     ```bash
       # Create cluster
@@ -107,5 +104,5 @@ https://github.com/semiroz/cloudbees-examples/blob/870f22a043a228451fdd6d1768a52
   ```
 - Delete GKE cluster
    ```bash
-   gcloud container clusters delete $GKE_CLUSTER_NAME_NAME --zone=$GCP_ZONE
+   gcloud container clusters delete $GKE_CLUSTER_NAME --zone=$GCP_ZONE
   ```
