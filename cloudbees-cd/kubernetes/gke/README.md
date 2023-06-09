@@ -12,8 +12,7 @@ Pre-requisites:
 ### Create GKE cluster
 - Set environment variables
 
-https://github.com/semiroz/cloudbees-examples/blob/master/cloudbees-cd/kubernetes/gke/demo.env
-
+https://github.com/semiroz/cloudbees-examples/blob/BEE-35191/cloudbees-cd/kubernetes/gke/demo.env
      ```bash
       # Set zone. e.g. us-east1-a
       GCP_ZONE=<zone>
