@@ -11,7 +11,9 @@ Pre-requisites:
 
 ### Create GKE cluster
 - Set environment variables
-```bash:cloudbees-cd/kubernetes/gke/demo-env.sh#L3-L9```
+
+https://github.com/semiroz/cloudbees-examples/blob/213c1dea8e3f30c4ecbc9ffaa69b05ee2fc1336f/cloudbees-cd/kubernetes/gke/demo-env.sh#L3-L10
+
 
 - Create GKE cluster
     ```bash
