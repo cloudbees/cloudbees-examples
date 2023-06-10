@@ -11,22 +11,8 @@ Pre-requisites:
 
 ### Create GKE cluster
 - Set environment variables
-     ```bash
-      # Set zone. e.g. us-east1-a
-      GCP_ZONE=<zone>
-  
-      # Set GCP project id
-      GCP_PROJECT=<project-id>
+     ```bash:demo.env```
 
-      # Set cluster name e.g. flow-demo
-      GKE_CLUSTER_NAME=<cluster-name>
-
-      # Set number of nodes. 2 nodes are are necessary and sufficient for CD/RO installation
-      GKE_CLUSTER_NUM_NODES=<number-of-nodes>
-
-      # Set machine type, e.g. n1-standard-4 is enough for demo deployment
-      GKE_CLUSTER_MACHINE_TYPE=<machine-type>
-  ```
 - Create GKE cluster
     ```bash
       # Create cluster
