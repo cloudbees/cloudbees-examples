@@ -11,7 +11,7 @@ Pre-requisites:
 
 ### Create GKE cluster
 - Set environment variables
-     ```bash:demo.env```
+```bash:demo.env [3-9]```
 
 - Create GKE cluster
     ```bash
