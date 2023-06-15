@@ -48,35 +48,6 @@ Pre-requisites:
     --machine-type="$GKE_CLUSTER_MACHINE_TYPE" \
     --zone="$GCP_ZONE"
   ```  
-  
-### CloudBees CD Installation in `demo` mode
-
-- Download demo values file
-    ```bash
-    curl -fsSL -o cloudbees-cd-demo.yaml https://raw.githubusercontent.com/cloudbees/cloudbees-examples/master/cloudbees-cd/kubernetes/cloudbees-cd-demo.yaml
-  ```  
-
-- Install CD from cloudbees/cd Helm repo
-    ```bash
-     helm repo add cloudbees https://charts.cloudbees.com/public/cloudbees
-     helm repo update
-  
-    # Install CD Server
-     helm install $HELM_RELEASE cloudbees/cloudbees-flow \
-      --namespace $NAMESPACE \
-      --create-namespace \
-      --values cloudbees-cd-demo.yaml \
-      --wait --timeout 1000s
-  ```  
-
-- Get the URL of the CD server and the generated administrator password
-    ```bash
-  LB_HOSTIP=$(kubectl get service $HELM_RELEASE-ingress-nginx-controller -n $NAMESPACE -o jsonpath="{.status.loadBalancer.ingress[0].ip}")
-  echo "Available at: https://$LB_HOSTIP/flow/"
-  # Get your admin user password by running:
-  kubectl get secret --namespace $NAMESPACE $HELM_RELEASE-cloudbees-flow-credentials \
-    -o jsonpath="{.data.CBF_SERVER_ADMIN_PASSWORD}" | base64 --decode; echo
-  ```  
 
 ### CloudBees CD Installation in `production` mode
 
