@@ -63,3 +63,17 @@
     --namespace $NAMESPACE \
     -o jsonpath="{.data.CBF_SERVER_ADMIN_PASSWORD}" | base64 --decode; echo
   ```  
+
+### Cleanup
+- Delete CD Agent
+    ```bash
+    helm uninstall $HELM_RELEASE-agents -n $NAMESPACE
+  ```  
+- Delete CD Server
+    ```bash
+    helm uninstall $HELM_RELEASE -n $NAMESPACE
+  ```  
+- Delete GKE cluster
+   ```bash
+   gcloud container clusters delete $GKE_CLUSTER_NAME --zone=$GCP_ZONE
+  ```  
