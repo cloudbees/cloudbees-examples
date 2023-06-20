@@ -8,6 +8,13 @@
      NAMESPACE=<cloudbees-cd-namespace>
      HELM_RELEASE=<cloudbees-cd-helm-release>
     ```
+
+- Add cloudbees helm repo
+  ```bash
+  helm repo add cloudbees https://charts.cloudbees.com/public/cloudbees
+  helm repo update  
+  ```
+
 - Install CD Agent from cloudbees/cd helm repo
   ```bash
   # Create CD user secret

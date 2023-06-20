@@ -5,14 +5,11 @@
 - Create VPC network and subnet for GKE cluster
     ```bash
     # set environment variables
-    GCP_VPC_NETWORK=<gcp-vpc-network>
-    # e.g. GCP_VPC_NETWORK=cd-vpc
-    GCP_VPC_SUBNET=<gcp-vpc-subnet>
-    # e.g. GCP_VPC_SUBNET=cd-subnet
-    GCP_SUBNET_IP_RANGE=<gcp-subnet-ip-range>
-    # e.g. GCP_SUBNET_IP_RANGE=10.0.0.0/24
-    GCP_REGION=<gcp-region>
-    # e.g. GCP_REGION=us-east1
+    GCP_VPC_NETWORK=<gcp-vpc-network>           # e.g. GCP_VPC_NETWORK=cd-vpc
+    GCP_VPC_SUBNET=<gcp-vpc-subnet>             # e.g. GCP_VPC_SUBNET=cd-subnet
+    GCP_SUBNET_IP_RANGE=<gcp-subnet-ip-range>   # e.g. GCP_SUBNET_IP_RANGE=10.0.0.0/24
+    GCP_REGION=<gcp-region>                     # e.g. GCP_REGION=us-east1
+    
     # create VPC network and subnet
     gcloud compute networks create $GCP_VPC_NETWORK \
       --project="$GCP_PROJECT" \
@@ -47,7 +44,7 @@
       --global
     ```  
 
-- Create servicenetworking.googleapis.com peering
+- Create `servicenetworking.googleapis.com` peering
     ```bash
     gcloud services vpc-peerings connect \
       --service=servicenetworking.googleapis.com \
@@ -145,8 +142,7 @@
 
 - Create DNS zone
     ```bash
-    GCP_DNS_ZONE=<gcp-dns-zone>
-    # e.g GCP_DNS_ZONE=cd-internal
+    GCP_DNS_ZONE=<gcp-dns-zone>                       # e.g GCP_DNS_ZONE=cd-internal
     GCP_DNS_NAME=$GCP_DNS_ZONE.
     gcloud dns managed-zones create $GCP_DNS_ZONE \
       --dns-name=$GCP_DNS_NAME \

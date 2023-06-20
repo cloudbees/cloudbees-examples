@@ -1,30 +1,18 @@
-### Create a GKE cluster for CloudBees CD installation in `demo` mode  
+### Create a GKE cluster for CloudBees CD installation in `demo` mode
+
 - Set environment variables
    ```bash
-  GCP_ZONE=<gcp-zone>
-  #e.g. GCP_ZONE=us-east1-b
-  
-  GCP_PROJECT=<gcp-project>
-  # e.g. GCP_PROJECT=cloudbees-cd-demo
-  
-  GKE_CLUSTER_NAME=<gke-cluster-name>
-  # e.g. GKE_CLUSTER_NAME=gke-cd-demo
-  
+  GCP_ZONE=<gcp-zone>                                   #e.g. GCP_ZONE=us-east1-b
+  GCP_PROJECT=<gcp-project>                             # e.g. GCP_PROJECT=cloudbees-cd-demo
+  GKE_CLUSTER_NAME=<gke-cluster-name>                   # e.g. GKE_CLUSTER_NAME=gke-cd-demo
   # Number of nodes in the cluster, 
   # 2 is enough for demo purposes
-  GKE_CLUSTER_NUM_NODES=<gke-cluster-number-of-nodes>
-  # e.g. GKE_CLUSTER_NUM_NODES=2
-  
+  GKE_CLUSTER_NUM_NODES=<gke-cluster-number-of-nodes>   # e.g. GKE_CLUSTER_NUM_NODES=2
   # Machine type for the cluster nodes, 
   # n1-standard-4 is enough for demo purposes
-  GKE_CLUSTER_MACHINE_TYPE=<gke-cluster-machine-type>
-  # e.g. GKE_CLUSTER_MACHINE_TYPE=n1-standard-4
-  
-  HELM_RELEASE=<cloudbees-cd-helm-release>
-  # e.g. HELM_RELEASE=cd-demo
-  
-  NAMESPACE=<cloudbees-cd-namespace>
-  # e.g. NAMESPACE=cd-demo
+  GKE_CLUSTER_MACHINE_TYPE=<gke-cluster-machine-type>   # e.g. GKE_CLUSTER_MACHINE_TYPE=n1-standard-4
+  HELM_RELEASE=<cloudbees-cd-helm-release>              # e.g. HELM_RELEASE=cd-demo
+  NAMESPACE=<cloudbees-cd-namespace>                    # e.g. NAMESPACE=cd-demo
   ```  
 - Create GKE cluster
     ```bash
