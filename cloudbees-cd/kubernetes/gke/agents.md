@@ -1,7 +1,8 @@
 ### CloudBees CD Agents Installation
 - Download agent values file
     ```bash
-    curl -fsSL -o cloudbees-cd-agent-example.yaml https://raw.githubusercontent.com/cloudbees/cloudbees-examples/master/cloudbees-cd/kubernetes/cloudbees-cd-agent-example.yaml
+    AGENTS_FILE_URL=https://raw.githubusercontent.com/cloudbees/cloudbees-examples/master/cloudbees-cd/kubernetes/cloudbees-cd-agent-example.yaml
+    curl -fsSL -o cloudbees-cd-agent-example.yaml $AGENTS_FILE_URL
   ```
 - Set environment variables
     ```bash
@@ -31,4 +32,10 @@
     --values cloudbees-cd-agent-example.yaml \
     --set flowCredentials.existingSecret=cd-user-secret \
     --wait --timeout 1000s
+  ```  
+
+### Cleanup
+- Delete CD Agents
+    ```bash
+    helm uninstall $HELM_RELEASE-agents -n $NAMESPACE
   ```  
