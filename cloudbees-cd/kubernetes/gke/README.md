@@ -8,7 +8,7 @@ Pre-requisites:
 
 - Install gcloud cli https://cloud.google.com/sdk/docs/install
 - Configure gcloud cli https://cloud.google.com/sdk/docs/initializing
-- Install kubectl https://kubernetes.io/docs/tasks/tools/install-kubectl/
+- https://kubernetes.io/docs/tasks/tools/
     ```bash
     gcloud components install kubectl
   ```
