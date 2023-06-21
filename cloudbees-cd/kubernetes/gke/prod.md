@@ -195,6 +195,7 @@ Be sure to follow the security policies and rules of your organization.
     helm install $HELM_RELEASE cloudbees/cloudbees-flow \
       --namespace $NAMESPACE \
       --values cloudbees-cd-production.yaml \
+      --set storage.volumes.serverPlugins.storageClass=filestore-sc \
       --timeout 4200s
   ```
 
