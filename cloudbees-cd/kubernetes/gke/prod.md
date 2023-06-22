@@ -186,8 +186,17 @@ Be sure to follow the security policies and rules of your organization.
       dbPort: 5432
       existingSecret: flow-db-secret
   ```
-- Install CD from cloudbees/cd Helm repo
+- Create server admin secret
     ```bash
+    CD_SERVER_ADMIN_PASSWORD=<your-password-for-admin-user>
+    kubectl create secret generic $HELM_RELEASE-cloudbees-flow-credentials \
+      --namespace $NAMESPACE \
+      --from-literal=CBF_SERVER_ADMIN_PASSWORD=$CD_SERVER_ADMIN_PASSWORD
+  ```
+- Install CD from cloudbees CD Helm repo
+    ```bash
+    LICENSE=<relative-or-absolute-path-to-license-file>  # e.g LICENSE=~/cd/cloudbees-flow-license.xml
+  
     helm repo add cloudbees https://charts.cloudbees.com/public/cloudbees
     helm repo update
   
@@ -195,7 +204,9 @@ Be sure to follow the security policies and rules of your organization.
     helm install $HELM_RELEASE cloudbees/cloudbees-flow \
       --namespace $NAMESPACE \
       --values cloudbees-cd-production.yaml \
+      --flowCredentials.existingSecret=$HELM_RELEASE-cloudbees-flow-credentials \
       --set storage.volumes.serverPlugins.storageClass=filestore-sc \
+      --set-file flowLicense.licenseData=$LICENSE \
       --timeout 4200s
   ```
 
