@@ -8,7 +8,7 @@ images:
   registry: "docker.io/cloudbees"
 
   ## CloudBees CD/RO flow-server image tag to pull.
-  tag: "2023.04.0.162443_3.2.41_20230407"
+  tag: "2023.06.0.164409_3.2.44_20230603"
 
   ## The image pull policy to use.
   pullPolicy: IfNotPresent
@@ -182,6 +182,11 @@ server:
   ## Creates extra Kubernetes service with type LoadBalancer.
   externalService:
     enabled: false
+    ## server LoadBalancer service annotations for
+    ## creating internal LoadBalancer on GCP or AWS.
+    annotations:
+  #      networking.gke.io/load-balancer-type: "Internal"
+  #      service.beta.kubernetes.io/aws-load-balancer-internal: "0.0.0.0/0"
 
   ## Enable or disable creating init container for volume permissions for cbflow-server.
   volumesPermissionsInitContainer:
@@ -363,6 +368,12 @@ repository:
   ## Creates extra Kubernetes service with type LoadBalancer.
   externalService:
     enabled: false
+    ## repository LoadBalancer service annotations for
+    ## creating internal LoadBalancer on GCP or AWS.
+    annotations:
+  #      networking.gke.io/load-balancer-type: "Internal"
+  #      service.beta.kubernetes.io/aws-load-balancer-internal: "0.0.0.0/0"
+
 
 
   ## Enable or disable creating init container for volume permissions for cbflow-repository.
@@ -913,7 +924,7 @@ zookeeper:
     ## Container repository to pull ZooKeeper image from.
     repository: docker.io/cloudbees/cbflow-tools
     ## Zookeeper image tag to pull.
-    tag: "2023.04.0.162443_3.2.41_20230407"
+    tag: "2023.06.0.164409_3.2.44_20230603"
 
   fullnameOverride: zookeeper
   replicaCount: 3
@@ -931,6 +942,19 @@ zookeeper:
     requests:
       memory: "512Mi"
       cpu: "250m"
+  livenessProbe:
+    initialDelaySeconds: 20
+    periodSeconds: 30
+    timeoutSeconds: 5
+    failureThreshold: 2
+    successThreshold: 1
+
+  readinessProbe:
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
 
 ### --------------------------------------------
 ### Flow ingress configuration section
@@ -1087,6 +1111,8 @@ sda: false
 
 mariadb:
   enabled:  false
+  image:
+    tag: "10.11.2-debian-11-r19"
   fullnameOverride: mariadb
   replication:
     enabled: false
