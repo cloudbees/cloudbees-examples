@@ -12,7 +12,7 @@ Be sure to follow the security policies and rules of your organization.
   # Number of nodes in the cluster, 2 is enough for demo purposes
   GKE_CLUSTER_NUM_NODES=<gke-cluster-number-of-nodes>   # e.g. GKE_CLUSTER_NUM_NODES=2
   # Machine type for the GKE cluster nodes, e2-standard-4 is enough for demo purposes
-  GKE_CLUSTER_MACHINE_TYPE=<gke-cluster-machine-type>   # e.g. GKE_CLUSTER_MACHINE_TYPE=-e2-standard-4
+  GKE_CLUSTER_MACHINE_TYPE=<gke-cluster-machine-type>   # e.g. GKE_CLUSTER_MACHINE_TYPE=e2-standard-4
   HELM_RELEASE=<cloudbees-cd-helm-release>              # e.g. HELM_RELEASE=cd-demo
   NAMESPACE=<cloudbees-cd-namespace>                    # e.g. NAMESPACE=cd-demo
   ```  
