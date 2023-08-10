@@ -15,8 +15,8 @@ Be sure to follow the security policies and rules of your organization.
   GKE_CLUSTER_NAME=<gke-cluster-name>                   # e.g. GKE_CLUSTER_NAME=gke-cd-prod
   # Number of nodes in the cluster, 3 is enough for production purposes
   GKE_CLUSTER_NUM_NODES=<gke-cluster-number-of-nodes>   # e.g. GKE_CLUSTER_NUM_NODES=3
-  # Machine type for the GKE cluster nodes, n1-standard-8 is enough for production purposes
-  GKE_CLUSTER_MACHINE_TYPE=<gke-cluster-machine-type>   # e.g. GKE_CLUSTER_MACHINE_TYPE=n1-standard-8
+  # Machine type for the GKE cluster nodes, e2-standard-8 is enough for production purposes
+  GKE_CLUSTER_MACHINE_TYPE=<gke-cluster-machine-type>   # e.g. GKE_CLUSTER_MACHINE_TYPE=e2-standard-8
   HELM_RELEASE=<cloudbees-cd-helm-release>              # e.g. HELM_RELEASE=cd-prod
   NAMESPACE=<cloudbees-cd-namespace>                    # e.g. NAMESPACE=cd-prod
   ```
