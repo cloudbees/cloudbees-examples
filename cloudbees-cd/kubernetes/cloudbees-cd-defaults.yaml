@@ -8,7 +8,7 @@ images:
   registry: "docker.io/cloudbees"
 
   ## CloudBees CD/RO flow-server image tag to pull.
-  tag: "2023.06.0.164409_3.2.44_20230603"
+  tag: "2023.08.0.167214_3.2.51_20230809"
 
   ## The image pull policy to use.
   pullPolicy: IfNotPresent
@@ -537,6 +537,11 @@ dois:
       type: s3
       # Name of bucket in Amazon S3 or GCS
       bucketName:
+      ## Use GKE Workload Identity with Kubernetes service account to impersonate a Google Cloud
+      ## Use The AWS IAM roles for service accounts to impersonate access to a S3
+      ## Enable serviceAccountsIdentity or provide IAM or GCS  credentials below
+      serviceAccountsIdentity: false
+
       ## For `existingSecret`, either:
       ## * Specify where the AWS or GCS credentials are stored.
       ## or
@@ -651,6 +656,15 @@ boundAgent:
 
   ## The default loglevel for cbflow-agent.
   logLevel: DEBUG
+  flowCredentials:
+    ## Enable `serverSecretReference` to re-use flow-server secrets in the agent charts.
+    serverSecretReference: true
+  releaseNamePrefix: cb-flow-bound-agent
+  resourceName: local
+  resourcePools: default
+  service:
+    publicHostName: cb-flow-bound-agent
+    name: cb-flow-bound-agent
 
   ## Interpreted as if passed to the CloudBees ecconfigure utility within the container.
   ecconfigure: "--agentInitMemoryMB=256 --agentMaxMemoryMB=256"
@@ -667,6 +681,22 @@ boundAgent:
   nodeSelector: {}
   tolerations: []
   affinity: {}
+  storage:
+    volumes:
+      agentWorkspace:
+        ## Set `volumes.enable: true` to use Persistent Volume for the bound agent workspace.
+        enabled: false
+        name: flow-bound-agent-workspace
+        accessMode: ReadWriteOnce
+        storage: 5Gi
+        ## To use a custom storage class, provide the `storageClass` name.
+        storageClass:
+        ## To use an existing PVC, set:
+        ## * Set `storage.volumes.repositoryStorage.name` to your PVC name.
+        ## * Set `existingClaim: true`.
+        ## If you are using a PVC, it *must be* `ReadWriteMany` accessible.
+        existingClaim: false
+
 
   ## Additional environment variables to set for cbflow-agent.
   extraEnvs: []
@@ -679,7 +709,7 @@ boundAgent:
   #          name: secret-resource
 
   ## Enable or disable creating init container for volume permissions for cbflow-agent.
-  volumesPermissionsInitContainer:
+  volumePermissions:
     enabled: true
 
   ## Specify additional volumes to mount in the cbflow-agent container.
@@ -738,20 +768,6 @@ storage:
       ## To use a custom storage class, provide the storageClass name.
       storageClass:
 
-    ## To use an existing PVC, set:
-    ## * Set `storage.volumes.repositoryStorage.name` to your PVC name.
-    ## * Set `existingClaim: true`.
-    ## If you are using a PVC, it *must be* `ReadWriteMany` accessible.
-    boundAgentStorage:
-      ## Set `boundAgentStorage.enable:true` to enable
-      ## Persistent Volume for bound agent workspace.
-      enabled: false
-      name: flow-bound-agent-workspace
-      accessMode: ReadWriteOnce
-      storage: 5Gi
-      ## To use a custom storage class, provide the `storageClass` name.
-      storageClass:
-      existingClaim: false
 
 ### --------------------------------------------
 ### Flow server database configuration section
@@ -773,7 +789,6 @@ database:
   ## secret yourself. The value *must* given in the format:
   ## existingSecret: server-secrets.yaml::dbSecret
   #  existingSecret: <my-existing-secret>
-
   dbName:
   dbUser:
   ## If dbPassword is an empty string, a random 20 characters password is generated.
@@ -797,6 +812,14 @@ database:
   mysqlConnector:
     enabled: true
     externalUrl:
+
+  ## configure  the database connection to use either built-in database authentication or IAM database authentication
+  ## using customDatabaseUrl .
+  ## example customDatabaseUrl=jdbc:postgresql:///<DB_NAME>?cloudSqlInstance=<YOUR_GCP_PROJECT_ID>:<REGION_ID>:<INSTANCE_CONNECTION_NAME>&socketFactory=com.google.cloud.sql.postgres.SocketFactory&ipTypes=PRIVATE
+  ## for more information on supported configuration, refer to
+  ## https://docs.cloudbees.com/docs/cloudbees-cd/latest/install-k8s/k8s-platform-specific-configurations#_using_cloudbees_cdro_with_google_cloud_sql
+#  customDatabaseUrl:
+
 
 
 ### --------------------------------------------
@@ -924,7 +947,7 @@ zookeeper:
     ## Container repository to pull ZooKeeper image from.
     repository: docker.io/cloudbees/cbflow-tools
     ## Zookeeper image tag to pull.
-    tag: "2023.06.0.164409_3.2.44_20230603"
+    tag: "2023.08.0.167214_3.2.51_20230809"
 
   fullnameOverride: zookeeper
   replicaCount: 3
@@ -1233,3 +1256,7 @@ cdsidecarinjector:
   annotationPrefix: com.cloudbees.sidecar-injector
   ## Use `batch/v1beta1` if using Kubernetes v1.22 or later.
   batchApiVersion: batch/v1
+
+## Helm tests configuration
+helmTests:
+  image: mwendler/wget
