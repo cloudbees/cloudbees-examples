@@ -52,7 +52,7 @@ Be sure to follow the security policies and rules of your organization.
     -o jsonpath="{.data.CBF_SERVER_ADMIN_PASSWORD}" | base64 --decode; echo
   ```  
 
-[Example of installation CD agent helm charts](agents.md)
+[Example of installation CD agent helm charts](../common/agents.md)
 
 ### Cleanup
 

@@ -210,7 +210,7 @@ Be sure to follow the security policies and rules of your organization.
       --timeout 4200s
   ```
 
-[Example of installation CD agent helm charts](agents.md)
+[Example of installation CD agent helm charts](../common/agents.md)
 
 ### Cleanup
 - Delete CD Server
