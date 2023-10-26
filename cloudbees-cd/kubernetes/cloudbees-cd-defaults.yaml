@@ -1,3 +1,19 @@
+### Global  configurations section
+### ---------------------------------------------
+## Please, note that this will override the parameters, including sub-charts,
+##  configured to use the global value over local values
+
+global:
+  cloudbees:
+    imageRegistry:
+    imageTag:
+    ## Enable `imagePullSecrets` if you are using a private registry.
+    ## Secrets must be manually created or already exist in the namespace.
+    ## `imagePullSecrets: <secret-name>`
+    imagePullSecrets:
+
+
+
 ### --------------------------------------------
 ### Common images configurations section
 ### ---------------------------------------------
@@ -8,7 +24,7 @@ images:
   registry: "docker.io/cloudbees"
 
   ## CloudBees CD/RO flow-server image tag to pull.
-  tag: "2023.08.0.167214_3.2.51_20230809"
+  tag: "2023.10.0.169425_3.2.54_20231002"
 
   ## The image pull policy to use.
   pullPolicy: IfNotPresent
@@ -426,7 +442,7 @@ dois:
   ## Number replicas of Elasticsearch nodes to create.
   replicas: 1
 
-  ## `expose: true` allows cbflow-dois service ingress ports `9200` and `9500`
+  ## `expose: true` allows cbflow-dois service ingress ports `9200`
   ## to be accessed from outside the cluster.
   expose: true
 
@@ -510,6 +526,10 @@ dois:
   ## the sysctl `vm.max_map_count setting` is set by another method.
   sysctlInitContainer:
     enabled: true
+    ## The `sysctlInitContainer.imageRepository` sysctlInitContainer image repository.
+    imageRepository: busybox
+    ## The `sysctlInitContainer.imageTag` sysctlInitContainer image tag .
+    imageTag: stable
 
   ## Enable or disable creating an init container for cbflow-dois volume permissions.
   volumesPermissionsInitContainer:
@@ -571,7 +591,7 @@ dois:
       region:
 
 
-  ## Requires `dois.expose.enable: true` and ports `9200` and `9500` to be open and externally exposed.
+  ## Requires `dois.expose.enable: true` and ports `9200`  to be open and externally exposed.
   ## Creates extra Kubernetes service with type LoadBalancer.
   externalService:
     enabled: false
@@ -649,11 +669,8 @@ dois:
 ## deployment of cbflow-web and cbflow-repository are enabled.
 
 boundAgent:
-  ## The `imageRepository` in the `images.registry` to pull component image from.
-  imageRepository: cbflow-agent
   ## Number of replicas of this component to create.
   replicas: 1
-
   ## The default loglevel for cbflow-agent.
   logLevel: DEBUG
   flowCredentials:
@@ -947,7 +964,7 @@ zookeeper:
     ## Container repository to pull ZooKeeper image from.
     repository: docker.io/cloudbees/cbflow-tools
     ## Zookeeper image tag to pull.
-    tag: "2023.08.0.167214_3.2.51_20230809"
+    tag: "2023.10.0.169425_3.2.54_20231002"
 
   fullnameOverride: zookeeper
   replicaCount: 3
@@ -988,7 +1005,7 @@ zookeeper:
 ## Ingress requires the following ports to be exposed:
 ## * `8200` (cbflow-repository)
 ## * `8443` and `61613` (cbflow-server)
-## * `9200` and `9500` (cbflow-dois)
+## * `9200`  (cbflow-dois)
 ##
 ## As per Kubernetes ingress specification, this is not organically supported.
 ## This is why flow-ingress comes bundled with CloudBees CD/RO.
@@ -1054,7 +1071,6 @@ nginx-ingress:
     ##  Additional TCP ports to access DOIS Elasticsearch over ingress endpoint.
     #    7800: "{{ .Release.Namespace }}/gateway-external-agent-flow-agents:7800"
     #    9200: "{{ .Release.Namespace }}/flow-devopsinsight:9200"
-    #    9500: "{{ .Release.Namespace }}/flow-devopsinsight:9500"
 
     ## Additional port to enable external agents to connect to flow-server.
 #    8000: "{{ .Release.Namespace }}/flow-server:8000"
@@ -1116,7 +1132,6 @@ ingress-nginx:
       ##  Additional TCP ports to access DOIS Elasticsearch over the ingress endpoint:
       #    7800: "{{ .Release.Namespace }}/gateway-external-agent-flow-agents:7800"
       #    9200: "{{ .Release.Namespace }}/flow-devopsinsight:9200"
-      #    9500: "{{ .Release.Namespace }}/flow-devopsinsight:9500"
 
     ## Additional port to enable external agents to connect to flow-server.
 #    8000: "{{ .Release.Namespace }}/flow-server:8000"
