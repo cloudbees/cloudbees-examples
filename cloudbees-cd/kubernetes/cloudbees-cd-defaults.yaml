@@ -24,7 +24,7 @@ images:
   registry: "docker.io/cloudbees"
 
   ## CloudBees CD/RO flow-server image tag to pull.
-  tag: "2023.10.0.169425_3.2.54_20231002"
+  tag: "2023.12.0.171596_3.2.64_20231207"
 
   ## The image pull policy to use.
   pullPolicy: IfNotPresent
@@ -236,6 +236,12 @@ jobInit:
   tolerations: []
   affinity: {}
 
+  ## Kubernetes Liveness Probes:
+  livenessProbe:
+    initialDelaySeconds: 60
+    periodSeconds: 60
+    timeoutSeconds: 10
+
 ### --------------------------------------------
 ### Flow web server configuration section
 ### ---------------------------------------------
@@ -297,6 +303,20 @@ web:
   #         command:
   #           - "/container-command"
 
+  ## Kubernetes Liveness Probes:
+  livenessProbe:
+    initialDelaySeconds: 10
+    periodSeconds: 60
+    timeoutSeconds: 10
+    failureThreshold: 3
+
+  ## Kubernetes Readiness Probes:
+  readinessProbe:
+    initialDelaySeconds: 10
+    periodSeconds: 5
+    timeoutSeconds: 10
+    failureThreshold: 3
+
   ## Horizontal Pod Autoscaling configuration for cbflow-web.
   ## This is only supported when `clusteredMode: true`.
   autoscaling:
@@ -315,6 +335,7 @@ web:
 #         target:
 #           type: AverageValue
 #           averageValue: 10000m
+
 
 
 ### --------------------------------------------
@@ -408,6 +429,20 @@ repository:
   #       image: image-version
   #       command:
   #         - "/container-command"
+
+  ## Kubernetes Liveness Probes:
+  livenessProbe:
+    initialDelaySeconds: 120
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+
+  ## Kubernetes Readiness Probes:
+  readinessProbe:
+    initialDelaySeconds: 120
+    periodSeconds: 5
+    timeoutSeconds: 5
+    failureThreshold: 3
 
   ## Horizontal Pod Autoscaling configuration for cbflow-repository.
   ## This is only supported when `clusteredMode: true`.
@@ -876,21 +911,44 @@ flowLicense:
   ## passed with the `helm --set-file` option.
   licenseData:
 
+
 ### --------------------------------------------
 ### Pods security context
 ### ---------------------------------------------
-
+## Requires `securityContext.enabled=true` to apply `securityContext` settings for pod spec.
+## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 securityContext:
   enabled: false
   fsGroup: 1000
-  allowPrivilegeEscalation: false
   runAsUser: 1000
-  readOnlyRootFilesystem: true
-  runAsNonRoot: true
-  capabilities:
-    drop: ["ALL"]
-  seccompProfile:
-    type: "RuntimeDefault"
+## Configure pod security context, which applied to pod spec.
+## Ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#podsecuritycontext-v1-core
+#  fsGroup: 1000
+#  fsGroupChangePolicy: OnRootMismatch
+#  runAsGroup: 1000
+#  runAsNonRoot: true
+#  runAsUser: 1000
+#  seLinuxOptions: {}
+#  seccompProfile: {}
+#  supplementalGroups:
+#  sysctls:
+
+## Requires `securityContext.enabled=true` to apply `containerSecurityContext` settings for containers.
+containerSecurityContext: {}
+## Configure container security context, which is applied to containers.
+## Ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#securitycontext-v1-core
+#  allowPrivilegeEscalation: false
+#  capabilities:
+#    drop: [ "ALL" ]
+#  privileged: false
+#  procMount: "Default"
+#  readOnlyRootFilesystem: true
+#  runAsGroup: 1000
+#  runAsNonRoot: true
+#  runAsUser: 1000
+#  seLinuxOptions: {}
+#  seccompProfile: {}
+
 
 volumePermissions:
   enabled: true
@@ -964,8 +1022,9 @@ zookeeper:
     ## Container repository to pull ZooKeeper image from.
     repository: docker.io/cloudbees/cbflow-tools
     ## Zookeeper image tag to pull.
-    tag: "2023.10.0.169425_3.2.54_20231002"
-
+    tag: "2023.12.0.171596_3.2.64_20231207"
+    ## Added Image repository for global values support
+    imageRepository: cbflow-tools
   fullnameOverride: zookeeper
   replicaCount: 3
 
@@ -1209,6 +1268,14 @@ externalGatewayAgent:
     ## External DNS hostname external agents use to communicate
     ## with the external gateway agent
     publicHostName:
+  ## Enabling `externalService` creates a Load Balancer Kubernetes service named `<prefix>-flow-agents-external`.
+  ## If `externalGatewayAgent.service.publicHostName` above is configured with a DNS Endpoint (DNS Entry added for LB Endpoint), an
+  ## External Gateway Agent with the specified Agent Host Name is automatically created.
+  ## The port can be set to ports other than 7800. The load balancer will route any requests
+  ## to the specified port to the internal service on port 7800.
+  externalService:
+    enabled: false
+    port: 7800
 
   ## Configure gateway using external gateway agent.
   gateway:
@@ -1275,3 +1342,7 @@ cdsidecarinjector:
 ## Helm tests configuration
 helmTests:
   image: mwendler/wget
+
+## Custom Labels for CDRO workload pods
+customLabels:
+  product: cdro

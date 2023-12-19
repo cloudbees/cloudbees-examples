@@ -9,7 +9,7 @@ images:
   ## The `imageRepository` in the `images.registry` to pull the agent image from.
   imageRepository: "cbflow-agent"
   ## CloudBees CD/RO flow-server image tag to pull.
-  tag: "2023.10.0.169425_3.2.54_20231002"
+  tag: "2023.12.0.171596_3.2.64_20231207"
 
   ## The image pull policy to use:
   pullPolicy: IfNotPresent
@@ -127,8 +127,11 @@ service:
 ## the External Gateway Agent in CD/RO resources.
 ## If `service.publicHostName` is configured with a DNS Endpoint (DNS Entry added for LB Endpoint), an
 ## External Gateway Agent with the specified Agent Host Name is automatically created.
+## The port can be set to ports other than 7800. The load balancer will route any requests
+## to the specified port to the internal service on port 7800.
 externalService:
   enabled: false
+  port: 7800
   ## agent LoadBalancer service annotations for
   ## creating internal LoadBalancer on GCP or AWS.
   annotations:
@@ -194,11 +197,39 @@ flowCredentials:
 ### --------------------------------------------
 ### Pods security context
 ### ---------------------------------------------
-
+## Requires `securityContext.enabled=true` to apply `securityContext` settings for pod spec.
+## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 securityContext:
   enabled: false
   fsGroup: 1000
   runAsUser: 1000
+## Configure pod security context, which is applied to pod spec.
+## Ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#podsecuritycontext-v1-core
+#  fsGroup: 1000
+#  fsGroupChangePolicy: OnRootMismatch
+#  runAsGroup: 1000
+#  runAsNonRoot: true
+#  runAsUser: 1000
+#  seLinuxOptions: {}
+#  seccompProfile: {}
+#  supplementalGroups:
+#  sysctls:
+
+## Requires `securityContext.enabled=true` to apply `containerSecurityContext` settings for containers.
+containerSecurityContext: {}
+## Configure pod security context, which is applied to containers.
+## Ref: https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#securitycontext-v1-core
+#  allowPrivilegeEscalation: false
+#  capabilities:
+#    drop: [ "ALL" ]
+#  privileged: false
+#  procMount: "Default"
+#  readOnlyRootFilesystem: true
+#  runAsGroup: 1000
+#  runAsNonRoot: true
+#  runAsUser: 1000
+#  seLinuxOptions: {}
+#  seccompProfile: {}
 
 rbac:
   ## Specifies if RBAC resources should be created.
@@ -253,3 +284,8 @@ additionalVolumeMounts: []
 ## Helm tests configuration
 helmTests:
   image: mwendler/wget
+
+
+## Specify additional custom labels to agent pods.
+customLabels:
+  product: cdro
