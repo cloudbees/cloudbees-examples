@@ -1,26 +1,35 @@
-# CloudBees CD GKE examples
+# CloudBees CD/RO GKE example installations
 
-## In this folder
+This directory provides example installations of CloudBees CD/RO Helm charts within GKE clusters.
 
-This folder contains instructions to quickly install the CloudBees CD Helm Chart on GKE cluster.
+>**IMPORTANT** 
+> 
+>All examples provided are for informational purposes only. They are not meant to be used in production environments, but only to provide working demonstrations of such environments. 
+> 
+>If you use these examples in actual production environments data loss or other security-related issues may occur. For production environments, always follow the security policies and rules of your organization.  
 
-Pre-requisites:
+## Pre-requisites:
 
-- Install gcloud cli https://cloud.google.com/sdk/docs/install
-- Configure gcloud cli https://cloud.google.com/sdk/docs/initializing
-- Install kubectl https://kubernetes.io/docs/tasks/tools/ or
-    ```bash
+You must meet these pre-requisites to follow the instructions in the examples:
+
+- You must have the `gcloud` CLI installed. Refer to the `gcloud` [installation](https://cloud.google.com/sdk/docs/install) and [configuration](https://cloud.google.com/sdk/docs/initializing) documentation for more information.
+- You must have `kubectl` CLI installed. Refer to [`kubectl` installation](https://kubernetes.io/docs/tasks/tools/#kubectl), or to install using `gcloud`, run:
+     ```bash
     gcloud components install kubectl
-  ```
-- Install Helm https://helm.sh/docs/intro/install/
+     ```
+- You must have the `helm` CLI installed. Refer to [`helm` installation](https://helm.sh/docs/intro/install/), or run:
     ```bash
     curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
     chmod 700 get_helm.sh
     ./get_helm.sh
   ```
 
-[Example of environment and installation in demo mode](demo.md)
+## GKE examples
 
-[Example of environment and installation in production mode](prod.md)
+The following example installations are provided: 
 
-[Example of installation CD agent helm charts](../common/agents.md)
+* [GKE example environment and installation in demo mode](demo.md)
+
+* [GKE example environment and installation in production mode](prod.md)
+
+* [GKE example installation of CloudBees CD/RO agent Helm charts](agents.md)
