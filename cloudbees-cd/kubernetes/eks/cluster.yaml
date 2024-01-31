@@ -1,0 +1,51 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: demo
+  version: "1.28"
+  region: us-east-1
+
+iam:
+  withOIDC: true
+  serviceAccounts:
+    - metadata:
+        name: ebs-csi-controller-sa
+        namespace: kube-system
+      wellKnownPolicies:
+        ebsCSIController: true
+
+
+vpc:
+  clusterEndpoints:
+    publicAccess: true
+    privateAccess: true
+
+managedNodeGroups:
+  - name: cd-ro-node-group
+    amiFamily: AmazonLinux2
+    instanceTypes: [ "m6i.xlarge", "m6a.xlarge" ]
+    minSize: 1
+    desiredCapacity: 2
+    maxSize: 3
+    volumeSize: 100
+    volumeType: gp3
+    volumeEncrypted: true
+    ssh:
+      allow: true
+    updateConfig:
+      maxUnavailablePercentage: 33
+    iam:
+      withAddonPolicies:
+        ebs: true
+        efs: true
+        albIngress: true
+
+addons:
+  - name: vpc-cni
+  - name: coredns
+  - name: kube-proxy
+  - name: aws-ebs-csi-driver
+    version: "v1.27.0-eksbuild.1"
+
+
