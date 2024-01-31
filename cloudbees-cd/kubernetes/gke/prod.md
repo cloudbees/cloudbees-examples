@@ -1,4 +1,4 @@
-## CloudBees CD Installation in `production` mode
+# GKE example CloudBees CD/RO production installation
 
 All the steps to create an environment are not a recommendation for production use.
 All the steps below are optional and are for informational purposes only and are provided as an example for quickly setting up an infrastructure to install CD on k8s. 

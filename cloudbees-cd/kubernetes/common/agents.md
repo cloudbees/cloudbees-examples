@@ -1,4 +1,4 @@
-### CloudBees CD Agents Installation
+# GKE example CloudBees CD/RO agent installation
 - Download agent values file
     ```bash
     AGENTS_FILE_URL=https://raw.githubusercontent.com/cloudbees/cloudbees-examples/master/cloudbees-cd/kubernetes/cloudbees-cd-agent-example.yaml
