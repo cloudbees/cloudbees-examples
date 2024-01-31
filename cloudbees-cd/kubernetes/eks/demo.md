@@ -12,7 +12,7 @@ Be sure to follow the security policies and rules of your organization.
   ```
 
 ### CloudBees CD Installation in `demo` mode
-Download demo values file
+- Download demo values file
   ```bash
   DEMO_FILE_URL=https://raw.githubusercontent.com/cloudbees/cloudbees-examples/master/cloudbees-cd/kubernetes/cloudbees-cd-demo.yaml
   curl -fsSL -o cloudbees-cd-demo.yaml $DEMO_FILE_URL
@@ -42,3 +42,14 @@ Download demo values file
   ```  
 
 [Example of installation CD agent helm charts](../common/agents.md)
+
+### Cleanup
+
+- Delete CD Server
+    ```bash
+    helm uninstall $HELM_RELEASE -n $NAMESPACE
+  ```  
+- Delete EKS cluster
+   ```bash
+   eksctl delete cluster -f eks.yaml
+  ```  
