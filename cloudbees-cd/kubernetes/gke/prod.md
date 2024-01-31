@@ -1,8 +1,15 @@
 # GKE example CloudBees CD/RO production installation
 
-All the steps to create an environment are not a recommendation for production use.
-All the steps below are optional and are for informational purposes only and are provided as an example for quickly setting up an infrastructure to install CD on k8s. 
-Be sure to follow the security policies and rules of your organization.
+>**IMPORTANT**
+>
+>All examples provided are for informational purposes only. They are not meant to be used in production environments, but only to provide working demonstrations of such environments.
+>
+>If you use these examples in actual production environments data loss or other security-related issues may occur. For production environments, always follow the security policies and rules of your organization.
+
+## Prerequisites
+To complete the following instructions, you must meet the cluster and tooling requirements listed in [Prerequisites](README.md#gke-available-examples-a-namecdro-gke-available-examples).
+
+## Configure environment variables
 
 - Set environment variables
    ```bash
@@ -20,7 +27,9 @@ Be sure to follow the security policies and rules of your organization.
   HELM_RELEASE=<cloudbees-cd-helm-release>              # e.g. HELM_RELEASE=cd-prod
   NAMESPACE=<cloudbees-cd-namespace>                    # e.g. NAMESPACE=cd-prod
   ```
-### Network configuration
+
+## Configure networking
+ 
 - Create VPC network and subnet for GKE cluster
     ```bash
     gcloud compute networks create $GCP_VPC_NETWORK \
@@ -76,7 +85,8 @@ Be sure to follow the security policies and rules of your organization.
       --member=serviceAccount:$GCP_SA_EMAIL \
       --role=roles/file.editor
     ```
-### GKE cluster configuration
+## Create a GKE cluster
+
 - Create a GKE cluster with CSI driver enabled
     ```bash
     gcloud container clusters create "$GKE_CLUSTER_NAME" \
@@ -104,7 +114,9 @@ Be sure to follow the security policies and rules of your organization.
     allowVolumeExpansion: true
     EOF
   ```
-### GCP SQL configuration
+  
+## Configure a GCP SQL instance 
+
 - Create GCP SQL instance with private connection
     ```bash
     GCP_DB_INSTANCE_NAME=<gcp-db-instance-name>
@@ -160,7 +172,7 @@ Be sure to follow the security policies and rules of your organization.
       --rrdatas=$GCP_DB_IP
   ```  
 
-### CloudBees CD installation
+## Install CloudBees CD/RO production environment
 
 - Download production values file
     ```bash
@@ -212,7 +224,8 @@ Be sure to follow the security policies and rules of your organization.
 
 [Example of installation CD agent helm charts](agents.md)
 
-### Cleanup
+## Teardown CloudBees CD/RO production installation
+
 - Delete CD Server
     ```bash
     helm uninstall $HELM_RELEASE -n $NAMESPACE
