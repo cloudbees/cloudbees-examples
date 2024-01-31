@@ -37,8 +37,8 @@ To complete the following instructions, you must meet the cluster and tooling re
   GKE_CLUSTER_MACHINE_TYPE=<gke-cluster-machine-type>   # e.g. GKE_CLUSTER_MACHINE_TYPE=e2-standard-4
   HELM_RELEASE=<cloudbees-cd-helm-release>              # e.g. HELM_RELEASE=cd-demo
   NAMESPACE=<cloudbees-cd-namespace>                    # e.g. NAMESPACE=cd-demo
-  # Do not change
-  DEMO_FILE_URL=https://raw.githubusercontent.com/cloudbees/cloudbees-examples/master/cloudbees-cd/kubernetes/cloudbees-cd-demo.yaml
+  # Do not change:
+  DEMO_FILE_URL="https://raw.githubusercontent.com/cloudbees/cloudbees-examples/master/cloudbees-cd/kubernetes/cloudbees-cd-demo.yaml"
   ``` 
 
 ## Create a GKE cluster

@@ -17,7 +17,7 @@ To complete the following instructions, you must meet the cluster and tooling re
      NAMESPACE=<cloudbees-cd-namespace>
      HELM_RELEASE=<cloudbees-cd-helm-release>
      # Do not change:
-     AGENTS_FILE_URL=https://raw.githubusercontent.com/cloudbees/cloudbees-examples/master/cloudbees-cd/kubernetes/cloudbees-cd-agent-example.yaml
+     AGENTS_FILE_URL="https://raw.githubusercontent.com/cloudbees/cloudbees-examples/master/cloudbees-cd/kubernetes/cloudbees-cd-agent-example.yaml"
     ```
 
 ## Install CloudBees CD/RO agent

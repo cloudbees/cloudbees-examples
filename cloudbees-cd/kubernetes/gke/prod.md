@@ -26,6 +26,8 @@ To complete the following instructions, you must meet the cluster and tooling re
   GKE_CLUSTER_MACHINE_TYPE=<gke-cluster-machine-type>   # e.g. GKE_CLUSTER_MACHINE_TYPE=e2-standard-8
   HELM_RELEASE=<cloudbees-cd-helm-release>              # e.g. HELM_RELEASE=cd-prod
   NAMESPACE=<cloudbees-cd-namespace>                    # e.g. NAMESPACE=cd-prod
+  # Do not change:
+   PROD_FILE_URL="https://raw.githubusercontent.com/cloudbees/cloudbees-examples/master/cloudbees-cd/kubernetes/cloudbees-cd-prod.yaml"
   ```
 
 ## Configure networking
@@ -176,7 +178,7 @@ To complete the following instructions, you must meet the cluster and tooling re
 
 - Download production values file
     ```bash
-    curl -fsSL -o cloudbees-cd-production.yaml https://raw.githubusercontent.com/cloudbees/cloudbees-examples/master/cloudbees-cd/kubernetes/cloudbees-cd-prod.yaml
+    curl -fsSL -o cloudbees-cd-demo.yaml $PROD_FILE_URL
   ```
 - Create k8s namespace
     ```bash
