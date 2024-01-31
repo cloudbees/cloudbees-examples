@@ -51,5 +51,5 @@ Be sure to follow the security policies and rules of your organization.
   ```  
 - Delete EKS cluster
    ```bash
-   eksctl delete cluster -f eks.yaml
-  ```  
+   eksctl delete cluster -f eks.yaml --disable-nodegroup-eviction
+  ```
