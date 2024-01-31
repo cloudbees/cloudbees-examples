@@ -26,8 +26,9 @@ To complete the following instructions, you must meet the cluster and tooling re
 
 ## Configure environment variables
 
-- Set environment variables
-   ```bash
+The commands in following sections are preconfigured to use environment variables. To align your installation, set the following environment variables:
+
+```bash
   GCP_ZONE=<gcp-zone>                                   # e.g. GCP_ZONE=us-east1-b
   GCP_PROJECT=<gcp-project>                             # e.g. GCP_PROJECT=cloudbees-cd-demo
   GKE_CLUSTER_NAME=<gke-cluster-name>                   # e.g. GKE_CLUSTER_NAME=gke-cd-demo
@@ -39,18 +40,18 @@ To complete the following instructions, you must meet the cluster and tooling re
   NAMESPACE=<cloudbees-cd-namespace>                    # e.g. NAMESPACE=cd-demo
   # Do not change:
   DEMO_FILE_URL="https://raw.githubusercontent.com/cloudbees/cloudbees-examples/master/cloudbees-cd/kubernetes/cloudbees-cd-demo.yaml"
-  ``` 
+``` 
 
 ## Create a GKE cluster
 
 - Create GKE cluster
-    ```bash
+```bash
     gcloud container clusters create "$GKE_CLUSTER_NAME" \
     --project="$GCP_PROJECT" \
     --num-nodes="$GKE_CLUSTER_NUM_NODES" \
     --machine-type="$GKE_CLUSTER_MACHINE_TYPE" \
     --zone="$GCP_ZONE"
-  ```
+```
 
 ## Install CloudBees CD/RO demo environment
  
