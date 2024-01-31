@@ -225,7 +225,13 @@ The commands in following sections are preconfigured to use environment variable
       --timeout 4200s
   ```
 
-[Example of installation CD agent helm charts](agents.md)
+## Install CloudBees CD/RO agents
+
+To run user jobs within your CloudBees CD/RO environment, you must install at least one agent. For instructions on installing CloudBees CD/RO agents, refer to [GKE example CloudBees CD/RO agent installation](agents.md).
+
+>**IMPORTANT**
+>
+> CloudBees CD/RO installation include the CloudBees CD/RO bound agent (`flow-bound-agent`), but this agent is an internal component used specifically by CloudBees CD/RO for internal operations. While it is possible to schedule user jobs on bound agents, they are not intended for this purpose, and the overall performance of CloudBees CD/RO may be greatly impacted. CloudBees CD/RO agents should be used instead.
 
 ## Teardown CloudBees CD/RO production installation
 

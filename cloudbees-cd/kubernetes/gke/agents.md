@@ -1,10 +1,6 @@
 # GKE example CloudBees CD/RO agent installation
 
->**IMPORTANT**
->
->All examples provided are for informational purposes only. They are not meant to be used in production environments, but only to provide working demonstrations of such environments.
->
->If you use these examples in actual production environments data loss or other security-related issues may occur. For production environments, always follow the security policies and rules of your organization.
+To run user jobs within your CloudBees CD/RO environment, you must install at least one agent.
 
 ## Prerequisites
 To complete the following instructions, you must meet the cluster and tooling requirements listed in [Prerequisites](README.md#gke-available-examples-a-namecdro-gke-available-examples).
