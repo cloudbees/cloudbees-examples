@@ -4,7 +4,7 @@ All the steps to create an environment are not a recommendation for production u
 All the steps below are optional and are for informational purposes only and are provided as an example for quickly setting up an infrastructure to install CD on k8s.
 Be sure to follow the security policies and rules of your organization.
 
-- Create EKS cluster by following the [AWS documentation](https://docs.aws.amazon.com/eks/latest/userguide/getting-started-console.html)
+- Create EKS cluster by following the [eksctl documentation](https://eksctl.io/getting-started/)
 - ```bash
   DEMO_EKS_CLUSTER_FILE_URL=https://raw.githubusercontent.com/cloudbees/cloudbees-examples/master/cloudbees-cd/kubernetes/eks/cluster.yaml
   curl -fsSL -o eks.yaml $DEMO_EKS_CLUSTER_FILE_URL
