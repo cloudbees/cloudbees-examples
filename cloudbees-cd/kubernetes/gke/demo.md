@@ -1,5 +1,20 @@
 # GKE example CloudBees CD/RO demo installation
 
+This example provides instructions on how to set up a demo installation of CloudBees CD/RO in a GKE cluster. This environment can be used to experiment with CloudBees CD/RO, and includes the following components: 
+
+* CloudBees CD/RO server (`flow-server`)
+
+* CloudBees CD/RO web server (`web-server`)
+
+* CloudBees Analytics server (`cloudbees-devopsinsight`)
+
+* The repository server (`flow-repository`)
+
+* A bound agent (`flow-bound-agent`), which serves as a local agent for the CloudBees CD/RO and repository servers.
+
+* Built-in MariaDB database 
+  * To install an external database, a CloudBees CD/RO enterprise license is required. For more information on licenses, refer to the CloudBees CD/RO [Licenses](https://docs.cloudbees.com/docs/cloudbees-cd/latest/set-up-cdro/licenses) documentation. 
+
 >**IMPORTANT**
 >
 >All examples provided are for informational purposes only. They are not meant to be used in production environments, but only to provide working demonstrations of such environments.
@@ -7,9 +22,9 @@
 >If you use these examples in actual production environments data loss or other security-related issues may occur. For production environments, always follow the security policies and rules of your organization.
 
 ## Prerequisites
-To complete the steps listed here, you must meet the cluster and tooling requirements listed in [Prerequisites](README.md#gke-available-examples-a-namecdro-gke-available-examples).
+To complete the following instructions, you must meet the cluster and tooling requirements listed in [Prerequisites](README.md#gke-available-examples-a-namecdro-gke-available-examples).
 
-
+## Configure environment variables
 
 - Set environment variables
    ```bash
@@ -22,7 +37,12 @@ To complete the steps listed here, you must meet the cluster and tooling require
   GKE_CLUSTER_MACHINE_TYPE=<gke-cluster-machine-type>   # e.g. GKE_CLUSTER_MACHINE_TYPE=e2-standard-4
   HELM_RELEASE=<cloudbees-cd-helm-release>              # e.g. HELM_RELEASE=cd-demo
   NAMESPACE=<cloudbees-cd-namespace>                    # e.g. NAMESPACE=cd-demo
-  ```  
+  # Do not change
+  DEMO_FILE_URL=https://raw.githubusercontent.com/cloudbees/cloudbees-examples/master/cloudbees-cd/kubernetes/cloudbees-cd-demo.yaml
+  ``` 
+
+## Create a GKE cluster
+
 - Create GKE cluster
     ```bash
     gcloud container clusters create "$GKE_CLUSTER_NAME" \
@@ -31,10 +51,11 @@ To complete the steps listed here, you must meet the cluster and tooling require
     --machine-type="$GKE_CLUSTER_MACHINE_TYPE" \
     --zone="$GCP_ZONE"
   ```
-### CloudBees CD Installation in `demo` mode  
+
+## Install CloudBees CD/RO demo environment
+ 
 - Download demo values file
   ```bash
-  DEMO_FILE_URL=https://raw.githubusercontent.com/cloudbees/cloudbees-examples/master/cloudbees-cd/kubernetes/cloudbees-cd-demo.yaml
   curl -fsSL -o cloudbees-cd-demo.yaml $DEMO_FILE_URL
   ```
 - Install CD from cloudbees/cd Helm repo
@@ -61,7 +82,7 @@ To complete the steps listed here, you must meet the cluster and tooling require
 
 [Example of installation CD agent helm charts](../common/agents.md)
 
-### Cleanup
+## Teardown CloudBees CD/RO demo installation
 
 - Delete CD Server
     ```bash
