@@ -11,8 +11,9 @@ To complete the following instructions, you must meet the cluster and tooling re
 
 ## Configure environment variables
 
-- Set environment variables
-   ```bash
+The commands in following sections are preconfigured to use environment variables. To align your installation, set the following environment variables:
+
+```bash
   GCP_PROJECT=<gcp-project>                             # e.g. GCP_PROJECT=cloudbees-cd-prod
   GCP_REGION=<gcp-region>                               # e.g. GCP_REGION=us-east1
   GCP_ZONE=<gcp-zone>                                   # e.g. GCP_ZONE=us-east1-b
@@ -28,7 +29,7 @@ To complete the following instructions, you must meet the cluster and tooling re
   NAMESPACE=<cloudbees-cd-namespace>                    # e.g. NAMESPACE=cd-prod
   # Do not change:
    PROD_FILE_URL="https://raw.githubusercontent.com/cloudbees/cloudbees-examples/master/cloudbees-cd/kubernetes/cloudbees-cd-prod.yaml"
-  ```
+```
 
 ## Configure networking
  

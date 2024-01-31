@@ -12,13 +12,14 @@ To complete the following instructions, you must meet the cluster and tooling re
 
 ## Configure environment variables
 
-- Set environment variables
-    ```bash
-     NAMESPACE=<cloudbees-cd-namespace>
-     HELM_RELEASE=<cloudbees-cd-helm-release>
-     # Do not change:
-     AGENTS_FILE_URL="https://raw.githubusercontent.com/cloudbees/cloudbees-examples/master/cloudbees-cd/kubernetes/cloudbees-cd-agent-example.yaml"
-    ```
+The commands in following sections are preconfigured to use environment variables. To align your installation, set the following environment variables:
+
+```bash
+NAMESPACE=<cloudbees-cd-namespace>
+HELM_RELEASE=<cloudbees-cd-helm-release>
+# Do not change:
+AGENTS_FILE_URL="https://raw.githubusercontent.com/cloudbees/cloudbees-examples/master/cloudbees-cd/kubernetes/cloudbees-cd-agent-example.yaml"
+```
 
 ## Install CloudBees CD/RO agent
 
