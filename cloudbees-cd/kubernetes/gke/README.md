@@ -1,6 +1,7 @@
-# CloudBees CD/RO GKE example installations
 
-This directory provides example installations of CloudBees CD/RO Helm charts within GKE clusters.
+# CloudBees CD/RO GKE example installations <a name="cdro-gke-example"/>
+
+This directory provides example installations of CloudBees CD/RO Helm charts for GKE clusters.
 
 >**IMPORTANT** 
 > 
@@ -8,7 +9,7 @@ This directory provides example installations of CloudBees CD/RO Helm charts wit
 > 
 >If you use these examples in actual production environments data loss or other security-related issues may occur. For production environments, always follow the security policies and rules of your organization.  
 
-## Pre-requisites:
+## Prerequisites <a name="cdro-gke-example-prerequisites "/>
 
 You must meet these pre-requisites to follow the instructions in the examples:
 
@@ -24,12 +25,12 @@ You must meet these pre-requisites to follow the instructions in the examples:
     ./get_helm.sh
   ```
 
-## GKE examples
+## GKE available examples <a name="cdro-gke-available-examples"/>
 
 The following example installations are provided: 
 
-* [GKE example environment and installation in demo mode](demo.md)
+* [GKE example CloudBees CD/RO demo installation](demo.md)
 
-* [GKE example environment and installation in production mode](prod.md)
+* [GKE example CloudBees CD/RO production installation](prod.md)
 
-* [GKE example installation of CloudBees CD/RO agent Helm charts](agents.md)
+* [GKE example CloudBees CD/RO agent installation](agents.md)

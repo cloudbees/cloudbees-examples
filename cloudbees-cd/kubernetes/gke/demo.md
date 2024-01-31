@@ -1,8 +1,15 @@
-### Create a GKE cluster for CloudBees CD installation in `demo` mode
+# GKE example CloudBees CD/RO demo installation
 
-All the steps to create an environment are not a recommendation for production use.
-All the steps below are optional and are for informational purposes only and are provided as an example for quickly setting up an infrastructure to install CD on k8s.
-Be sure to follow the security policies and rules of your organization.
+>**IMPORTANT**
+>
+>All examples provided are for informational purposes only. They are not meant to be used in production environments, but only to provide working demonstrations of such environments.
+>
+>If you use these examples in actual production environments data loss or other security-related issues may occur. For production environments, always follow the security policies and rules of your organization.
+
+## Prerequisites
+To complete the steps listed here, you must meet the cluster and tooling requirements listed in [Prerequisites](README.md#gke-available-examples-a-namecdro-gke-available-examples).
+
+
 
 - Set environment variables
    ```bash
