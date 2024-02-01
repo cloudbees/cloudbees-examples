@@ -18,6 +18,11 @@ You must meet these pre-requisites to follow the instructions in the examples:
      ```bash
     gcloud components install kubectl
      ```
+  - To verify `kubectl` is installed, run:
+    ```bash
+    kubectl version --client
+     ```
+
 - You must have the `helm` CLI installed. Refer to [`helm` installation](https://helm.sh/docs/intro/install/), or run:
     ```bash
     curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3

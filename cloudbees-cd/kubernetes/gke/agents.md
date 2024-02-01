@@ -51,7 +51,7 @@ AGENTS_FILE_URL="https://raw.githubusercontent.com/cloudbees/cloudbees-examples/
 
 ## Teardown CloudBees CD/RO agent installation
 
-- Delete CD Agents
-    ```bash
+Once you are finished with your CloudBees CD/RO agents, to tear down the agent installation, run:
+```bash
     helm uninstall $HELM_RELEASE-agents -n $NAMESPACE
   ```  
