@@ -1,4 +1,4 @@
-# GKE example CloudBees CD/RO demo installation
+# GKE example CloudBees CD/RO demo installation <a name="cdro-gke-example-demo"/>
 
 This example provides instructions on how to set up a demo installation of CloudBees CD/RO in a GKE cluster. This environment can be used to experiment with CloudBees CD/RO, and includes the following components: 
 
@@ -21,10 +21,10 @@ This example provides instructions on how to set up a demo installation of Cloud
 >
 >If you use these examples in actual production environments data loss or other security-related issues may occur. For production environments, always follow the security policies and rules of your organization.
 
-## Prerequisites
+## Prerequisites <a name="cdro-gke-example-demo-prerequisites"/>
 To complete the following instructions, you must meet the cluster and tooling requirements listed in [Prerequisites](README.md#gke-available-examples-a-namecdro-gke-available-examples).
 
-## Configure environment variables
+## Configure environment variables <a name="cdro-gke-example-demo-config-env-vars"/>
 
 The commands in following sections are preconfigured to use environment variables. To align your installation, set the following environment variables:
 
@@ -42,7 +42,11 @@ The commands in following sections are preconfigured to use environment variable
   DEMO_FILE_URL="https://raw.githubusercontent.com/cloudbees/cloudbees-examples/master/cloudbees-cd/kubernetes/cloudbees-cd-demo.yaml"
 ``` 
 
-## Create a GKE cluster
+## Create a GKE cluster <a name="cdro-gke-example-demo-create-gke-cluster"/>
+
+>**NOTE**
+>
+>The following commands use variable configured in (#Configure environment variables)
 
 - Create GKE cluster
 ```bash
@@ -53,7 +57,7 @@ The commands in following sections are preconfigured to use environment variable
     --zone="$GCP_ZONE"
 ```
 
-## Install CloudBees CD/RO demo environment
+## Install CloudBees CD/RO demo environment <a name="cdro-gke-example-demo-install-cdro"/>
  
 - Download demo values file
   ```bash
@@ -81,7 +85,7 @@ The commands in following sections are preconfigured to use environment variable
     -o jsonpath="{.data.CBF_SERVER_ADMIN_PASSWORD}" | base64 --decode; echo
   ```  
 
-## Install CloudBees CD/RO agents
+## Install CloudBees CD/RO agents <a name="cdro-gke-example-demo-install-cdro-agents"/>
 
 To run user jobs within your CloudBees CD/RO environment, you must install at least one agent. For instructions on installing CloudBees CD/RO agents, refer to [GKE example CloudBees CD/RO agent installation](agents.md).
 
@@ -89,7 +93,7 @@ To run user jobs within your CloudBees CD/RO environment, you must install at le
 >
 > CloudBees CD/RO installation include the CloudBees CD/RO bound agent (`flow-bound-agent`), but this agent is an internal component used specifically by CloudBees CD/RO for internal operations. While it is possible to schedule user jobs on bound agents, they are not intended for this purpose, and the overall performance of CloudBees CD/RO may be greatly impacted. CloudBees CD/RO agents should be used instead.
 
-## Teardown CloudBees CD/RO demo installation
+## Teardown CloudBees CD/RO demo installation <a name="cdro-gke-example-demo-teardown"/>
 
 - Delete CD Server
     ```bash
