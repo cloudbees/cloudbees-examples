@@ -1,5 +1,19 @@
 # GKE example CloudBees CD/RO production installation
 
+>**NOTE**
+>
+>To follow all steps in this example, a CloudBees CD/RO enterprise license is required. For more information on licenses, refer to the CloudBees CD/RO [Licenses](https://docs.cloudbees.com/docs/cloudbees-cd/latest/set-up-cdro/licenses) documentation.
+
+This example provides instructions on how to set up a demo installation of CloudBees CD/RO in a GKE cluster. This environment can be used to experiment with CloudBees CD/RO, and includes the following components:
+
+* CloudBees CD/RO server (`flow-server`)
+* CloudBees CD/RO web server (`web-server`)
+* CloudBees Analytics server (`cloudbees-devopsinsight`)
+* The repository server (`flow-repository`)
+* A bound agent (`flow-bound-agent`), which serves as a local agent for the CloudBees CD/RO and repository servers.
+* External PostgresSQL
+  * If you are using a different database, 
+
 >**IMPORTANT**
 >
 >All examples provided are for informational purposes only. They are not meant to be used in production environments, but only to provide working demonstrations of such environments.
@@ -31,8 +45,10 @@ The commands in following sections are preconfigured to use environment variable
    PROD_FILE_URL="https://raw.githubusercontent.com/cloudbees/cloudbees-examples/master/cloudbees-cd/kubernetes/cloudbees-cd-prod.yaml"
 ```
 
-## Configure networking
+## Configure cluster networking
  
+For production environments, networking is an extremely important aspect of how CloudBees CD/RO operates. The following steps demonstrate an example of GKE networking for CloudBees CD/RO 
+
 - Create VPC network and subnet for GKE cluster
     ```bash
     gcloud compute networks create $GCP_VPC_NETWORK \
@@ -73,7 +89,7 @@ The commands in following sections are preconfigured to use environment variable
       --network=$GCP_VPC_NETWORK \
       --project="$GCP_PROJECT"
     ```
-- Create GCP service account for Filestore CSI driver
+- Create GCP service account for filestore CSI driver
     ```bash
     GCP_SA_NAME=filestore-sa
     gcloud iam service-accounts create $GCP_SA_NAME \
@@ -82,7 +98,7 @@ The commands in following sections are preconfigured to use environment variable
       --filter="displayName:$GCP_SA_NAME" \
       --format='value(email)')
     ```
-- Add Filestore editor IAM role to the service account
+- Add filestore editor IAM role to the service account
     ```bash
     gcloud projects add-iam-policy-binding $GCP_PROJECT \
       --member=serviceAccount:$GCP_SA_EMAIL \
@@ -233,7 +249,13 @@ To run user jobs within your CloudBees CD/RO environment, you must install at le
 >
 > CloudBees CD/RO installation include the CloudBees CD/RO bound agent (`flow-bound-agent`), but this agent is an internal component used specifically by CloudBees CD/RO for internal operations. While it is possible to schedule user jobs on bound agents, they are not intended for this purpose, and the overall performance of CloudBees CD/RO may be greatly impacted. CloudBees CD/RO agents should be used instead.
 
-## Teardown CloudBees CD/RO production installation
+## Tear down CloudBees CD/RO production installation
+
+Once you are finished with your example CloudBees CD/RO production installation, the following steps guide you through tearing down the environment:
+
+>**NOTE**
+>
+>The following commands use variable configured in [Configure environment variables](#configure-environment-variables-a-namecdro-gke-example-demo-config-env-vars). Ensure you have configured these variables before continuing.
 
 - Delete CD Server
     ```bash

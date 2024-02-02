@@ -110,7 +110,7 @@ To run user jobs within your CloudBees CD/RO environment, you must install at le
 
 ## Tear down CloudBees CD/RO demo installation <a name="cdro-gke-example-demo-teardown"/>
 
-Once you are finished with your CloudBees CD/RO demo installation, the following steps guide you through tearing down the environment:
+Once you are finished with your example CloudBees CD/RO demo installation, the following steps guide you through tearing down the environment:
 
 >**NOTE**
 >
