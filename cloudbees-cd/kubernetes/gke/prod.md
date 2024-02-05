@@ -1,10 +1,10 @@
-# GKE example CloudBees CD/RO production installation <a name="cdro-gke-example-prod"/>
+# GKE example CloudBees CD/RO clustered installation <a name="cdro-gke-example-clustered"/>
 
 >**NOTE**
 >
 >To follow all steps in this example, a CloudBees CD/RO enterprise license is required. For more information on licenses, refer to the CloudBees CD/RO [Licenses](https://docs.cloudbees.com/docs/cloudbees-cd/latest/set-up-cdro/licenses) documentation.
 
-This example provides instructions on how to set up an example production installation of CloudBees CD/RO in a GKE cluster. This environment can be used to experiment with CloudBees CD/RO, and includes the following components:
+This example provides instructions on how to set up an example clustered installation of CloudBees CD/RO in a GKE cluster. This environment can be used to experiment with CloudBees CD/RO, and includes the following components:
 
 * CloudBees CD/RO server (`flow-server`)
 * CloudBees CD/RO web server (`web-server`)
@@ -26,31 +26,31 @@ This example provides instructions on how to set up an example production instal
 ## Prerequisites
 To complete the following instructions, you must meet the cluster and tooling requirements listed in [Prerequisites](README.md#gke-available-examples-a-namecdro-gke-available-examples).
 
-## Configure environment variables <a name="cdro-gke-example-prod-config-en-vars"/>
+## Configure environment variables <a name="cdro-gke-example-clustered-config-en-vars"/>
 
 The commands in following sections are preconfigured to use environment variables. To align your installation, set the following environment variables:
 
 ```bash
-  GCP_PROJECT=<gcp-project>                             # e.g. GCP_PROJECT=cloudbees-cd-prod
+  GCP_PROJECT=<gcp-project>                             # e.g. GCP_PROJECT=cloudbees-cd-clustered
   GCP_REGION=<gcp-region>                               # e.g. GCP_REGION=us-east1
   GCP_ZONE=<gcp-zone>                                   # e.g. GCP_ZONE=us-east1-b
   GCP_VPC_NETWORK=<gcp-vpc-network>                     # e.g. GCP_VPC_NETWORK=cd-vpc
   GCP_VPC_SUBNET=<gcp-vpc-subnet>                       # e.g. GCP_VPC_SUBNET=cd-subnet
   GCP_SUBNET_IP_RANGE=<gcp-subnet-ip-range>             # e.g. GCP_SUBNET_IP_RANGE=10.0.0.0/24
-  GKE_CLUSTER_NAME=<gke-cluster-name>                   # e.g. GKE_CLUSTER_NAME=gke-cd-prod
-  # Number of nodes in the cluster, 3 is enough for production purposes
+  GKE_CLUSTER_NAME=<gke-cluster-name>                   # e.g. GKE_CLUSTER_NAME=gke-cd-clustered
+  # Number of nodes in the cluster, 3 is enough for clustering purposes
   GKE_CLUSTER_NUM_NODES=<gke-cluster-number-of-nodes>   # e.g. GKE_CLUSTER_NUM_NODES=3
-  # Machine type for the GKE cluster nodes, n1-standard-8 is enough for production purposes
-  GKE_CLUSTER_MACHINE_TYPE=<gke-cluster-machine-type>   # e.g. GKE_CLUSTER_MACHINE_TYPE=n1-standard-8
+  # Machine type for the GKE cluster nodes, n1-standard-8 is enough for clustering purposes
+  GKE_CLUSTER_MACHINE_TYPE=<gke-cluster-machine-type>   # e.g. GKE_CLUSTER_MACHINE_TYPE=e2-standard-8
   HELM_RELEASE=<cloudbees-cd-helm-release>              # e.g. HELM_RELEASE=cd-prod
   NAMESPACE=<cloudbees-cd-namespace>                    # e.g. NAMESPACE=cd-prod
   # Do not change:
    PROD_FILE_URL="https://raw.githubusercontent.com/cloudbees/cloudbees-examples/master/cloudbees-cd/kubernetes/cloudbees-cd-prod.yaml"
 ```
 
-## Configure cluster networking <a name="cdro-gke-example-prod-config-net"/>
+## Configure cluster networking <a name="cdro-gke-example-clustered-config-net"/>
  
-For production environments, networking is an extremely important aspect of how CloudBees CD/RO operates. The following steps demonstrate an example of GKE cluster networking for CloudBees CD/RO: 
+For clustered environments, networking is an extremely important aspect of how CloudBees CD/RO operates. The following steps demonstrate an example of GKE cluster networking for CloudBees CD/RO: 
 
 1. To create a VPC network and subnet for your GKE cluster, run:
     ```bash
@@ -107,7 +107,7 @@ For production environments, networking is an extremely important aspect of how 
       --member=serviceAccount:$GCP_SA_EMAIL \
       --role=roles/file.editor
     ```
-## Create a GKE cluster <a name="cdro-gke-example-prod-create-cluster"/>
+## Create a GKE cluster <a name="cdro-gke-example-clustered-create-cluster"/>
 
 The next steps in this example demonstrate how to create a GKE cluster, which includes the CSI driver for managing network file storage:     
 
@@ -139,7 +139,7 @@ The next steps in this example demonstrate how to create a GKE cluster, which in
     EOF
     ```
   
-## Configure a GCP SQL instance <a name="cdro-gke-example-prod-install-sql"/>
+## Configure a GCP SQL instance <a name="cdro-gke-example-clustered-install-sql"/>
 
 The next steps in this example demonstrate how to configure the Cloud SQL instance for your GKE cluster. This example uses PostgresSQL. For more information on the configurations in this example, refer the [Cloud SQL](https://cloud.google.com/sql/docs/postgres/instance-settings) documentation. To get started:
 
@@ -208,11 +208,11 @@ The next steps in this example demonstrate how to configure the Cloud SQL instan
    
 Now that your cluster database is configured, you can install CloudBees CD/RO.
 
-## Install CloudBees CD/RO production environment <a name="cdro-gke-example-prod-install-cdro"/>
+## Install CloudBees CD/RO clustered environment <a name="cdro-gke-example-clustered-install-cdro"/>
 
 Now that your cluster database is configured, you can install CloudBees CD/RO. To get started:
 
-1. Download production values file:
+1. Download the clustered installation values file:
     ```bash
     curl -fsSL -o cloudbees-cd-cluster.yaml $PROD_FILE_URL
     ```
@@ -259,7 +259,7 @@ Now that your cluster database is configured, you can install CloudBees CD/RO. T
       --set-file flowLicense.licenseData=$LICENSE \
       --timeout 4200s
     ```
-## Log into your CloudBees CD/RO production environment <a name="cdro-gke-example-prod-login"/>
+## Log into your CloudBees CD/RO environment <a name="cdro-gke-example-clustered-login"/>
 
 Once CloudBees CD/RO is installed in your GKE cluster, you can access it via the instance URL using [supported browsers](https://docs.cloudbees.com/docs/cloudbees-common/latest/supported-platforms/cloudbees-ci-cloud#browsers).
 
@@ -279,7 +279,7 @@ Once CloudBees CD/RO is installed in your GKE cluster, you can access it via the
 3. Open your supported browser and paste the URL returned by the previous command.
 4. To log in to the instance for the username, enter `admin`, and for the password, enter the autogenerated password returned from the previous command.
 
-## Install CloudBees CD/RO agents <a name="cdro-gke-example-prod-install-cdro-agents"/>
+## Install CloudBees CD/RO agents <a name="cdro-gke-example-clustered-install-cdro-agents"/>
 
 To run user jobs within your CloudBees CD/RO environment, you must install at least one agent. For instructions on installing CloudBees CD/RO agents, refer to [GKE example CloudBees CD/RO agent installation](agents.md).
 
@@ -287,13 +287,13 @@ To run user jobs within your CloudBees CD/RO environment, you must install at le
 >
 > CloudBees CD/RO installation include the CloudBees CD/RO bound agent (`flow-bound-agent`), but this agent is an internal component used specifically by CloudBees CD/RO for internal operations. While it is possible to schedule user jobs on bound agents, they are not intended for this purpose, and the overall performance of CloudBees CD/RO may be greatly impacted. CloudBees CD/RO agents should be used instead.
 
-## Tear down CloudBees CD/RO production installation <a name="cdro-gke-example-prod-teardown"/>
+## Tear down CloudBees CD/RO clustered installation <a name="cdro-gke-example-clustered-teardown"/>
 
-Once you are finished with your example CloudBees CD/RO production installation, the following steps guide you through tearing down the environment:
+Once you are finished with your example CloudBees CD/RO clustered installation, the following steps guide you through tearing down the environment:
 
 >**NOTE**
 >
->The following commands use variable configured in [Configure environment variables](#configure-environment-variables-a-namecdro-gke-example-prod-config-env-vars). Ensure you have configured these variables before continuing.
+>The following commands use variable configured in [Configure environment variables](#configure-environment-variables-a-namecdro-gke-example-clustered-config-env-vars). Ensure you have configured these variables before continuing.
 
 1. Delete the CloudBees CD/RO instance:
     ```bash
