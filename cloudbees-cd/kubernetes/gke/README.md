@@ -36,6 +36,6 @@ The following example installations are provided:
 
 * [GKE example CloudBees CD/RO demo installation](demo.md)
 
-* [GKE example CloudBees CD/RO production installation](prod.md)
+* [GKE example CloudBees CD/RO production installation](clustered.md)
 
 * [GKE example CloudBees CD/RO agent installation](agents.md)
