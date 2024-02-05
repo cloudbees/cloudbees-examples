@@ -83,7 +83,7 @@ The following steps are an example of installing a CloudBees demo environment:
 
 Once CloudBees CD/RO is installed in your GKE cluster, you can access it via the instance URL using [supported browsers](https://docs.cloudbees.com/docs/cloudbees-common/latest/supported-platforms/cloudbees-ci-cloud#browsers). 
 
-1. To get CloudBees CD/RO URL, run:
+1. To get the CloudBees CD/RO instance URL, run:
     ```bash
     LB_HOSTIP=$(kubectl get service $HELM_RELEASE-ingress-nginx-controller \
     -n $NAMESPACE \
