@@ -214,7 +214,7 @@ Now that your cluster database is configured, you can install CloudBees CD/RO. T
 
 1. Download production values file:
     ```bash
-    curl -fsSL -o cloudbees-cd-demo.yaml $PROD_FILE_URL
+    curl -fsSL -o cloudbees-cd-cluster.yaml $PROD_FILE_URL
     ```
 2.  Create Kubernetes `namespace`:
     ```bash
@@ -227,7 +227,7 @@ Now that your cluster database is configured, you can install CloudBees CD/RO. T
       --from-literal=DB_USER=$GCP_DB_USER \
       --from-literal=DB_PASSWORD=$GCP_DB_PASSWORD
     ```
-4.  Open `cloudbees-cd-demo.yaml` and set the following database connection parameters:
+4.  Open `cloudbees-cd-cluster.yaml` and set the following database connection parameters:
     ```yaml
     database:
       dbType: postgresql
@@ -253,9 +253,9 @@ Now that your cluster database is configured, you can install CloudBees CD/RO. T
     # Install CD Server
     helm install $HELM_RELEASE cloudbees/cloudbees-flow \
       --namespace $NAMESPACE \
-      --values cloudbees-cd-production.yaml \
+      --values cloudbees-cd-cluster.yaml \
       --flowCredentials.existingSecret=$HELM_RELEASE-cloudbees-flow-credentials \
-      --set storage.volumes.serverPlugins.storageClass=filestore-sc \
+      --set boundAgent.flowCredentials.existingSecret=$HELM_RELEASE-cloudbees-flow-credentials \
       --set-file flowLicense.licenseData=$LICENSE \
       --timeout 4200s
     ```
@@ -293,7 +293,7 @@ Once you are finished with your example CloudBees CD/RO production installation,
 
 >**NOTE**
 >
->The following commands use variable configured in [Configure environment variables](#configure-environment-variables-a-namecdro-gke-example-demo-config-env-vars). Ensure you have configured these variables before continuing.
+>The following commands use variable configured in [Configure environment variables](#configure-environment-variables-a-namecdro-gke-example-prod-config-env-vars). Ensure you have configured these variables before continuing.
 
 1. Delete the CloudBees CD/RO instance:
     ```bash
