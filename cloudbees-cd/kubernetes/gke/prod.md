@@ -1,4 +1,4 @@
-## CloudBees CD Installation in `cluster` mode
+## CloudBees CD Installation in `production` mode
 
 All the steps to create an environment are not a recommendation for production use.
 All the steps below are optional and are for informational purposes only and are provided as an example for quickly setting up an infrastructure to install CD on k8s. 
@@ -15,8 +15,8 @@ Be sure to follow the security policies and rules of your organization.
   GKE_CLUSTER_NAME=<gke-cluster-name>                   # e.g. GKE_CLUSTER_NAME=gke-cd-prod
   # Number of nodes in the cluster, 3 is enough for production purposes
   GKE_CLUSTER_NUM_NODES=<gke-cluster-number-of-nodes>   # e.g. GKE_CLUSTER_NUM_NODES=3
-  # Machine type for the GKE cluster nodes, e2-standard-8 is enough for production purposes
-  GKE_CLUSTER_MACHINE_TYPE=<gke-cluster-machine-type>   # e.g. GKE_CLUSTER_MACHINE_TYPE=e2-standard-8
+  # Machine type for the GKE cluster nodes, n1-standard-8 is enough for production purposes
+  GKE_CLUSTER_MACHINE_TYPE=<gke-cluster-machine-type>   # e.g. GKE_CLUSTER_MACHINE_TYPE=n1-standard-8
   HELM_RELEASE=<cloudbees-cd-helm-release>              # e.g. HELM_RELEASE=cd-prod
   NAMESPACE=<cloudbees-cd-namespace>                    # e.g. NAMESPACE=cd-prod
   ```
@@ -199,12 +199,12 @@ Be sure to follow the security policies and rules of your organization.
   
     helm repo add cloudbees https://charts.cloudbees.com/public/cloudbees
     helm repo update
+  
     # Install CD Server
     helm install $HELM_RELEASE cloudbees/cloudbees-flow \
       --namespace $NAMESPACE \
       --values cloudbees-cd-production.yaml \
-      --set flowCredentials.existingSecret=$HELM_RELEASE-cloudbees-flow-credentials \
-      --set boundAgent.flowCredentials.existingSecret=$HELM_RELEASE-cloudbees-flow-credentials \
+      --flowCredentials.existingSecret=$HELM_RELEASE-cloudbees-flow-credentials \
       --set storage.volumes.serverPlugins.storageClass=filestore-sc \
       --set-file flowLicense.licenseData=$LICENSE \
       --timeout 4200s
