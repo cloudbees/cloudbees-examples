@@ -2,9 +2,9 @@ apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 
 metadata:
-  name: demo
   version: "1.28"
-  region: us-east-1
+  name: <CLUSTER>
+  region: <REGION>
 
 iam:
   withOIDC: true
@@ -14,7 +14,6 @@ iam:
         namespace: kube-system
       wellKnownPolicies:
         ebsCSIController: true
-
 
 vpc:
   clusterEndpoints:
@@ -26,7 +25,7 @@ managedNodeGroups:
     amiFamily: AmazonLinux2
     instanceTypes: [ "m6i.xlarge", "m6a.xlarge" ]
     minSize: 1
-    desiredCapacity: 2
+    desiredCapacity: 3
     maxSize: 3
     volumeSize: 100
     volumeType: gp3
@@ -38,7 +37,6 @@ managedNodeGroups:
     iam:
       withAddonPolicies:
         ebs: true
-        efs: true
         albIngress: true
 
 addons:
@@ -47,5 +45,3 @@ addons:
   - name: kube-proxy
   - name: aws-ebs-csi-driver
     version: "v1.27.0-eksbuild.1"
-
-

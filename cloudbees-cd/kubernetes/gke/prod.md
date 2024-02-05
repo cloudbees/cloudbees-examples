@@ -1,4 +1,4 @@
-## CloudBees CD Installation in `production` mode
+## CloudBees CD Installation in `cluster` mode
 
 All the steps to create an environment are not a recommendation for production use.
 All the steps below are optional and are for informational purposes only and are provided as an example for quickly setting up an infrastructure to install CD on k8s. 
@@ -199,12 +199,12 @@ Be sure to follow the security policies and rules of your organization.
   
     helm repo add cloudbees https://charts.cloudbees.com/public/cloudbees
     helm repo update
-  
     # Install CD Server
     helm install $HELM_RELEASE cloudbees/cloudbees-flow \
       --namespace $NAMESPACE \
       --values cloudbees-cd-production.yaml \
-      --flowCredentials.existingSecret=$HELM_RELEASE-cloudbees-flow-credentials \
+      --set flowCredentials.existingSecret=$HELM_RELEASE-cloudbees-flow-credentials \
+      --set boundAgent.flowCredentials.existingSecret=$HELM_RELEASE-cloudbees-flow-credentials \
       --set storage.volumes.serverPlugins.storageClass=filestore-sc \
       --set-file flowLicense.licenseData=$LICENSE \
       --timeout 4200s

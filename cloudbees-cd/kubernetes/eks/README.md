@@ -19,6 +19,6 @@ Pre-requisites:
 
 [Example of environment and installation in demo mode](demo.md)
 
-[Example of environment and installation in production mode](prod.md)
+[Example of environment and installation in cluster mode](cluster.md)
 
 [Example of installation CD agent helm charts](../common/agents.md)
