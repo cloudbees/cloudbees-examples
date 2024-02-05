@@ -42,10 +42,10 @@ The commands in following sections are preconfigured to use environment variable
   GKE_CLUSTER_NUM_NODES=<GKE-CLUSTER-NUMBER-OF-NODES>   # e.g. GKE_CLUSTER_NUM_NODES=3
   # Machine type for the GKE cluster nodes, e2-standard-8 is enough for clustering purposes
   GKE_CLUSTER_MACHINE_TYPE=<GKE-CLUSTER-MACHINE-TYPE>   # e.g. GKE_CLUSTER_MACHINE_TYPE=e2-standard-8
-  HELM_RELEASE=<CLOUDBEES-CD-HELM-RELEASE>              # e.g. HELM_RELEASE=cd-prod
-  NAMESPACE=<CLOUDBEES-CD-NAMESPACE>                    # e.g. NAMESPACE=cd-prod
+  HELM_RELEASE=<CLOUDBEES-CD-HELM-RELEASE>              # e.g. HELM_RELEASE=cd-cluster
+  NAMESPACE=<CLOUDBEES-CD-NAMESPACE>                    # e.g. NAMESPACE=cd-cluster
   # Do not change:
-   ClUSTER_FILE_URL="https://raw.githubusercontent.com/cloudbees/cloudbees-examples/master/cloudbees-cd/kubernetes/cloudbees-cd-clustered.yaml"
+   CLUSTER_FILE_URL="https://raw.githubusercontent.com/cloudbees/cloudbees-examples/master/cloudbees-cd/kubernetes/cloudbees-cd-prod.yaml"
 ```
 
 ## Configure cluster networking <a name="cdro-gke-example-clustered-config-net"/>
@@ -214,7 +214,7 @@ Now that your cluster database is configured, you can install CloudBees CD/RO. T
 
 1. Download the clustered installation values file:
     ```bash
-    curl -fsSL -o cloudbees-cd-cluster.yaml $ClUSTER_FILE_URL
+    curl -fsSL -o cloudbees-cd-cluster.yaml $CLUSTER_FILE_URL
     ```
 2.  Create Kubernetes `namespace`:
     ```bash
