@@ -24,15 +24,15 @@ To complete the following instructions, you must meet the cluster and tooling re
 Commands in following sections are preconfigured to use environment variables. To align your installation, set the following environment variables:
 
 ```bash
-  GCP_ZONE=<gcp-zone>                                   # e.g. GCP_ZONE=us-east1-b
-  GCP_PROJECT=<gcp-project>                             # e.g. GCP_PROJECT=cloudbees-cd-demo
-  GKE_CLUSTER_NAME=<gke-cluster-name>                   # e.g. GKE_CLUSTER_NAME=gke-cd-demo
+  GCP_ZONE=<GCP-ZONE>                                   # e.g. GCP_ZONE=us-east1-b
+  GCP_PROJECT=<GCP-PROJECT>                             # e.g. GCP_PROJECT=cloudbees-cd-demo
+  GKE_CLUSTER_NAME=<GKE-CLUSTER-NAME>                   # e.g. GKE_CLUSTER_NAME=gke-cd-demo
   # Number of nodes in the cluster, 2 is enough for demo purposes
-  GKE_CLUSTER_NUM_NODES=<gke-cluster-number-of-nodes>   # e.g. GKE_CLUSTER_NUM_NODES=2
+  GKE_CLUSTER_NUM_NODES=<GKE-CLUSTER-NUMBER-OF-NODES>   # e.g. GKE_CLUSTER_NUM_NODES=2
   # Machine type for the GKE cluster nodes, e2-standard-4 is enough for demo purposes
-  GKE_CLUSTER_MACHINE_TYPE=<gke-cluster-machine-type>   # e.g. GKE_CLUSTER_MACHINE_TYPE=e2-standard-4
-  HELM_RELEASE=<cloudbees-cd-helm-release>              # e.g. HELM_RELEASE=cd-demo
-  NAMESPACE=<cloudbees-cd-namespace>                    # e.g. NAMESPACE=cd-demo
+  GKE_CLUSTER_MACHINE_TYPE=<GKE-CLUSTER-MACHINE-TYPE>   # e.g. GKE_CLUSTER_MACHINE_TYPE=e2-standard-4
+  HELM_RELEASE=<CLOUDBEES-CDRO-HELM-RELEASE>              # e.g. HELM_RELEASE=cd-demo
+  NAMESPACE=<CLOUDBEES-CD-NAMESPACE>                    # e.g. NAMESPACE=cd-demo
   # Do not change:
   DEMO_FILE_URL="https://raw.githubusercontent.com/cloudbees/cloudbees-examples/master/cloudbees-cd/kubernetes/cloudbees-cd-demo.yaml"
 ``` 

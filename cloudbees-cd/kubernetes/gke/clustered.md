@@ -31,21 +31,21 @@ To complete the following instructions, you must meet the cluster and tooling re
 The commands in following sections are preconfigured to use environment variables. To align your installation, set the following environment variables:
 
 ```bash
-  GCP_PROJECT=<gcp-project>                             # e.g. GCP_PROJECT=cloudbees-cd-clustered
-  GCP_REGION=<gcp-region>                               # e.g. GCP_REGION=us-east1
-  GCP_ZONE=<gcp-zone>                                   # e.g. GCP_ZONE=us-east1-b
-  GCP_VPC_NETWORK=<gcp-vpc-network>                     # e.g. GCP_VPC_NETWORK=cd-vpc
-  GCP_VPC_SUBNET=<gcp-vpc-subnet>                       # e.g. GCP_VPC_SUBNET=cd-subnet
-  GCP_SUBNET_IP_RANGE=<gcp-subnet-ip-range>             # e.g. GCP_SUBNET_IP_RANGE=10.0.0.0/24
-  GKE_CLUSTER_NAME=<gke-cluster-name>                   # e.g. GKE_CLUSTER_NAME=gke-cd-clustered
+  GCP_PROJECT=<GCP-PROJECT>                             # e.g. GCP_PROJECT=cloudbees-cd-clustered
+  GCP_REGION=<GCP-REGION>                               # e.g. GCP_REGION=us-east1
+  GCP_ZONE=<GCP-ZONE>                                   # e.g. GCP_ZONE=us-east1-b
+  GCP_VPC_NETWORK=<GCP-VPC-NETWORK>                     # e.g. GCP_VPC_NETWORK=cd-vpc
+  GCP_VPC_SUBNET=<GCP-VPC-SUBNET>                       # e.g. GCP_VPC_SUBNET=cd-subnet
+  GCP_SUBNET_IP_RANGE=<GCP-SUBNET-IP-RANGE>             # e.g. GCP_SUBNET_IP_RANGE=10.0.0.0/24
+  GKE_CLUSTER_NAME=<GKE-CLUSTER-NAME>                   # e.g. GKE_CLUSTER_NAME=gke-cd-clustered
   # Number of nodes in the cluster, 3 is enough for clustering purposes
-  GKE_CLUSTER_NUM_NODES=<gke-cluster-number-of-nodes>   # e.g. GKE_CLUSTER_NUM_NODES=3
+  GKE_CLUSTER_NUM_NODES=<GKE-CLUSTER-NUMBER-OF-NODES>   # e.g. GKE_CLUSTER_NUM_NODES=3
   # Machine type for the GKE cluster nodes, e2-standard-8 is enough for clustering purposes
-  GKE_CLUSTER_MACHINE_TYPE=<gke-cluster-machine-type>   # e.g. GKE_CLUSTER_MACHINE_TYPE=e2-standard-8
-  HELM_RELEASE=<cloudbees-cd-helm-release>              # e.g. HELM_RELEASE=cd-prod
-  NAMESPACE=<cloudbees-cd-namespace>                    # e.g. NAMESPACE=cd-prod
+  GKE_CLUSTER_MACHINE_TYPE=<GKE-CLUSTER-MACHINE-TYPE>   # e.g. GKE_CLUSTER_MACHINE_TYPE=e2-standard-8
+  HELM_RELEASE=<CLOUDBEES-CD-HELM-RELEASE>              # e.g. HELM_RELEASE=cd-prod
+  NAMESPACE=<CLOUDBEES-CD-NAMESPACE>                    # e.g. NAMESPACE=cd-prod
   # Do not change:
-   PROD_FILE_URL="https://raw.githubusercontent.com/cloudbees/cloudbees-examples/master/cloudbees-cd/kubernetes/cloudbees-cd-prod.yaml"
+   ClUSTER_FILE_URL="https://raw.githubusercontent.com/cloudbees/cloudbees-examples/master/cloudbees-cd/kubernetes/cloudbees-cd-clustered.yaml"
 ```
 
 ## Configure cluster networking <a name="cdro-gke-example-clustered-config-net"/>
@@ -214,7 +214,7 @@ Now that your cluster database is configured, you can install CloudBees CD/RO. T
 
 1. Download the clustered installation values file:
     ```bash
-    curl -fsSL -o cloudbees-cd-cluster.yaml $PROD_FILE_URL
+    curl -fsSL -o cloudbees-cd-cluster.yaml $ClUSTER_FILE_URL
     ```
 2.  Create Kubernetes `namespace`:
     ```bash
