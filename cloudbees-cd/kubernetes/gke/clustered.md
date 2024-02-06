@@ -28,7 +28,7 @@ To complete the following instructions, you must meet the cluster and tooling re
 
 ## Configure environment variables <a name="cdro-gke-example-clustered-config-en-vars"/>
 
-The commands in following sections are preconfigured to use environment variables. To align your installation, set the following environment variables:
+Commands in following sections are preconfigured to use environment variables. To align your installation, set the following environment variables:
 
 ```bash
   GCP_PROJECT=<GCP-PROJECT>                             # e.g. GCP_PROJECT=cloudbees-cd-clustered
