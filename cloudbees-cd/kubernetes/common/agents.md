@@ -16,9 +16,9 @@ The commands in following sections are preconfigured to use environment variable
 
 ```bash
 # If you have already set the $NAMESPACE for you CloudBees CD/RO installation, this is not needed. 
-NAMESPACE=<cloudbees-cd-namespace>
+NAMESPACE=<CLOUDBEES-CD-NAMESPACE>
 # If you have already set the $HELM_RELEASE for you CloudBees CD/RO installation, this is not needed. 
-HELM_RELEASE=<cloudbees-cd-helm-release>
+HELM_RELEASE=<CLOUDBEES-CD-HELM-RELEASE>
 # Do not change:
 AGENTS_FILE_URL="https://raw.githubusercontent.com/cloudbees/cloudbees-examples/master/cloudbees-cd/kubernetes/cloudbees-cd-agent-example.yaml"
 ```
