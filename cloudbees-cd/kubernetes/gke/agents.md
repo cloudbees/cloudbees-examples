@@ -12,7 +12,7 @@ To complete the following instructions, you must meet the cluster and tooling re
 
 ## Configure environment variables
 
-The commands in the following sections are preconfigured to use environment variables. To align your installation, set the following environment variables:
+Commands in following sections are preconfigured to use environment variables. To align your installation, set the following environment variables:
 
 ```bash
 # If you have already set the $NAMESPACE for you CloudBees CD/RO installation, this is not needed. 
