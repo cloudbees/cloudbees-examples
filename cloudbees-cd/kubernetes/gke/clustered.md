@@ -50,7 +50,11 @@ The commands in following sections are preconfigured to use environment variable
 
 ## Configure cluster networking <a name="cdro-gke-example-clustered-config-net"/>
  
-For clustered environments, networking is an extremely important aspect of how CloudBees CD/RO operates. The following steps demonstrate an example of GKE cluster networking for CloudBees CD/RO: 
+For clustered environments, networking is an extremely important aspect of how CloudBees CD/RO operates. The following steps demonstrate an example of GKE cluster networking for CloudBees CD/RO:
+
+>**NOTE**
+>
+>The following commands use variable configured in [Configure environment variables](#cdro-gke-example-clustered-config-en-vars). Ensure you have configured these variables before continuing.
 
 1. To create a VPC network and subnet for your GKE cluster, run:
     ```bash
@@ -109,7 +113,11 @@ For clustered environments, networking is an extremely important aspect of how C
     ```
 ## Create a GKE cluster <a name="cdro-gke-example-clustered-create-cluster"/>
 
-The next steps in this example demonstrate how to create a GKE cluster, which includes the CSI driver for managing network file storage:     
+The next steps in this example demonstrate how to create a GKE cluster, which includes the CSI driver for managing network file storage:
+
+>**NOTE**
+>
+>The following commands use variable configured in [Configure environment variables](#cdro-gke-example-clustered-config-en-vars). Ensure you have configured these variables before continuing.
 
 1. Create a GKE cluster with CSI driver enabled:
     ```bash
@@ -142,6 +150,10 @@ The next steps in this example demonstrate how to create a GKE cluster, which in
 ## Configure a GCP SQL instance <a name="cdro-gke-example-clustered-install-sql"/>
 
 The next steps in this example demonstrate how to configure the Cloud SQL instance for your GKE cluster. This example uses PostgresSQL. For more information on the configurations in this example, refer the [Cloud SQL](https://cloud.google.com/sql/docs/postgres/instance-settings) documentation. To get started:
+
+>**NOTE**
+>
+>The following commands use variable configured in [Configure environment variables](#cdro-gke-example-clustered-config-en-vars). Ensure you have configured these variables before continuing.
 
 1. Create the GCP SQL instance with private connection:
     ```bash
@@ -212,6 +224,10 @@ Now that your cluster database is configured, you can install CloudBees CD/RO.
 
 Now that your cluster database is configured, you can install CloudBees CD/RO. To get started:
 
+>**NOTE**
+>
+>The following commands use variable configured in [Configure environment variables](#cdro-gke-example-clustered-config-en-vars). Ensure you have configured these variables before continuing.
+
 1. Download the clustered installation values file:
     ```bash
     curl -fsSL -o cloudbees-cd-cluster.yaml $CLUSTER_FILE_URL
@@ -263,6 +279,10 @@ Now that your cluster database is configured, you can install CloudBees CD/RO. T
 
 Once CloudBees CD/RO is installed in your GKE cluster, you can access it via the instance URL using [supported browsers](https://docs.cloudbees.com/docs/cloudbees-common/latest/supported-platforms/cloudbees-ci-cloud#browsers).
 
+>**NOTE**
+>
+>The following commands use variable configured in [Configure environment variables](#cdro-gke-example-clustered-config-en-vars). Ensure you have configured these variables before continuing.
+
 1. To get the CloudBees CD/RO instance URL, run:
     ```bash
     LB_HOSTIP=$(kubectl get service $HELM_RELEASE-ingress-nginx-controller \
@@ -293,7 +313,7 @@ Once you are finished with your example CloudBees CD/RO clustered installation, 
 
 >**NOTE**
 >
->The following commands use variable configured in [Configure environment variables](#configure-environment-variables-a-namecdro-gke-example-clustered-config-env-vars). Ensure you have configured these variables before continuing.
+>The following commands use variable configured in [Configure environment variables](#cdro-gke-example-clustered-config-en-vars). Ensure you have configured these variables before continuing.
 
 1. Delete the CloudBees CD/RO instance:
     ```bash
