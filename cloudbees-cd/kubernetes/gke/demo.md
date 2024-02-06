@@ -43,7 +43,7 @@ Before you can install the CloudBees CD/RO demo, you must create a GKE cluster. 
 
 >**NOTE**
 >
->The following commands use variable configured in [Configure environment variables](#configure-environment-variables-a-namecdro-gke-example-demo-config-env-vars). Ensure you have configured these variables before continuing.  
+>The following commands use variable configured in [Configure environment variables](#cdro-gke-example-demo-config-env-vars). Ensure you have configured these variables before continuing.  
 
 ```bash
 gcloud container clusters create "$GKE_CLUSTER_NAME" \
@@ -60,7 +60,7 @@ The following steps are an example of installing a CloudBees demo environment:
 
 >**NOTE**
 >
->The following commands use variable configured in [Configure environment variables](#configure-environment-variables-a-namecdro-gke-example-demo-config-env-vars). Ensure you have configured these variables before continuing.
+>The following commands use variable configured in [Configure environment variables](#cdro-gke-example-demo-config-env-vars). Ensure you have configured these variables before continuing.
 
 1. To download the example CloudBees CD/RO demo values file, run:
     ```bash
@@ -81,7 +81,11 @@ The following steps are an example of installing a CloudBees demo environment:
 
 ## Log into your CloudBees CD/RO demo environment <a name="cdro-gke-example-demo-login"/>
 
-Once CloudBees CD/RO is installed in your GKE cluster, you can access it via the instance URL using [supported browsers](https://docs.cloudbees.com/docs/cloudbees-common/latest/supported-platforms/cloudbees-ci-cloud#browsers). 
+Once CloudBees CD/RO is installed in your GKE cluster, you can access it via the instance URL using [supported browsers](https://docs.cloudbees.com/docs/cloudbees-common/latest/supported-platforms/cloudbees-ci-cloud#browsers).
+
+>**NOTE**
+>
+>The following commands use variable configured in [Configure environment variables](#cdro-gke-example-demo-config-env-vars). Ensure you have configured these variables before continuing.
 
 1. To get the CloudBees CD/RO instance URL, run:
     ```bash
@@ -114,7 +118,7 @@ Once you are finished with your example CloudBees CD/RO demo installation, the f
 
 >**NOTE**
 >
->The following commands use variable configured in [Configure environment variables](#configure-environment-variables-a-namecdro-gke-example-demo-config-env-vars). Ensure you have configured these variables before continuing.
+>The following commands use variable configured in [Configure environment variables](#cdro-gke-example-demo-config-env-vars). Ensure you have configured these variables before continuing.
 
 1. To delete the CloudBees CD/RO installation and `namespace`, run: 
    ```bash
