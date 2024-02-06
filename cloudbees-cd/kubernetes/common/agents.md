@@ -4,7 +4,7 @@ To run user jobs within your CloudBees CD/RO environment, you must install at le
 
 >**IMPORTANT**
 >
-> CloudBees CD/RO installation include the CloudBees CD/RO bound agent (`flow-bound-agent`), but this agent is an internal component used specifically by CloudBees CD/RO for internal operations. While it is possible to schedule user jobs on bound agents, they are not intended for this purpose, and the overall performance of CloudBees CD/RO may be greatly impacted. CloudBees CD/RO agents should be used instead.
+> CloudBees CD/RO installations include a CloudBees CD/RO bound agent (`flow-bound-agent`) component. However, this agent is an internal component used specifically by CloudBees CD/RO for internal operations. While it is possible to schedule user jobs on bound agents, they are not intended for this purpose, and the overall performance of CloudBees CD/RO may be greatly impacted. CloudBees CD/RO agents should be used instead.
 
 ## Prerequisites
 To complete the following instructions, you must meet the cluster and tooling requirements listed in [Prerequisites](README.md#gke-available-examples-a-namecdro-gke-available-examples).
@@ -12,7 +12,7 @@ To complete the following instructions, you must meet the cluster and tooling re
 
 ## Configure environment variables
 
-The commands in following sections are preconfigured to use environment variables. To align your installation, set the following environment variables:
+The commands in the following sections are preconfigured to use environment variables. To align your installation, set the following environment variables:
 
 ```bash
 # If you have already set the $NAMESPACE for you CloudBees CD/RO installation, this is not needed. 

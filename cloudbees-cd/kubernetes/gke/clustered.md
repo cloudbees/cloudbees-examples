@@ -218,11 +218,11 @@ The next steps in this example demonstrate how to configure the Cloud SQL instan
       --rrdatas=$GCP_DB_IP
     ```  
    
-Now that your cluster database is configured, you can install CloudBees CD/RO.
+Once your cluster database is configured, you can install CloudBees CD/RO.
 
 ## Install CloudBees CD/RO clustered environment <a name="cdro-gke-example-clustered-install-cdro"/>
 
-Now that your cluster database is configured, you can install CloudBees CD/RO. To get started:
+Once your cluster database is configured, you can install CloudBees CD/RO. To get started:
 
 >**NOTE**
 >
