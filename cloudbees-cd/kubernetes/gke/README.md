@@ -1,26 +1,41 @@
-# CloudBees CD GKE examples
 
-## In this folder
+# CloudBees CD/RO GKE example installations <a name="cdro-gke-example"/>
 
-This folder contains instructions to quickly install the CloudBees CD Helm Chart on GKE cluster.
+This directory provides example installations of CloudBees CD/RO within GKE clusters, and insight for the instructions in [CloudBees CD/RO for Google Cloud Platform (GCP)](https://docs.cloudbees.com/docs/cloudbees-cd/latest/install-k8s/k8s-platform-specific-configurations#_google_cloud_platform_gcp).
 
-Pre-requisites:
+>**IMPORTANT** 
+> 
+>All examples provided are for informational purposes only. They are not meant to be used in production environments, but only to provide working demonstrations of such environments. 
+> 
+>If you use these examples in actual production environments data loss or other security-related issues may occur. For production environments, always follow the security policies and rules of your organization.  
 
-- Install gcloud cli https://cloud.google.com/sdk/docs/install
-- Configure gcloud cli https://cloud.google.com/sdk/docs/initializing
-- Install kubectl https://kubernetes.io/docs/tasks/tools/ or
-    ```bash
+## Prerequisites <a name="cdro-gke-example-prerequisites "/>
+
+You must meet these pre-requisites to follow the instructions in the examples:
+
+- You must have the `gcloud` CLI installed. Refer to the `gcloud` [installation](https://cloud.google.com/sdk/docs/install) and [configuration](https://cloud.google.com/sdk/docs/initializing) documentation for more information.
+- You must have `kubectl` CLI installed. Refer to [`kubectl` installation](https://kubernetes.io/docs/tasks/tools/#kubectl), or to install using `gcloud`, run:
+     ```bash
     gcloud components install kubectl
-  ```
-- Install Helm https://helm.sh/docs/intro/install/
+     ```
+  - To verify `kubectl` is installed, run:
+    ```bash
+    kubectl version --client
+     ```
+
+- You must have the `helm` CLI installed. Refer to [`helm` installation](https://helm.sh/docs/intro/install/), or run:
     ```bash
     curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
     chmod 700 get_helm.sh
     ./get_helm.sh
   ```
 
-[Example of environment and installation in demo mode](demo.md)
+## GKE available examples <a name="cdro-gke-available-examples"/>
 
-[Example of environment and installation in production mode](prod.md)
+The following example installations are provided: 
 
-[Example of installation CD agent helm charts](agents.md)
+* [GKE example CloudBees CD/RO demo installation](demo.md)
+
+* [GKE example CloudBees CD/RO clustered installation](clustered.md)
+
+* [GKE example CloudBees CD/RO agent installation](agents.md)
