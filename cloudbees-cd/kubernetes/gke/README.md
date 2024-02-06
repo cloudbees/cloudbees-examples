@@ -1,7 +1,7 @@
 
 # CloudBees CD/RO GKE example installations <a name="cdro-gke-example"/>
 
-This directory provides example installations of CloudBees CD/RO within GKE clusters, and provide more insight to the instructions in [CloudBees CD/RO for Google Cloud Platform (GCP)](https://docs.cloudbees.com/docs/cloudbees-cd/latest/install-k8s/k8s-platform-specific-configurations#_google_cloud_platform_gcp).
+This directory provides example installations of CloudBees CD/RO within GKE clusters, and insight for the instructions in [CloudBees CD/RO for Google Cloud Platform (GCP)](https://docs.cloudbees.com/docs/cloudbees-cd/latest/install-k8s/k8s-platform-specific-configurations#_google_cloud_platform_gcp).
 
 >**IMPORTANT** 
 > 
