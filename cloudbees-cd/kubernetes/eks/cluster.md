@@ -1,4 +1,4 @@
-### Create an EKS cluster for CloudBees CD installation in `demo` mode
+### Create an EKS cluster for CloudBees CD installation in clustered mode
 
 All the steps to create an environment are not a recommendation for production use.
 All the steps below are optional and are for informational purposes only and are provided as an example for quickly setting up an infrastructure to install CD on k8s.
@@ -6,7 +6,7 @@ Be sure to follow the security policies and rules of your organization.
 
 - Create EKS cluster by following the [eksctl documentation](https://eksctl.io/getting-started/)
 ```bash
-# Download the EKS demo.yaml file
+# Download the EKS cd-cluster-eks.yaml file
 EKS_FILE_URL=https://raw.githubusercontent.com/cloudbees/cloudbees-examples/master/cloudbees-cd/kubernetes/eks/cd-cluster-eks.yaml
 curl -fsSL -o cd-cluster-eks.yaml $EKS_FILE_URL
 
@@ -14,7 +14,7 @@ curl -fsSL -o cd-cluster-eks.yaml $EKS_FILE_URL
 CLUSTER=cd-cluster
 REGION=us-east-1
 
-# Replace the cluster name and region in the demo.yaml file
+# Replace the cluster name and region in the cd-cluster-eks.yaml file
 sed "s/<CLUSTER>/$CLUSTER/g; s/<REGION>/$REGION/g" < cd-cluster-eks.yaml > $CLUSTER-$REGION-eks.yaml
 
 # Create the EKS cluster using eksctl
