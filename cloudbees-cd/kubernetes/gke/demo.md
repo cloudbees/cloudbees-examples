@@ -106,7 +106,7 @@ Once CloudBees CD/RO is installed in your GKE cluster, you can access it via the
 
 ## Install CloudBees CD/RO agents <a name="cdro-gke-example-demo-install-cdro-agents"/>
 
-To run user jobs within your CloudBees CD/RO environment, you must install at least one agent. For instructions on installing CloudBees CD/RO agents, refer to [GKE example CloudBees CD/RO agent installation](agents.md).
+To run user jobs within your CloudBees CD/RO environment, you must install at least one agent. For instructions on installing CloudBees CD/RO agents, refer to [GKE example CloudBees CD/RO agent installation](../common/agents.md).
 
 >**IMPORTANT**
 >
