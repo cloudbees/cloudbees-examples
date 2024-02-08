@@ -38,4 +38,4 @@ The following example installations are provided:
 
 * [GKE example CloudBees CD/RO clustered installation](clustered.md)
 
-* [GKE example CloudBees CD/RO agent installation](agents.md)
+* [GKE example CloudBees CD/RO agent installation](../common/agents.md)
