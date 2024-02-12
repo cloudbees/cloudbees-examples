@@ -1,0 +1,9 @@
+workspaceCache:
+    cacheManager:
+      googleCloudStorage:
+        bucket: "bucket-name"
+        credentialsId: "cred-id"
+        prefix: "prefix"
+    jobExcludes: "excluded-jobs"
+    jobIncludes: "included-jobs"
+  
