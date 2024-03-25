@@ -9,7 +9,7 @@ images:
   ## The `imageRepository` in the `images.registry` to pull the agent image from.
   imageRepository: "cbflow-agent"
   ## CloudBees CD/RO flow-server image tag to pull.
-  tag: "2023.12.0.171596_3.2.64_20231207"
+  tag: "2024.03.0.173398_3.2.106_20240227"
 
   ## The image pull policy to use:
   pullPolicy: IfNotPresent
@@ -18,7 +18,7 @@ images:
   ## Secrets must be manually created or already exist in the namespace.
   ## `imagePullSecrets: <secret-name>`
   imagePullSecrets:
-
+  
   ## (OPTIONAL) Create an array of `imagePullSecrets` containing private registry credentials.
   ## when you have one or more secrets to use when pulling images.
   ## NOTE: Only one instance of `imagePullSecrets:` can be present.
@@ -33,7 +33,7 @@ images:
 ## service. However, the CloudBees CD/RO flow-server will not be fully
 ## accessible to non-cluster components if this is the default.
 
-## NOTE: If you are installing this agent in different namespace than
+## NOTE: If you are installing this agent in different namespace than 
 ## flow-server, you must provide the `serverEndpoint` as `service-name.namespace`.
 ## Here it is assumed the server and agent are in the same namespace.
 
@@ -43,13 +43,13 @@ serverEndpoint: flow-server
 ### Flow agent configuration section
 ### ---------------------------------------------
 
-## Provide the resource pools you want your agents to attempt to register
+## Provide the resource pools you want your agents to attempt to register 
 ## with when initializing and connecting with the flow-server.
 resourcePools:
 
 ## Flow resource name that agents in this deployment will be assigned to (defaults to hostname).
-## You can use ordinary Helm template values.
-## For example:
+## You can use ordinary Helm template values. 
+## For example: 
 ##  {{ .Release.Name }}, {{ .Release.Namespace }}, etc.
 ##
 ## Additionally, the following special templates are allowed here:
@@ -62,7 +62,7 @@ resourcePools:
 resourceName:
 
 ## Release name prefix added to support this chart to launch as multiple sub-chart in CD deployment
-##  NOTE: Leave `releaseNamePrefix` empty for standalone deployments.
+##  NOTE: Leave `releaseNamePrefix` empty for standalone deployments. 
 releaseNamePrefix:
 
 ## Number of agent replicas to create.
@@ -122,12 +122,12 @@ service:
 ## Gateway Agents require port `7800` (by default) to be open externally
 ## to communicate with external agents.
 ## Creates extra Kubernetes service with type LoadBalancer
-## Enabling `externalService` creates a Load Balancer Kubernetes service named `<prefix>-flow-agents-external`.
+## Enabling `externalService` creates a Load Balancer Kubernetes service named `<prefix>-flow-agents-external`. 
 ## Use your LoadBalancer Endpoint or DNS Endpoint (DNS Entry added for LB Endpoint) as the Resource Agent Host Name for
-## the External Gateway Agent in CD/RO resources.
-## If `service.publicHostName` is configured with a DNS Endpoint (DNS Entry added for LB Endpoint), an
+## the External Gateway Agent in CD/RO resources. 
+## If `service.publicHostName` is configured with a DNS Endpoint (DNS Entry added for LB Endpoint), an 
 ## External Gateway Agent with the specified Agent Host Name is automatically created.
-## The port can be set to ports other than 7800. The load balancer will route any requests
+## The port can be set to ports other than 7800. The load balancer will route any requests 
 ## to the specified port to the internal service on port 7800.
 externalService:
   enabled: false
@@ -136,7 +136,7 @@ externalService:
   ## creating internal LoadBalancer on GCP or AWS.
   annotations:
 #    networking.gke.io/load-balancer-type: "Internal"
-#    service.beta.kubernetes.io/aws-load-balancer-internal: "0.0.0.0/0"
+#    service.beta.kubernetes.io/aws-load-balancer-internal: "0.0.0.0/0"    
 
 ### --------------------------------------------
 ### Flow agent storage and resources configuration section
@@ -152,7 +152,7 @@ storage:
       accessMode: ReadWriteOnce
       storage: 5Gi
       ## To use any  custom storage class just uncomment the line and state required storageClass name
-      #      storageClass: my-class
+#      storageClass: my-class
 
       ## Configure `existingClaim: true` if you have agents already deployed with a shared workspace or PVC.
       existingClaim: false
@@ -266,7 +266,7 @@ autoscaling:
   targetMemoryUtilizationPercentage: 80
   templates: []
     ## Specify custom or additional autoscaling metrics.
-  ## Ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#support-for-custom-metrics
+    ## Ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#support-for-custom-metrics
 #    - type: Pods
 #      pods:
 #       metric:
@@ -289,3 +289,6 @@ helmTests:
 ## Specify additional custom labels to agent pods.
 customLabels:
   product: cdro
+
+## Specify termination grace periods seconds for agent pods.
+terminationGracePeriodSeconds: 30
