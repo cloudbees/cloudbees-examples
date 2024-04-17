@@ -1,0 +1,5 @@
+unclassified:
+  insightConfiguration:
+    # See https://github.com/jenkinsci/configuration-as-code-plugin/blob/master/docs/features/secrets.adoc
+    accessKey: ${readFile:/secret/platform-access-key.txt}
+    fetchHistoricalData: false
