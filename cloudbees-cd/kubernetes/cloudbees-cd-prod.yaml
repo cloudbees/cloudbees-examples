@@ -67,3 +67,6 @@ flowCredentials:
   ##
   ## Set the name of the secret that contains the admin user password.
   existingSecret: your-flow-admin-secret
+
+dois:
+  enabled: false
