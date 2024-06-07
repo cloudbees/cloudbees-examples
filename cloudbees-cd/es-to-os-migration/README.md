@@ -7,7 +7,7 @@ In CloudBees CD/RO v2024.06.0, the CloudBees Analytics server was upgraded from 
 
 CloudBees has provided the [reporting-data-reindex.pl](reporting-data-reindex.pl) utility to help you roughly estimate the size of legacy CloudBees Analytics indexes data that will be migrated to your updated CloudBees Analytics server.
 
-> **IMPORTANT**  
+> [!IMPORTANT]
 > As described in the [known issues of the data migration](https://docs.cloudbees.com/docs/cloudbees-cd/latest/troubleshooting/data-migration-es-to-os#data-migration-known-issues), the migration options provided by CloudBees have a timeout of `180 minutes` per index to avoid unexpected hangs.
 > In cases where an index contains a considerably large amount of data, and its migration does not complete within the timeout duration, the migration process fails.
 >
