@@ -1,11 +1,11 @@
 # Estimate data size of legacy CloudBees Analytics indexes
 
-In CloudBees CD/RO v2024.06.0, the CloudBees Analytics server was upgraded from Elasticsearch to OpenSearch. As part of the upgrade process from v2024.03.0 or earlier to v2024.06.0 or later, you must migrate your CloudBees Analytics to OpenSearch, as described on:
+In CloudBees CD/RO v2024.06.0, the CloudBees Analytics server was upgraded from Elasticsearch to OpenSearch. As part of the upgrade process from v2024.03.0 or earlier to v2024.06.0 or later, you must migrate your CloudBees Analytics to OpenSearch, as described in:
 
 * [Traditional migrations](https://docs.cloudbees.com/docs/cloudbees-cd/latest/troubleshooting/trad-upgrade-to-os)
 * [Kubernetes migrations](https://docs.cloudbees.com/docs/cloudbees-cd/latest/troubleshooting/k8s-upgrade-to-os)
 
-To help roughly estimate the size of legacy CloudBees Analytics indexes data that will be migrated to your updated CloudBees Analytics server,  CloudBees has provided the [reporting-data-reindex.pl](reporting-data-reindex.pl) utility.
+CloudBees has provided the [reporting-data-reindex.pl](reporting-data-reindex.pl) utility to help you roughly estimate the size of legacy CloudBees Analytics indexes data that will be migrated to your updated CloudBees Analytics server.
 
 > **IMPORTANT**  
 > As described in the [known issues of the data migration](https://docs.cloudbees.com/docs/cloudbees-cd/latest/troubleshooting/data-migration-es-to-os#data-migration-known-issues), the migration options provided by CloudBees have a timeout of `180 minutes` per index to avoid unexpected hangs.
@@ -26,9 +26,9 @@ $ /opt/cloudbees/sda/bin/cb-perl ./reporting-data-reindex.pl --showStatistics=1 
 
 Where:
 
-* `--showStatistics=1`: The required parameter, which selects the mode of displaying index statistics.
+* `--showStatistics=1`: *_Required_*. Specifies to display the index statistics.
 
-* `--sourceUrl=https://<hostname>:9200`: Specifies URL for the legacy CloudBees Analytics server.
+* `--sourceUrl=https://<hostname>:9200`: Specifies the legacy CloudBees Analytics server URL.
 
 * `--sourceAuthUser=reportuser`: Specifies the username to authenticate to the legacy CloudBees Analytics server. By default, it is `reportuser`.
 
