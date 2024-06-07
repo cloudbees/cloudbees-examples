@@ -28,7 +28,7 @@ Where:
 
 * `--sourceUrl=https://<hostname>:9200`: Specifies URL for the legacy CloudBees Analytics server.
 
-* `--sourceAuthUser=reportuser`: Specifies the username to authenticate to the legacy CloudBees Analytics server. But default, it is `reportuser`.
+* `--sourceAuthUser=reportuser`: Specifies the username to authenticate to the legacy CloudBees Analytics server. By default, it is `reportuser`.
 
 * `--sourceAuthPassword=<password>`: Specifies the password for the username to authenticate to the legacy CloudBees Analytics server.
 
