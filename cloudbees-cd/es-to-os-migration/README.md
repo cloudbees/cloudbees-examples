@@ -8,11 +8,8 @@ In CloudBees CD/RO v2024.06.0, the CloudBees Analytics server was upgraded from 
 To help roughly estimate the size of legacy CloudBees Analytics indexes data that will be migrated to your updated CloudBees Analytics server,  CloudBees has provided the [reporting-data-reindex.pl](reporting-data-reindex.pl) utility.
 
 > **IMPORTANT**  
-> As described in the [known issues of the data migration](https://docs.cloudbees.com/docs/cloudbees-cd/latest/troubleshooting/data-migration-es-to-os#data-migration-known-issues), the automated processes CloudBees has supplied to automate data migration have a timeout of `180 minutes` per index. This is roughly equivalent to `32,000,000` documents, which may vary based on the complexity of individual documents (number of fields, etc.).   
-> 
-> If your indexes contain vastly more than 32,000,000 documents, or you reach the timeout limit for specific indexes, it may be necessary to split the specific index into a set of smaller indexes. For more information on this process, refer to the [Elasticsearch Split index API](https://www.elastic.co/guide/en/elasticsearch/reference/7.17/indices-split-index.html) documentation.
-
-
+> As described in the [known issues of the data migration](https://docs.cloudbees.com/docs/cloudbees-cd/latest/troubleshooting/data-migration-es-to-os#data-migration-known-issues), the automated processes CloudBees has supplied to automate data migration have a timeout of `180 minutes` per index to avoid unexpected hangs. 
+> In cases where an index contains a large amount of data, and its migration does not fit within the timeout, it may be necessary to split index into multiple smaller indexes. If you encounter multiple timeout issues, contact CloudBees support in such cases.
 
 ## Dependencies
 This utility requires `cb-perl` to run, and is executable in any environment with a CloudBees CD/RO server or agent installation.
