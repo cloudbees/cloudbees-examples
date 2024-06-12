@@ -792,13 +792,15 @@ sub main {
             mesg("CRIT", "Failed to get '$index' index statistics from the source server.");
         }
 
-        my $m = $src->getIndexMappingES($index);
-        if ( !defined($m) || !defined($m->{$index}) || !defined($m->{$index}->{mappings}) ) {
-            mesg("CRIT", "Failed to get '$index' index mappings from the source server.");
+        if (!$::gShowStatistics) {
+            my $m = $src->getIndexMappingES($index);
+            if ( !defined($m) || !defined($m->{$index}) || !defined($m->{$index}->{mappings}) ) {
+                mesg("CRIT", "Failed to get '$index' index mappings from the source server.");
+            }
+            $mappings{$index} = $m->{$index}->{mappings};
         }
 
         $indices{$index} = $stats->{count};
-        $mappings{$index} = $m->{$index}->{mappings};
         $doc_count += $stats->{count};
 
     }
