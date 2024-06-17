@@ -21,7 +21,7 @@ This utility requires `cb-perl` to run, and is executable in any environment wit
 The format for launching the utility is as follows:
 
 ```sh
-$ /opt/cloudbees/sda/bin/cb-perl ./reporting-data-reindex.pl --showStatistics=1 --sourceUrl=https://<hostname>:9200 --sourceAuthUser=reportuser --sourceAuthPassword=<password>
+$ <cdro_install_dir>/bin/cb-perl ./reporting-data-reindex.pl --showStatistics=1 --sourceUrl=https://<hostname>:9200 --sourceAuthUser=reportuser --sourceAuthPassword=<password>
 ```
 
 Where:
