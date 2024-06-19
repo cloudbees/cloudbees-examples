@@ -21,11 +21,11 @@ This utility requires `cb-perl` to run, and is executable in any environment wit
 The format for launching the utility is as follows:
 
 ```sh
-$ <cdro-install-dir>/bin/cb-perl ./reporting-data-reindex.pl --showStatistics=1 --sourceUrl=https://<hostname>:9200 --sourceAuthUser=reportuser --sourceAuthPassword=<password>
+$ <cdro_install_dir>/bin/cb-perl ./reporting-data-reindex.pl --showStatistics=1 --sourceUrl=https://<hostname>:9200 --sourceAuthUser=reportuser --sourceAuthPassword=<password>
 ```
 
 Where:
-* `<cdro-install-dir>`: Directory where the CloudBees CD/RO server or agent is installed.
+* `<cdro_install_dir>`: Directory where the CloudBees CD/RO server or agent is installed.
 * `--showStatistics=1`: *_Required_*. Specifies to display the index statistics.
 
 * `--sourceUrl=https://<hostname>:9200`: Specifies the legacy CloudBees Analytics server URL.
