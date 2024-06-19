@@ -24,7 +24,7 @@ images:
   registry: "docker.io/cloudbees"
 
   ## CloudBees CD/RO flow-server image tag to pull.
-  tag: "2024.03.0.173398_3.2.106_20240227"
+  tag: "2024.06.0.175153_3.2.117_20240613"
 
   ## The image pull policy to use.
   pullPolicy: IfNotPresent
@@ -83,7 +83,6 @@ ingress:
 #    alb.ingress.kubernetes.io/certificate-arn: "<acm certificate arn>"
 
 
-  ## Set to the same value as `nginx-ingress.controller.ingressClass` if enabled.
   ## Set to the same value as `ingress-nginx.controller.ingressClassResource.name` if enabled.
   class: flow-ingress
   ## If using EKS and need to deploy ALB load balancer with alb controller enabled, set to `alb`.
@@ -202,7 +201,7 @@ server:
     ## creating internal LoadBalancer on GCP or AWS.
     annotations:
 #      networking.gke.io/load-balancer-type: "Internal"
-#      service.beta.kubernetes.io/aws-load-balancer-internal: "0.0.0.0/0"    
+#      service.beta.kubernetes.io/aws-load-balancer-internal: "0.0.0.0/0"
 
   ## Enable or disable creating init container for volume permissions for cbflow-server.
   volumesPermissionsInitContainer:
@@ -235,6 +234,15 @@ jobInit:
   nodeSelector: {}
   tolerations: []
   affinity: {}
+
+  ## Specify the resources to request for this component.
+  resources:
+    limits:
+      cpu: 4
+      memory: 6Gi
+    requests:
+      cpu: 2
+      memory: 6Gi
 
 ## Kubernetes Liveness Probes:
   livenessProbe:
@@ -409,7 +417,7 @@ repository:
     ## creating internal LoadBalancer on GCP or AWS.
     annotations:
 #      networking.gke.io/load-balancer-type: "Internal"
-#      service.beta.kubernetes.io/aws-load-balancer-internal: "0.0.0.0/0"    
+#      service.beta.kubernetes.io/aws-load-balancer-internal: "0.0.0.0/0"
 
 
 
@@ -463,9 +471,259 @@ repository:
 #           type: AverageValue
 #           averageValue: 10000m
 
+### --------------------------------------------
+### Analytics server configuration section
+### ---------------------------------------------
+
+analytics:
+
+  ## Flag that dictates the cbflow-analytics workload and its accompanying services are installed.
+  enabled: true
+  ## The `imageRepository` in the `images.registry` to pull component image from.
+  imageRepository: cbflow-analytics
+  ## Number of replicas of this component to create.
+  replicas: 1
+
+  ## `expose: true` allows cbflow-analytics service ingress port `9201`
+  ## to be accessed from outside the cluster.
+  expose: true
+
+  ## The service endpoint configured on the remote CloudBees CD/RO server.
+  ## It is assumed the remote CloudBees CD/RO server is located in the same
+  ## Kubernetes cluster.
+  serviceEndpoint: "flow-analytics.{{ .Release.Namespace }}"
+
+  ## The name of the cluster.
+  clusterName:
+  ## The number of primary shards that an index should have.
+  numberOfShards:
+
+  ## Analytics server credentials
+  ## Specify either:
+  ## * The secret where the report user password and the admin user
+  ## password will be stored (Recommended for production).
+  ## or
+  ## * The reportUserPassword and adminPassword values.
+  ##
+  ## When using the secret:
+  ## * Store the `reportUser` password under the `CBF_ANALYTICS_PASSWORD` key.
+  ## * Store the `adminPassword` under the `CBF_ANALYTICS_ADMIN_PASSWORD` key.
+  ##
+  ##
+  ## IMPORTANT: If the `adminPassword` is left empty, *no admin user is created*,
+  ## and administrative access is *not* granted to any user.
+  credentials:
+    existingSecret:
+    adminPassword:
+    ## If `reportUserPassword` is an empty string, a random 20 characters password is generated.
+    reportUserPassword:
+
+  ## The heap size in MB for server service.
+  heapSize: 1024
+
+  ## Specify the resources to request for this component.
+  resources:
+    limits:
+      cpu: 1
+      memory: 2Gi
+    requests:
+      cpu: 0.1
+      memory: 1536Mi
+
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+  ## Adds an OpenShift node tuning label to analytics pods, which adjusts
+  ## the required value of 'vm.max_map_count'.
+  ## For more information, refer to:
+  ## https://developers.redhat.com/blog/2019/11/12/using-the-red-hat-openshift-tuned-operator-for-elasticsearch/
+  openshiftNodeTuning: false
+
+  ## Additional environment variables to set for cbflow-analytics.
+  extraEnvs: []
+#  extraEnvs:
+#   - name: FOO
+#     value: "BAR"
+#   - name: FOO
+#     valueFrom:
+#       secretKeyRef:
+#         key: FOO
+#         name: secret-resource
+
+  ## Kubernetes Liveness Probes:
+  livenessProbe:
+    initialDelaySeconds: 60
+    periodSeconds: 20
+    failureThreshold: 3
+    timeoutSeconds: 10
+
+  ## Kubernetes Readiness Probes:
+  readinessProbe:
+    initialDelaySeconds: 60
+    periodSeconds: 5
+    failureThreshold: 3
+    timeoutSeconds: 10
+
+  ## Enable or disable a *privileged* `sysctlInitContainer` if
+  ## the sysctl `vm.max_map_count setting` is set by another method.
+  sysctlInitContainer:
+    enabled: true
+    ## The `sysctlInitContainer.imageRepository` sysctlInitContainer image repository.
+    imageRepository: busybox
+    ## The `sysctlInitContainer.imageTag` sysctlInitContainer image tag .
+    imageTag: stable
+
+  ## Enable or disable creating an init container for cbflow-analytics volume permissions.
+  volumesPermissionsInitContainer:
+    enabled: true
+  ## Enable or disable registering the analytics server on CD/RO using `setAnalyticsServerConfiguration`.
+  ## Set `analytics.autoRegister: false` to prevent the analytics server configuration from being created or updated. 
+  ## If the analytics server configuration already exists in your deployment, setting this value to `false` has no effect.     
+  autoRegister: true
+  ## Enable or disable creating a backup of cbflow-analytics data.
+  backup:
+    ## NOTE: If you change `analytics.backup.enabled` for an existing installation,
+    ## you must delete the statefulset for the installation prior to upgrading.
+    ## To do so, you can use `kubectl delete statefulset flow-analytics`.
+    enabled: false
+    schedule_cron: "0 */12 * * *"
+    retentionDays: 15
+    location: "/os-backups"
+    ## The `imageRepository` in the `images.registry` to pull component image from.
+    imageRepository: cbflow-tools
+    cleanupImageRepository: "python"
+    cleanupImageTag: "3.7.7"
+    restoreSnapshot: false
+    restoreSnapshotName:
+    externalRepo:
+      ## Enable if you are backing up in Amazon S3 or GCS.
+      enabled: false
+      ## Type can be Amazon S3 or GCS.
+      type: s3
+      # Name of bucket in Amazon S3 or GCS
+      bucketName:
+      # base path for backups in Bucket
+      basePath: "os-backups"
+      ## Use GKE Workload Identity with Kubernetes service account to impersonate a Google Cloud
+      ## Use The AWS IAM roles for service accounts to impersonate access to a S3
+      ## Enable serviceAccountsIdentity or provide IAM or GCS  credentials below
+      serviceAccountsIdentity: false
+
+      ## For `existingSecret`, either:
+      ## * Specify where the AWS or GCS credentials are stored.
+      ## or
+      ## * Provide the secret in the values file.
+      ##
+      ## For AWS S3:
+      ## Create a secret for AWS S3 with permission to read/write
+      ## to the bucket policy with keys `AWS_ACCESS_KEY` and `AWS_SECRET_KEY`.
+      ## Example:
+      ## `kubectl create secret generic s3awssecret --from-literal=AWS_ACCESS_KEY="XXXXX" --from-literal=AWS_SECRET_KEY="XXXXX"`
+      ##
+      ## For GCS:
+      ## Create a secret for GCS with permission to read/write
+      ## to the bucket policy using `KEY GCS_SA_KEY` referencing
+      ## the file with the service account key.
+      ## Example:
+      ## `kubectl create secret generic gcssasecret --from-file=GCS_SA_KEY=/tmp/gke-credentials.json`
+      existingSecret:
+      secret:
+        ## Provide *only* if type is AWS S3.
+        awsAccessKey:
+        awsSecretKey:
+        ## Provide *only* if type is GCS.
+        gcsSaKey:
+
+      ## Region of the AWS S3 or GCS bucket. Example: us-east-1
+      region:
+    ## Custom Pip config file configuration to install pip packages using private PyPi repo
+    pipConfig: {}
+    ## pip.conf: |
+    ##  [global]
+    ##  index-url = http://<private-pypi-repo-host-port>
+    ##  trusted-host = <private-pypi-repo-host>
+
+  ## Requires `analytics.expose.enable: true` and port `9201` to be open and externally exposed.
+  ## Creates extra Kubernetes service with type LoadBalancer.
+  externalService:
+    enabled: false
+    ## cbflow-analytics LoadBalancer service annotations for
+    ## creating internal LoadBalancer on GCP or AWS.
+    annotations:
+#      networking.gke.io/load-balancer-type: "Internal"
+#      service.beta.kubernetes.io/aws-load-balancer-internal: "0.0.0.0/0"
+
+  ## For `analytics.certificates`, you must provide either:
+  ## * The certificates for ca, sign, node, admin,
+  ## and bundle in the fields below.
+  ## or
+  ## * A `analytics.certificates.existingSecret` that references
+  ## where the ca, sign, node, admin, and bundle are stored.
+
+  ## IMPORTANT:
+  ## If you have cbflow-analytics replicas, you must define one of
+  ## the following supported certificate options:
+  ##  * Define certificates.bundle.
+  ##  * Define certificates.ca.crt and certificates.ca.key.
+  ##  * Define certificates.ca.crt and certificates.sign.crt, and certificates.sign.key.
+  ##  * Define certificates.ca.crt, certificates.sign.crt, certificates.node.crt, certificates.node.key,
+  ##    certificates.admin.crt, and certificates.admin.key.
+  ## For more information, refer to:
+  ## https://docs.cloudbees.com/docs/cloudbees-cd/latest/install-k8s/installation#_configure_cloudbees_analytics_server_certificates
+
+  ## cbflow-analytics supported certificates:
+  certificates:
+    ca:
+      crt:
+      key:
+    sign:
+      crt:
+      key:
+    node:
+      crt:
+      key:
+    admin:
+      crt:
+      key:
+      dname:
+    bundle:
+
+    ## For `analytics.certificates.existingSecret`:
+    ## Specify the secret where the certificates ca, sign, node,
+    ## admin, and bundle are stored (recommended for production).
+    existingSecret:
+    ## When using the existingSecret use the following keys:
+    ##      Store the 'ca.crt' value under CBF_ANALYTICS_CA_CRT key.
+    ##      Store the 'ca.key' value under CBF_ANALYTICS_CA_KEY key.
+    ##      Store the 'sign.crt' value under CBF_ANALYTICS_SIGN_CRT key.
+    ##      Store the 'sign.key' value under CBF_ANALYTICS_SIGN_KEY key.
+    ##      Store the 'node.crt' value under CBF_ANALYTICS_NODE_CRT key.
+    ##      Store the 'node.key' value under CBF_ANALYTICS_NODE_KEY key.
+    ##      Store the 'admin.crt' value under CBF_ANALYTICS_ADMIN_CRT key.
+    ##      Store the 'admin.key' value under CBF_ANALYTICS_ADMIN_KEY key.
+    ##      Store the 'bundle' value under CBF_ANALYTICS_CRT_BUNDLE key.
+    ## NOTE: Do not store your 'admin.dnname' in any secret. Instead, pass it as a value.
+
+  ## Reindexing settings
+  reindex:
+    remote:
+      ## Specifies the hosts that can be reindexed from remotely. Consists of a comma-delimited
+      ## list of host:port entries. The default value is '127.0.0.1:*,[::1]:*,localhost:*'.
+      ## But a value is specified here to allow re-indexing of data from an outdated
+      ## Analytics server.
+      allowlist: "flow-devopsinsight.*:*"
+
+  ## Specify additional containers.
+  additionalContainers: null
+#  additionalContainers:
+#   - name: container-name
+#     image: image-version
+#     command:
+#       - "/container-command"
 
 ### --------------------------------------------
-### Analytics server / Flow DevOps Insight (DOIS/dois) configuration section
+### (LEGACY) Flow DevOps Insight (DOIS/dois) configuration section
 ### ---------------------------------------------
 
 dois:
@@ -581,8 +839,6 @@ dois:
     location: "/es-backups"
     ## The `imageRepository` in the `images.registry` to pull component image from.
     imageRepository: cbflow-tools
-    cleanupImageRepository: "python"
-    cleanupImageTag: "3.7.7"
     restoreSnapshot: false
     restoreSnapshotName:
     externalRepo:
@@ -624,9 +880,14 @@ dois:
 
       ## Region of the AWS S3 or GCS bucket. Example: us-east-1
       region:
+    ## Custom Pip config file configuration to install pip packages using private PyPi repo
+    pipConfig: {}
+    ## pip.conf: |
+    ##  [global]
+    ##  index-url = http://<private-pypi-repo-host-port>
+    ##  trusted-host = <private-pypi-repo-host>
 
-
-  ## Requires `dois.expose.enable: true` and ports `9200`  to be open and externally exposed.
+  ## Requires `dois.expose.enable: true` and ports `9200` to be open and externally exposed.
   ## Creates extra Kubernetes service with type LoadBalancer.
   externalService:
     enabled: false
@@ -820,6 +1081,12 @@ storage:
       ## To use a custom storage class, provide the storageClass name.
       storageClass:
 
+    analyticsStorage:
+      name: analytics-data
+      accessMode: ReadWriteOnce
+      storage: 10Gi
+      ## To use a custom storage class, provide the storageClass name.
+      storageClass:
 
 ### --------------------------------------------
 ### Flow server database configuration section
@@ -867,7 +1134,7 @@ database:
 
   ## configure  the database connection to use either built-in database authentication or IAM database authentication
   ## using customDatabaseUrl .
-  ## example customDatabaseUrl=jdbc:postgresql:///<DB_NAME>?cloudSqlInstance=<YOUR_GCP_PROJECT_ID>:<REGION_ID>:<INSTANCE_CONNECTION_NAME>&socketFactory=com.google.cloud.sql.postgres.SocketFactory&ipTypes=PRIVATE
+  ## example customDatabaseUrl:jdbc:postgresql:///<DB_NAME>?cloudSqlInstance=<YOUR_GCP_PROJECT_ID>:<REGION_ID>:<INSTANCE_CONNECTION_NAME>&socketFactory=com.google.cloud.sql.postgres.SocketFactory&ipTypes=PRIVATE
   ## for more information on supported configuration, refer to
   ## https://docs.cloudbees.com/docs/cloudbees-cd/latest/install-k8s/k8s-platform-specific-configurations#_using_cloudbees_cdro_with_google_cloud_sql
 #  customDatabaseUrl:
@@ -992,7 +1259,7 @@ networkIsolation:
   ##    - namespaceSelector:
   ##        matchLabels:
   ##          kubernetes.io/metadata.name: kube-system
-  
+
   web:
     additionalIngressSelector: []
   server:
@@ -1002,6 +1269,8 @@ networkIsolation:
   repository:
     additionalIngressSelector: []
   dois:
+    additionalIngressSelector: []
+  analytics:
     additionalIngressSelector: []
 
 ### --------------------------------------------
@@ -1022,7 +1291,7 @@ zookeeper:
     ## Container repository to pull ZooKeeper image from.
     repository: docker.io/cloudbees/cbflow-tools
     ## Zookeeper image tag to pull.
-    tag: "2024.03.0.173398_3.2.106_20240227"
+    tag: "2024.06.0.175153_3.2.117_20240613"
     ## Added Image repository for global values support
     imageRepository: cbflow-tools
   fullnameOverride: zookeeper
@@ -1060,79 +1329,15 @@ zookeeper:
 ### ---------------------------------------------
 
 ## CloudBees CD/RO requires cbflow-server, cbflow-repository, and
-## cbflow-dois (only if installed) to be exposed as externally available services.
+## cbflow-analytics/cbflow-dois (only if installed) to be exposed as externally available services.
 ## Ingress requires the following ports to be exposed:
 ## * `8200` (cbflow-repository)
 ## * `8443` and `61613` (cbflow-server)
-## * `9200`  (cbflow-dois)
+## * `9200` (cbflow-dois)
+## * `9201` (cbflow-analytics)
 ##
 ## As per Kubernetes ingress specification, this is not organically supported.
 ## This is why flow-ingress comes bundled with CloudBees CD/RO.
-
-## **Only use nginx-ingress for Kubernetes installations v1.21 or earlier.**
-## IMPORTANT: If you are upgrading from K8s v1.21 or earlier
-## to v1.22 or later, ensure you configure `nginx-ingress.enabled: false`
-## and `ingress-nginx.enabled: true` before upgrading.
-## For more information this type of upgrade, refer to:
-## https://docs.cloudbees.com/docs/cloudbees-cd/latest/upgrade/overview-k8s-environment#Prereq_upgrading_from_K8s_1.21_or_less_to_1.22_or_above
-nginx-ingress:
-
-  enabled: false
-
-  defaultBackend:
-    service:
-      ## Disable to omit the clusterIP from the controller service.
-      omitClusterIP: true
-
-  controller:
-    ingressClass: flow-ingress
-    ## `publishService` allows you to customize the external service
-    ## nginx-ingress is bound to via DNS.
-    publishService:
-      enabled: true
-    scope:
-      enabled: true
-
-#    extraArgs:
-      ## Additional log messages that may be useful for debugging.
-      ## Shows diff details about changes in the nginx-ingress configuration.
-#      v: 2
-      ## Shows details about the service, ingress rule, endpoint changes, and
-      ## dumps the nginx-ingress configuration in JSON format.
-#      v: 3
-      ## Configures NGINX in debug mode
-#      v: 5
-
-    config:
-      ## Ingress must support long-running requests without resetting the connection.
-      ## By default, nginx reset connections to TCP/UDP services after `600` seconds of
-      ## inactivity between two successive read or write operations. This setting
-      ## extends the timeout to `4000` seconds.
-      proxy-stream-timeout: "4000s"
-      ## `error-log-level` allows you to increase the detail of the error log, which
-      ## may be useful for debugging.
-#      error-log-level: debug
-
-    ## Ingress must support long-running requests without resetting the connection.
-    ## By default, AWS ELB resets connections after `60` seconds of inactivity. With
-    ## this annotation, the timeout will be increased to `4000` seconds. This is
-    ## the maximum timeout supported by AWS ELB.
-    service:
-      annotations:
-        service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: 4000
-      omitClusterIP: true
-
-  tcp:
-    8200: "{{ .Release.Namespace }}/flow-repository:8200"
-    8443: "{{ .Release.Namespace }}/flow-server:8443"
-    61613: "{{ .Release.Namespace }}/flow-server:61613"
-
-    ##  Additional TCP ports to access DOIS Elasticsearch over ingress endpoint.
-#    7800: "{{ .Release.Namespace }}/gateway-external-agent-flow-agents:7800"
-#    9200: "{{ .Release.Namespace }}/flow-devopsinsight:9200"
-
-    ## Additional port to enable external agents to connect to flow-server.
-#    8000: "{{ .Release.Namespace }}/flow-server:8000"
 
 
 ## **Only use ingress-nginx for Kubernetes installations v1.22 or later.**
@@ -1165,10 +1370,10 @@ ingress-nginx:
 
 #    extraArgs:
       ## Additional log messages that may be useful for debugging.
-      ## Shows diff detail about changes in the nginx-ingress configuration.
+      ## Shows diff detail about changes in the ingress-nginx configuration.
 #      v: 2
       ## Shows details about the service, Ingress rule, endpoint changes, and
-      ## dumps the nginx-ingress configuration in JSON format.
+      ## dumps the ingress-nginx configuration in JSON format.
 #      v: 3
       ## Configures NGINX in debug mode
 #      v: 5
@@ -1191,6 +1396,9 @@ ingress-nginx:
      ##  Additional TCP ports to access DOIS Elasticsearch over the ingress endpoint:
 #    7800: "{{ .Release.Namespace }}/gateway-external-agent-flow-agents:7800"
 #    9200: "{{ .Release.Namespace }}/flow-devopsinsight:9200"
+
+     ##  Additional TCP ports to access Analytics over the ingress endpoint:
+#    9201: "{{ .Release.Namespace }}/flow-analytics:9201"
 
      ## Additional port to enable external agents to connect to flow-server.
 #    8000: "{{ .Release.Namespace }}/flow-server:8000"
@@ -1341,7 +1549,7 @@ cdsidecarinjector:
 
 ## Helm tests configuration
 helmTests:
-  image: mwendler/wget
+  image: cbflowtest/wget
 
 ## Custom Labels for CDRO workload pods
 customLabels:
