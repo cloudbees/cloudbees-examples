@@ -14,18 +14,18 @@ CloudBees has provided the [reporting-data-reindex.pl](reporting-data-reindex.pl
 > This may result in having to split such indexes into multiple smaller indexes. If you encounter multiple timeout issues, contact CloudBees support.
 
 ## Dependencies
-This utility requires `cb-perl` to run, and is executable in any environment with a CloudBees CD/RO server or agent installation.
+This utility requires `cb-perl` to run, and is executable in any environment with a v10.3 or later CloudBees CD/RO server or agent installation.
 
 ## Command Format
 
 The format for launching the utility is as follows:
 
 ```sh
-$ <cdro_install_dir>/bin/cb-perl ./reporting-data-reindex.pl --showStatistics=1 --sourceUrl=https://<hostname>:9200 --sourceAuthUser=reportuser --sourceAuthPassword=<password>
+$ <CDRO-INSTALL-DIR>/bin/cb-perl ./reporting-data-reindex.pl --showStatistics=1 --sourceUrl=https://<hostname>:9200 --sourceAuthUser=reportuser --sourceAuthPassword=<password>
 ```
 
 Where:
-* <cdro_install_dir>: Directory where the CloudBees CD/RO server or agent is installed.
+* `<CDRO-INSTALL-DIR>`: Directory where the CloudBees CD/RO server or agent is installed.
 * `--showStatistics=1`: *_Required_*. Specifies to display the index statistics.
 
 * `--sourceUrl=https://<hostname>:9200`: Specifies the legacy CloudBees Analytics server URL.
