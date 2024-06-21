@@ -34,10 +34,10 @@ images:
   ## `imagePullSecrets: <secret-name>`
   imagePullSecrets:
 
-   ## (OPTIONAL) Create an array of `imagePullSecrets` containing private registry credentials.
-   ## when you have one or more secrets to use when pulling images.
-   ## NOTE: Only one instance of `imagePullSecrets:` can be present.
-   ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## (OPTIONAL) Create an array of `imagePullSecrets` containing private registry credentials.
+  ## when you have one or more secrets to use when pulling images.
+  ## NOTE: Only one instance of `imagePullSecrets:` can be present.
+  ## Ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 #  imagePullSecrets:
 #    - name: "docker-registry"
 
@@ -78,21 +78,21 @@ ingress:
     nginx.ingress.kubernetes.io/proxy-read-timeout: "4000"
     nginx.ingress.kubernetes.io/proxy-stream-timeout: "4000"
 
-     ## If you are using EKS with ALB, enable the follow annotations:
-#    alb.ingress.kubernetes.io/scheme: internet-facing
-#    alb.ingress.kubernetes.io/certificate-arn: "<acm certificate arn>"
+    ## If you are using EKS with ALB, enable the follow annotations:
+  #    alb.ingress.kubernetes.io/scheme: internet-facing
+  #    alb.ingress.kubernetes.io/certificate-arn: "<acm certificate arn>"
 
 
   ## Set to the same value as `ingress-nginx.controller.ingressClassResource.name` if enabled.
   class: flow-ingress
-  ## If using EKS and need to deploy ALB load balancer with alb controller enabled, set to `alb`.
-#  class: alb
+    ## If using EKS and need to deploy ALB load balancer with alb controller enabled, set to `alb`.
+    #  class: alb
 
 
-   ## Certificate for CloudBees flow-web ingress.
-   ## You can also set using `helm install --set-file`.
-#   ingress.certificate.key=path/to/key` `--set-file
-#   ingress.certificate.crt=path/to/certificate`
+    ## Certificate for CloudBees flow-web ingress.
+  ## You can also set using `helm install --set-file`.
+  #   ingress.certificate.key=path/to/key` `--set-file
+  #   ingress.certificate.crt=path/to/certificate`
 
   ## Example structure to configure an ingress certificate for TLS.
   certificate:
@@ -171,21 +171,21 @@ server:
 
   ## Specify additional containers to mount for cbflow-server.
   additionalContainers:
-#     - name: container-name
-#       image: image-version
-#       command:
-#         - "/container-command"
+  #     - name: container-name
+  #       image: image-version
+  #       command:
+  #         - "/container-command"
 
   ## Specify any additional environment variables to set for cbflow-server.
   extraEnvs: []
-# extraEnvs:
-#   - name: FOO
-#     value: "BAR"
-#   - name: FOO
-#     valueFrom:
-#       secretKeyRef:
-#         key: FOO
-#         name: secret-resource
+  # extraEnvs:
+  #   - name: FOO
+  #     value: "BAR"
+  #   - name: FOO
+  #     valueFrom:
+  #       secretKeyRef:
+  #         key: FOO
+  #         name: secret-resource
 
   ## Enable or disable sending telemetry data to CloudBees.
   ## NOTE: This option only works for the initial installation of the cbflow-server.
@@ -200,8 +200,8 @@ server:
     ## server LoadBalancer service annotations for
     ## creating internal LoadBalancer on GCP or AWS.
     annotations:
-#      networking.gke.io/load-balancer-type: "Internal"
-#      service.beta.kubernetes.io/aws-load-balancer-internal: "0.0.0.0/0"
+  #      networking.gke.io/load-balancer-type: "Internal"
+  #      service.beta.kubernetes.io/aws-load-balancer-internal: "0.0.0.0/0"
 
   ## Enable or disable creating init container for volume permissions for cbflow-server.
   volumesPermissionsInitContainer:
@@ -244,7 +244,7 @@ jobInit:
       cpu: 2
       memory: 6Gi
 
-## Kubernetes Liveness Probes:
+  ## Kubernetes Liveness Probes:
   livenessProbe:
     initialDelaySeconds: 60
     periodSeconds: 60
@@ -284,14 +284,14 @@ web:
 
   ## Additional environment variables to set for cbflow-web.
   extraEnvs: []
-# extraEnvs:
-#   - name: FOO
-#     value: "BAR"
-#   - name: FOO
-#     valueFrom:
-#       secretKeyRef:
-#         key: FOO
-#         name: secret-resource
+  # extraEnvs:
+  #   - name: FOO
+  #     value: "BAR"
+  #   - name: FOO
+  #     valueFrom:
+  #       secretKeyRef:
+  #         key: FOO
+  #         name: secret-resource
 
   ## Enable shared plugin volume mount (PVC) on flow-web pods.
   ## Mounts empty dir instead if `sharedPluginsEnabled` is false.
@@ -306,19 +306,19 @@ web:
 
   ## Specify additional containers to mount for cbflow-web.
   additionalContainers:
-#       - name: container-name
-#         image: image-version
-#         command:
-#           - "/container-command"
+  #       - name: container-name
+  #         image: image-version
+  #         command:
+  #           - "/container-command"
 
-## Kubernetes Liveness Probes:
+  ## Kubernetes Liveness Probes:
   livenessProbe:
     initialDelaySeconds: 10
     periodSeconds: 60
     timeoutSeconds: 10
     failureThreshold: 3
 
-## Kubernetes Readiness Probes:
+  ## Kubernetes Readiness Probes:
   readinessProbe:
     initialDelaySeconds: 10
     periodSeconds: 5
@@ -400,14 +400,14 @@ repository:
 
   ## Additional environment variables to set for cbflow-repository.
   extraEnvs: []
-#  extraEnvs:
-#    - name: FOO
-#      value: "BAR"
-#    - name: FOO
-#      valueFrom:
-#        secretKeyRef:
-#          key: FOO
-#          name: secret-resource
+  #  extraEnvs:
+  #    - name: FOO
+  #      value: "BAR"
+  #    - name: FOO
+  #      valueFrom:
+  #        secretKeyRef:
+  #          key: FOO
+  #          name: secret-resource
 
   ## Requires `repository.expose.enable: true` and port `8200` to be open and externally exposed.
   ## Creates extra Kubernetes service with type LoadBalancer.
@@ -416,8 +416,8 @@ repository:
     ## repository LoadBalancer service annotations for
     ## creating internal LoadBalancer on GCP or AWS.
     annotations:
-#      networking.gke.io/load-balancer-type: "Internal"
-#      service.beta.kubernetes.io/aws-load-balancer-internal: "0.0.0.0/0"
+  #      networking.gke.io/load-balancer-type: "Internal"
+  #      service.beta.kubernetes.io/aws-load-balancer-internal: "0.0.0.0/0"
 
 
 
@@ -433,19 +433,19 @@ repository:
 
   ## Specify additional containers to mount for cbflow-repository.
   additionalContainers:
-#     - name: container-name
-#       image: image-version
-#       command:
-#         - "/container-command"
+  #     - name: container-name
+  #       image: image-version
+  #       command:
+  #         - "/container-command"
 
-## Kubernetes Liveness Probes:
+  ## Kubernetes Liveness Probes:
   livenessProbe:
     initialDelaySeconds: 120
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 3
 
-## Kubernetes Readiness Probes:
+  ## Kubernetes Readiness Probes:
   readinessProbe:
     initialDelaySeconds: 120
     periodSeconds: 5
@@ -542,14 +542,14 @@ analytics:
 
   ## Additional environment variables to set for cbflow-analytics.
   extraEnvs: []
-#  extraEnvs:
-#   - name: FOO
-#     value: "BAR"
-#   - name: FOO
-#     valueFrom:
-#       secretKeyRef:
-#         key: FOO
-#         name: secret-resource
+  #  extraEnvs:
+  #   - name: FOO
+  #     value: "BAR"
+  #   - name: FOO
+  #     valueFrom:
+  #       secretKeyRef:
+  #         key: FOO
+  #         name: secret-resource
 
   ## Kubernetes Liveness Probes:
   livenessProbe:
@@ -578,8 +578,8 @@ analytics:
   volumesPermissionsInitContainer:
     enabled: true
   ## Enable or disable registering the analytics server on CD/RO using `setAnalyticsServerConfiguration`.
-  ## Set `analytics.autoRegister: false` to prevent the analytics server configuration from being created or updated. 
-  ## If the analytics server configuration already exists in your deployment, setting this value to `false` has no effect.     
+  ## Set `analytics.autoRegister: false` to prevent the analytics server configuration from being created or updated.
+  ## If the analytics server configuration already exists in your deployment, setting this value to `false` has no effect.
   autoRegister: true
   ## Enable or disable creating a backup of cbflow-analytics data.
   backup:
@@ -651,8 +651,8 @@ analytics:
     ## cbflow-analytics LoadBalancer service annotations for
     ## creating internal LoadBalancer on GCP or AWS.
     annotations:
-#      networking.gke.io/load-balancer-type: "Internal"
-#      service.beta.kubernetes.io/aws-load-balancer-internal: "0.0.0.0/0"
+  #      networking.gke.io/load-balancer-type: "Internal"
+  #      service.beta.kubernetes.io/aws-load-balancer-internal: "0.0.0.0/0"
 
   ## For `analytics.certificates`, you must provide either:
   ## * The certificates for ca, sign, node, admin,
@@ -723,33 +723,36 @@ analytics:
 #       - "/container-command"
 
 ### --------------------------------------------
-### Analytics server configuration section
+### (LEGACY) Flow DevOps Insight (DOIS/dois) configuration section
 ### ---------------------------------------------
 
-analytics:
+dois:
 
-  ## Flag that dictates the cbflow-analytics workload and its accompanying services are installed.
+  ## Flag that dictates the cbflow-dois workload and its accompanying services are installed.
   enabled: true
   ## The `imageRepository` in the `images.registry` to pull component image from.
-  imageRepository: cbflow-analytics
-  ## Number of replicas of this component to create.
+  imageRepository: cbflow-dois
+  ## Number replicas of Elasticsearch nodes to create.
   replicas: 1
 
-  ## `expose: true` allows cbflow-analytics service ingress ports `9201`
+  ## `expose: true` allows cbflow-dois service ingress ports `9200`
   ## to be accessed from outside the cluster.
   expose: true
 
-  ## The Analytics service endpoint configured on the remote CloudBees CD/RO server.
+  ## The DOIS service endpoint configured on the remote CloudBees CD/RO server.
   ## It is assumed the remote CloudBees CD/RO server is located in the same
   ## Kubernetes cluster.
-  serviceEndpoint: "flow-analytics.{{ .Release.Namespace }}"
+  serviceEndpoint: "flow-devopsinsight.{{ .Release.Namespace }}"
 
-  ## The name of the cluster.
-  clusterName:
+  ## The name of the Elasticsearch cluster.
+  esClusterName:
+  ## Minimum number of master-eligible nodes that must be visible in order to
+  ## form an Elasticsearch cluster.
+  esMinMasterNodes: 1
   ## The number of primary shards that an index should have.
-  numberOfShards:
+  esNumberOfShards:
 
-  ## Analytics server credentials
+  ## DOIS credentials
   ## Specify either:
   ## * The secret where the report user password and the admin user
   ## password will be stored (Recommended for production).
@@ -757,8 +760,8 @@ analytics:
   ## * The reportUserPassword and adminPassword values.
   ##
   ## When using the secret:
-  ## * Store the `reportUser` password under the `CBF_ANALYTICS_PASSWORD` key.
-  ## * Store the `adminPassword` under the `CBF_ANALYTICS_ADMIN_PASSWORD` key.
+  ## * Store the `reportUser` password under the `CBF_DOIS_PASSWORD` key.
+  ## * Store the `adminPassword` under the `CBF_DOIS_ADMIN_PASSWORD` key.
   ##
   ##
   ## IMPORTANT: If the `adminPassword` is left empty, *no admin user is created*,
@@ -769,8 +772,8 @@ analytics:
     ## If `reportUserPassword` is an empty string, a random 20 characters password is generated.
     reportUserPassword:
 
-  ## The heap size in MB for server service.
-  heapSize: 1024
+  ## The heap size in MB for Elasticsearch and Logstash services.
+  esRam: 1024
 
   ## Specify the resources to request for this component.
   resources:
@@ -785,29 +788,29 @@ analytics:
   tolerations: []
   affinity: {}
 
-  ## Adds an OpenShift node tuning label to Analytics pods that
-  ## configures the 'vm.max_map_count' value required to run OpenSearch.
+  ## Adds an OpenShift node tuning label to DOIS pods that
+  ## configures the 'vm.max_map_count' value required to run Elasticsearch.
   ## For more information, refer to:
   ## https://developers.redhat.com/blog/2019/11/12/using-the-red-hat-openshift-tuned-operator-for-elasticsearch/
   openshiftNodeTuning: false
 
-  ## Additional environment variables to set for cbflow-analytics.
+  ## Additional environment variables to set for cbflow-dois.
   extraEnvs: []
-#  extraEnvs:
-#   - name: FOO
-#     value: "BAR"
-#   - name: FOO
-#     valueFrom:
-#       secretKeyRef:
-#         key: FOO
-#         name: secret-resource
+  #  extraEnvs:
+  #   - name: FOO
+  #     value: "BAR"
+  #   - name: FOO
+  #     valueFrom:
+  #       secretKeyRef:
+  #         key: FOO
+  #         name: secret-resource
 
-  ## Analytics Readiness probe variables:
+  ## DOIS Readiness probe variables:
   healthProbeReadinessPeriodSeconds: 5
   healthProbeReadinessFailureThreshold: 3
   healthProbeReadinessInitialDelaySeconds: 60
 
-  ## Analytics Liveness probe variables:
+  ## DOIS Liveness probe variables:
   healthProbeLivenessPeriodSeconds: 20
   healthProbeLivenessFailureThreshold: 3
   healthProbeLivenessInitialDelaySeconds: 60
@@ -821,19 +824,19 @@ analytics:
     ## The `sysctlInitContainer.imageTag` sysctlInitContainer image tag .
     imageTag: stable
 
-  ## Enable or disable creating an init container for cbflow-analytics volume permissions.
+  ## Enable or disable creating an init container for cbflow-dois volume permissions.
   volumesPermissionsInitContainer:
     enabled: true
 
-  ## Enable or disable creating a backup of cbflow-analytics data.
+  ## Enable or disable creating a backup of cbflow-dois data.
   backup:
-    ## NOTE: If you change `analytics.backup.enabled` for an existing installation,
+    ## NOTE: If you change `dois.backup.enabled` for an existing installation,
     ## you must delete the statefulset for the installation prior to upgrading.
-    ## To do so, you can use `kubectl delete statefulset flow-analytics`.
+    ## To do so, you can use `kubectl delete statefulset flow-devopsinsight`.
     enabled: false
     schedule_cron: "0 */12 * * *"
     retentionDays: 15
-    location: "/os_v2-backups"
+    location: "/es-backups"
     ## The `imageRepository` in the `images.registry` to pull component image from.
     imageRepository: cbflow-tools
     restoreSnapshot: false
@@ -877,32 +880,32 @@ analytics:
 
       ## Region of the AWS S3 or GCS bucket. Example: us-east-1
       region:
-
-  ## Requires `analytics.expose.enable: true` and ports `9201`  to be open and externally exposed.
     ## Custom Pip config file configuration to install pip packages using private PyPi repo
     pipConfig: {}
     ## pip.conf: |
     ##  [global]
     ##  index-url = http://<private-pypi-repo-host-port>
     ##  trusted-host = <private-pypi-repo-host>
+
+  ## Requires `dois.expose.enable: true` and ports `9200` to be open and externally exposed.
   ## Creates extra Kubernetes service with type LoadBalancer.
   externalService:
     enabled: false
-    ## cbflow-analytics LoadBalancer service annotations for
+    ## cbflow-dois LoadBalancer service annotations for
     ## creating internal LoadBalancer on GCP or AWS.
     annotations:
-#      networking.gke.io/load-balancer-type: "Internal"
-#      service.beta.kubernetes.io/aws-load-balancer-internal: "0.0.0.0/0"
+  #      networking.gke.io/load-balancer-type: "Internal"
+  #      service.beta.kubernetes.io/aws-load-balancer-internal: "0.0.0.0/0"
 
-  ## For `analytics.certificates`, you must provide either:
+  ## For `dois.certificates`, you must provide either:
   ## * The certificates for ca, sign, node, admin,
   ## and bundle in the fields below.
   ## or
-  ## * A `analytics.certificates.existingSecret` that references
+  ## * A `dois.certificates.existingSecret` that references
   ## where the ca, sign, node, admin, and bundle are stored.
 
   ## IMPORTANT:
-  ## If you have cbflow-analytics replicas, you must define one of
+  ## If you have cbflow-dois replicas, you must define one of
   ## the following supported certificate options:
   ##  * Define certificates.bundle.
   ##  * Define certificates.ca.crt and certificates.ca.key.
@@ -912,7 +915,7 @@ analytics:
   ## For more information, refer to:
   ## https://docs.cloudbees.com/docs/cloudbees-cd/latest/install-k8s/installation#_configure_cloudbees_analytics_server_certificates
 
-  ## cbflow-analytics supported certificates:
+  ## cbflow-dois supported certificates:
   certificates:
     ca:
       crt:
@@ -929,20 +932,20 @@ analytics:
       dname:
     bundle:
 
-    ## For `analytics.certificates.existingSecret`:
+    ## For `dois.certificates.existingSecret`:
     ## Specify the secret where the certificates ca, sign, node,
     ## admin, and bundle are stored (recommended for production).
     existingSecret:
     ## When using the existingSecret use the following keys:
-    ##      Store the 'ca.crt' value under CBF_ANALYTICS_CA_CRT key.
-    ##      Store the 'ca.key' value under CBF_ANALYTICS_CA_KEY key.
-    ##      Store the 'sign.crt' value under CBF_ANALYTICS_SIGN_CRT key.
-    ##      Store the 'sign.key' value under CBF_ANALYTICS_SIGN_KEY key.
-    ##      Store the 'node.crt' value under CBF_ANALYTICS_NODE_CRT key.
-    ##      Store the 'node.key' value under CBF_ANALYTICS_NODE_KEY key.
-    ##      Store the 'admin.crt' value under CBF_ANALYTICS_ADMIN_CRT key.
-    ##      Store the 'admin.key' value under CBF_ANALYTICS_ADMIN_KEY key.
-    ##      Store the 'bundle' value under CBF_ANALYTICS_CRT_BUNDLE key.
+    ##      Store the 'ca.crt' value under CBF_DOIS_CA_CRT key.
+    ##      Store the 'ca.key' value under CBF_DOIS_CA_KEY key.
+    ##      Store the 'sign.crt' value under CBF_DOIS_SIGN_CRT key.
+    ##      Store the 'sign.key' value under CBF_DOIS_SIGN_KEY key.
+    ##      Store the 'node.crt' value under CBF_DOIS_NODE_CRT key.
+    ##      Store the 'node.key' value under CBF_DOIS_NODE_KEY key.
+    ##      Store the 'admin.crt' value under CBF_DOIS_ADMIN_CRT key.
+    ##      Store the 'admin.key' value under CBF_DOIS_ADMIN_KEY key.
+    ##      Store the 'bundle' value under CBF_DOIS_CRT_BUNDLE key.
     ## NOTE: Do not store your 'admin.dnname' in any secret. Instead, pass it as a value.
 
   ## Specify additional containers.
@@ -952,13 +955,6 @@ analytics:
 #     image: image-version
 #     command:
 #       - "/container-command"
-
-### --------------------------------------------
-### Flow DevOps Insight (DOIS/dois) configuration section (legacy)
-### ---------------------------------------------
-
-dois:
-  enabled: false
 
 ### --------------------------------------------
 ### Flow bound agent configuration section
@@ -1017,13 +1013,13 @@ boundAgent:
 
   ## Additional environment variables to set for cbflow-agent.
   extraEnvs: []
-#    - name: FOO
-#      value: "BAR"
-#    - name: FOO
-#      valueFrom:
-#        secretKeyRef:
-#          key: FOO
-#          name: secret-resource
+  #    - name: FOO
+  #      value: "BAR"
+  #    - name: FOO
+  #      valueFrom:
+  #        secretKeyRef:
+  #          key: FOO
+  #          name: secret-resource
 
   ## Enable or disable creating init container for volume permissions for cbflow-agent.
   volumePermissions:
@@ -1078,8 +1074,8 @@ storage:
       storageClass:
       existingClaim: false
 
-    analyticsStorage:
-      name: analytics-data
+    doisStorage:
+      name: elasticsearch-data
       accessMode: ReadWriteOnce
       storage: 10Gi
       ## To use a custom storage class, provide the storageClass name.
@@ -1100,18 +1096,18 @@ storage:
 ## that schema (rw access) - `dbUser` and `dbPassword`.
 
 database:
-   ## URL of you external Db.
-#  externalEndpoint: "my.db.somewhere.com"
+  ## URL of you external Db.
+  #  externalEndpoint: "my.db.somewhere.com"
 
-   ## Use this option if your database resides in the same k8s cluster
-   ## as the flow-server with the notation as <db-service>.<namespace>.
-   ## If deploying into the same namespace, `.<namespace>` can be omitted.
-#  clusterEndpoint: "<db-service>.<namespace>"
+  ## Use this option if your database resides in the same k8s cluster
+  ## as the flow-server with the notation as <db-service>.<namespace>.
+  ## If deploying into the same namespace, `.<namespace>` can be omitted.
+  #  clusterEndpoint: "<db-service>.<namespace>"
 
-   ## Use this option if you have an existing credentials or will deploy the
-   ## secret yourself. The value *must* given in the format:
-   ## existingSecret: server-secrets.yaml::dbSecret
-#  existingSecret: <my-existing-secret>
+  ## Use this option if you have an existing credentials or will deploy the
+  ## secret yourself. The value *must* given in the format:
+  ## existingSecret: server-secrets.yaml::dbSecret
+  #  existingSecret: <my-existing-secret>
   dbName:
   dbUser:
   ## If dbPassword is an empty string, a random 20 characters password is generated.
@@ -1150,13 +1146,13 @@ database:
 ### ---------------------------------------------
 
 flowCredentials:
-   ## Specify either:
-   ## * The secret where the admin user password is stored using
-   ## the 'CBF_SERVER_ADMIN_PASSWORD' key (recommended for production).
-   ## or
-   ## * The adminPassword.
+  ## Specify either:
+  ## * The secret where the admin user password is stored using
+  ## the 'CBF_SERVER_ADMIN_PASSWORD' key (recommended for production).
+  ## or
+  ## * The adminPassword.
   existingSecret:
-   ## If `adminPassword` is an empty string, a random 20 characters password is generated.
+  ## If `adminPassword` is an empty string, a random 20 characters password is generated.
   adminPassword:
 
 ### --------------------------------------------
@@ -1272,7 +1268,7 @@ networkIsolation:
     additionalIngressSelector: []
   repository:
     additionalIngressSelector: []
-  analytics:
+  dois:
     additionalIngressSelector: []
   analytics:
     additionalIngressSelector: []
@@ -1333,15 +1329,16 @@ zookeeper:
 ### ---------------------------------------------
 
 ## CloudBees CD/RO requires cbflow-server, cbflow-repository, and
-
-## cbflow-analytics (only if installed) to be exposed as externally available services.
+## cbflow-analytics/cbflow-dois (only if installed) to be exposed as externally available services.
 ## Ingress requires the following ports to be exposed:
 ## * `8200` (cbflow-repository)
 ## * `8443` and `61613` (cbflow-server)
-## * `9201`  (cbflow-analytics)
+## * `9200` (cbflow-dois)
+## * `9201` (cbflow-analytics)
 ##
 ## As per Kubernetes ingress specification, this is not organically supported.
 ## This is why flow-ingress comes bundled with CloudBees CD/RO.
+
 
 ## **Only use ingress-nginx for Kubernetes installations v1.22 or later.**
 ## IMPORTANT: If you are upgrading from K8s v1.21 or earlier
@@ -1371,15 +1368,15 @@ ingress-nginx:
     admissionWebhooks:
       port: 8445
 
-#    extraArgs:
+      #    extraArgs:
       ## Additional log messages that may be useful for debugging.
       ## Shows diff detail about changes in the ingress-nginx configuration.
-#      v: 2
+      #      v: 2
       ## Shows details about the service, Ingress rule, endpoint changes, and
       ## dumps the ingress-nginx configuration in JSON format.
-#      v: 3
+      #      v: 3
       ## Configures NGINX in debug mode
-#      v: 5
+    #      v: 5
 
     config:
       ## Ingress must support long-running requests without resetting the connection.
@@ -1389,21 +1386,21 @@ ingress-nginx:
       proxy-stream-timeout: "4000s"
       ## `error-log-level` allows you to increase the detail of the error log, which
       ## may be useful for debugging.
-#      error-log-level: debug
+  #      error-log-level: debug
 
   tcp:
     8200: "{{ .Release.Namespace }}/flow-repository:8200"
     8443: "{{ .Release.Namespace }}/flow-server:8443"
     61613: "{{ .Release.Namespace }}/flow-server:61613"
 
-     ##  Additional TCP ports to access Analytics server over the ingress endpoint:
-#    7800: "{{ .Release.Namespace }}/gateway-external-agent-flow-agents:7800"
-#    9201: "{{ .Release.Namespace }}/flow-analytics:9201"
+      ##  Additional TCP ports to access DOIS Elasticsearch over the ingress endpoint:
+      #    7800: "{{ .Release.Namespace }}/gateway-external-agent-flow-agents:7800"
+      #    9200: "{{ .Release.Namespace }}/flow-devopsinsight:9200"
 
-     ##  Additional TCP ports to access Analytics over the ingress endpoint:
-#    9201: "{{ .Release.Namespace }}/flow-analytics:9201"
+      ##  Additional TCP ports to access Analytics over the ingress endpoint:
+      #    9201: "{{ .Release.Namespace }}/flow-analytics:9201"
 
-     ## Additional port to enable external agents to connect to flow-server.
+    ## Additional port to enable external agents to connect to flow-server.
 #    8000: "{{ .Release.Namespace }}/flow-server:8000"
 
 ### --------------------------------------------
@@ -1443,72 +1440,72 @@ mariadb:
 ## cloudbees-flow-agent chart configuration to create
 ## an internal gateway agent.
 internalGatewayAgent:
-    enabled: false
-    releaseNamePrefix: gateway-default-agent
-    resourceName: gateway-default-agent
-    ## Number of replicas of this component to create.
-    replicas: 1
-    trustedAgent: false
-    flowCredentials:
-      ## Enable `serverSecretReference` to re-use flow-server secrets in agents chart.
-      serverSecretReference: true
+  enabled: false
+  releaseNamePrefix: gateway-default-agent
+  resourceName: gateway-default-agent
+  ## Number of replicas of this component to create.
+  replicas: 1
+  trustedAgent: false
+  flowCredentials:
+    ## Enable `serverSecretReference` to re-use flow-server secrets in agents chart.
+    serverSecretReference: true
 
-   ## Horizontal Pod Autoscaling configuration for internalGatewayAgent.
-   ## IMPORTANT: This is only supported when `clusteredMode: true`.
-    autoscaling:
-      enabled: false
-      minReplicas: 1
-      maxReplicas: 2
-      targetCPUUtilizationPercentage: 80
-      targetMemoryUtilizationPercentage: 80
-    gateway:
-      ## Recognize as internal gateway agent.
-      enabled: true
+  ## Horizontal Pod Autoscaling configuration for internalGatewayAgent.
+  ## IMPORTANT: This is only supported when `clusteredMode: true`.
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
+  gateway:
+    ## Recognize as internal gateway agent.
+    enabled: true
 
 ## cloudbees-flow-agent chart configurations used for creating an
 ## external gateway agent.
 externalGatewayAgent:
+  enabled: false
+  releaseNamePrefix: gateway-external-agent
+  resourceName: gateway-external-agent
+  ## Number of replicas of this component to create.
+  replicas: 1
+  trustedAgent: false
+  zoneName: external
+  service:
+    ## External DNS hostname external agents use to communicate
+    ## with the external gateway agent
+    publicHostName:
+  ## Enabling `externalService` creates a Load Balancer Kubernetes service named `<prefix>-flow-agents-external`.
+  ## If `externalGatewayAgent.service.publicHostName` above is configured with a DNS Endpoint (DNS Entry added for LB Endpoint), an
+  ## External Gateway Agent with the specified Agent Host Name is automatically created.
+  ## The port can be set to ports other than 7800. The load balancer will route any requests
+  ## to the specified port to the internal service on port 7800.
+  externalService:
     enabled: false
-    releaseNamePrefix: gateway-external-agent
-    resourceName: gateway-external-agent
-    ## Number of replicas of this component to create.
-    replicas: 1
-    trustedAgent: false
-    zoneName: external
-    service:
-      ## External DNS hostname external agents use to communicate
-      ## with the external gateway agent
-      publicHostName:
-    ## Enabling `externalService` creates a Load Balancer Kubernetes service named `<prefix>-flow-agents-external`.
-    ## If `externalGatewayAgent.service.publicHostName` above is configured with a DNS Endpoint (DNS Entry added for LB Endpoint), an
-    ## External Gateway Agent with the specified Agent Host Name is automatically created.
-    ## The port can be set to ports other than 7800. The load balancer will route any requests
-    ## to the specified port to the internal service on port 7800.
-    externalService:
-      enabled: false
-      port: 7800
+    port: 7800
 
-    ## Configure gateway using external gateway agent.
-    gateway:
-      ## Configure gateway using this agent.
-      enabled: true
-      ## Name of the gateway to create.
-      name: external
-      ## Name of the gateway agent to pair with as gateway resource 2.
-      pairedResourceName: gateway-default-agent
+  ## Configure gateway using external gateway agent.
+  gateway:
+    ## Configure gateway using this agent.
+    enabled: true
+    ## Name of the gateway to create.
+    name: external
+    ## Name of the gateway agent to pair with as gateway resource 2.
+    pairedResourceName: gateway-default-agent
 
-    flowCredentials:
-      ## Enable `serverSecretReference` to re-use flow-server secrets in agents chart.
-      serverSecretReference: true
+  flowCredentials:
+    ## Enable `serverSecretReference` to re-use flow-server secrets in agents chart.
+    serverSecretReference: true
 
-    ## Horizontal Pod Autoscaling configuration for externalGatewayAgent.
-    ## This is only supported when `clusteredMode: true`.
-    autoscaling:
-      enabled: false
-      minReplicas: 1
-      maxReplicas: 2
-      targetCPUUtilizationPercentage: 80
-      targetMemoryUtilizationPercentage: 80
+  ## Horizontal Pod Autoscaling configuration for externalGatewayAgent.
+  ## This is only supported when `clusteredMode: true`.
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 2
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: 80
 
 gitops:
   enabled: false
