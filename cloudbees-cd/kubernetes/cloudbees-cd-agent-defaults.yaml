@@ -152,7 +152,7 @@ storage:
       accessMode: ReadWriteOnce
       storage: 5Gi
       ## To use any  custom storage class just uncomment the line and state required storageClass name
-#      storageClass: my-class
+      #      storageClass: my-class
 
       ## Configure `existingClaim: true` if you have agents already deployed with a shared workspace or PVC.
       existingClaim: false
@@ -266,7 +266,7 @@ autoscaling:
   targetMemoryUtilizationPercentage: 80
   templates: []
     ## Specify custom or additional autoscaling metrics.
-    ## Ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#support-for-custom-metrics
+  ## Ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#support-for-custom-metrics
 #    - type: Pods
 #      pods:
 #       metric:
