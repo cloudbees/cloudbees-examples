@@ -92,3 +92,5 @@ externalGatewayAgent:
     ## Set the host name same as ingress.host .
     publicHostName: your-flow-domain-name.domain
 
+dois:
+  enabled: false

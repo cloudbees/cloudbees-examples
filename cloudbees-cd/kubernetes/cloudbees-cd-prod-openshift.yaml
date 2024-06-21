@@ -76,13 +76,16 @@ flowCredentials:
   existingSecret:
 
 #---------------------------------------------
-# Flow DevOps Insight configuration section
+# Analytics configuration section
 #---------------------------------------------
 
-dois:
+analytics:
   openshiftNodeTuning: true
   sysctlInitContainer:
     enabled: false
+
+dois:
+  enabled: false
 
 #---------------------------------------------
 # Volume configuration section
