@@ -18,8 +18,3 @@ OperationsCenter:
     # Update this with the openshift project your are using.
     Project:
       name: myproject
-
-# Do not change these values. They are all set for migrating CloudBees Core.
-Persistence:
-  ExistingClaim: 'jenkins-home-cjoc-0'
-
