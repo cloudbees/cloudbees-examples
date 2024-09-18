@@ -18,5 +18,3 @@ OperationsCenter:
     # Update this with the openshift project your are using.
     Project:
       name: myproject
-
-

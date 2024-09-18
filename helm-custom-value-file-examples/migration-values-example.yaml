@@ -14,5 +14,3 @@ OperationsCenter:
       Enable: false
       SecretName: core-example-com-tls
       Host: jenkins.cluster.local
-
-
