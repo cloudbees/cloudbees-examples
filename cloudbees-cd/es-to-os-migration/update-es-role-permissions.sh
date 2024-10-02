@@ -12,19 +12,21 @@
 # ES_DIR_CONF - conf dir which contains installed config yml files
 # ES_DIR_BINS - dir with ElasticSearch binaries
 # ES_JAVA_HOME - dir with java
-# ES_PORT -  port to communicate ES, specify new port if it was not configured by default as 9300
+# ES_PORT - the transport port used for communication between nodes, specify new port if it was not configured by default as 9300
 # CONFIG_DIR_TMP - temporary folder with write permissions
 
 ### example ###
-#
-# ES_PORT=9300 ES_DIR_CONF=/opt/cb/sda/conf/reporting/elasticsearch ./update-es-role-permissions.sh
-#
+## If DOIS is installed in /opt/cloudbees/dois, then run:
+#  ES_DIR_CONF=/opt/cloudbees/dois/conf/reporting/elasticsearch \
+#  ES_DIR_BINS=/opt/cloudbees/dois/reporting/elasticsearch/bin \
+#  ES_JAVA_HOME=/opt/cloudbees/dois/reporting/jre \
+#  ./update-es-role-permissions.sh"
 ### end of example ###
 
 function show_help() {
     echo "update_es_role_permissions.sh [-h]"
     echo  "-h show help"
-
+    echo ""
     echo "****************************************************************"
     echo  "Run this script using the system user assigned to run the CloudBees Analytics server"
     echo  "If you are not the user assigned to run the CloudBees Analytics, you can use \`sudo su\` to impersonate that user."
@@ -36,14 +38,18 @@ function show_help() {
     echo ""
     echo "Specify custom variables as environmental variables if required for your installation"
     echo "ES_DIR_CONF - conf dir which contains installed config yml files"
-    echo  "ES_DIR_BINS - dir with ElasticSearch binaries"
+    echo "ES_DIR_BINS - dir with ElasticSearch binaries"
     echo "ES_JAVA_HOME - dir with java"
-    echo "ES_PORT -  port to communicate ES, specify new port if it was not configured by default as 9300"
+    echo "ES_PORT -  the transport port used for communication between nodes, specify new port if it was not configured by default as 9300"
     echo "CONFIG_DIR_TMP - temporary folder with write permissions"
     echo ""
     echo "### example ###"
     echo ""
-    echo  "ES_PORT=9300 ES_DIR_CONF=/opt/cb/sda/conf/reporting/elasticsearch ./update-es-role-permissions.sh"
+    echo "# If DOIS is installed in /opt/cloudbees/dois, then run:"
+    echo "ES_DIR_CONF=/opt/cloudbees/dois/conf/reporting/elasticsearch \ "
+    echo "ES_DIR_BINS=/opt/cloudbees/dois/reporting/elasticsearch/bin \ "
+    echo "ES_JAVA_HOME=/opt/cloudbees/dois/reporting/jre \ "
+    echo "./update-es-role-permissions.sh"
     echo ""
     echo "### end of example ###"
     echo ""
