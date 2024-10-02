@@ -17,7 +17,7 @@
 
 ### example ###
 #
-# ES_PORT=9300 ES_DIR_CONF=/opt/cb/sda/conf/reporting/elasticsearch ./update_es_role_permissions.sh
+# ES_PORT=9300 ES_DIR_CONF=/opt/cb/sda/conf/reporting/elasticsearch ./update-es-role-permissions.sh
 #
 ### end of example ###
 
@@ -43,7 +43,7 @@ function show_help() {
     echo ""
     echo "### example ###"
     echo ""
-    echo  "ES_PORT=9300 ES_DIR_CONF=/opt/cb/sda/conf/reporting/elasticsearch ./update_es_role_permissions.sh"
+    echo  "ES_PORT=9300 ES_DIR_CONF=/opt/cb/sda/conf/reporting/elasticsearch ./update-es-role-permissions.sh"
     echo ""
     echo "### end of example ###"
     echo ""
