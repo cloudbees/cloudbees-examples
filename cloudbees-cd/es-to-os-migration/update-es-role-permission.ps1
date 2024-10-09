@@ -392,8 +392,6 @@ if ( -not $knowPortNumber ) {
 }
 
 
-
-!!!!
 Start-Process "$javaBin" -ArgumentList `
 "-Dio.netty.tryReflectionSetAccessible=false", `
 "-Dio.netty.noUnsafe=true", `
