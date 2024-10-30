@@ -1,50 +1,47 @@
 <#
 .SYNOPSIS
-This script must change roles permissions for user of ElasticSearch installed
-by CloudBees Software Delivery Automation Analytics.
-Script require Admin permissions.
+This script updates ElasticSearch user permissions for CloudBees Analytics in v2023.10.0 or earlier. If you are using v2023.12.0 or later, this update is not required.
+
+IMPORTANT:  This script requires Administrator permissions to run.
 
 .DESCRIPTION
-CloudBees Software Delivery Automation Analytics moved from ElasticSearch to OpenSearch in a release 2024.06
-To migrate from ElasticSearch to OpenSearch starting 2023.12 and later no need any changes. If any issues
-with older release in time of migration - current script can help with role permissions issues.
-Aplay this script before migrate from 2023.8 or older to the 2024.06 or younger.
-Script will try automatically find all needed values and if any issues to do it  - will report you about issues.
+CloudBees Analytics migrated from ElasticSearch to OpenSearch in release v2024.06.0. This script updates required user permissons when upgrading from v2023.10 or earlier as part of the migration when upgrading to v2024.06.0 or later. You must run this script prior to upgrading.
+This script attempts to automatically find all required values silently. However, if an issue is encountered, it reports the issue as an error messages.
 
 .PARAMETER Port
-Specify CloudBees Software Delivery Automation Analytics transport port if you know it. Script will try to read port namber from config file.
+Specify the CloudBees Analytics transport port. The script tries to read port number automatically from the config file.
 
 
 .PARAMETER Data
-Specify path to the Data folder if it is not installed by default or script was not able figureout location of that folder.
-By default it will be installed as C:\ProgramData\CloudBees\Software Delivery Automation\ .
+Specify path to the Data directory, if it is not installed in the default location, or script was not able to discover the data directory.
+By default, the Data directory is C:\ProgramData\CloudBees\Software Delivery Automation\ .
 
 .PARAMETER Install
 Specify path to the installation directory.
-By default it will be installed as C:\Program Files\CloudBees\Software Delivery Automation\ .
+By default, the Install directory is C:\Program Files\CloudBees\Software Delivery Automation\ .
 
 .PARAMETER Temp
-Path to the temporary folder with write permissions. If parameter will not be specifyed script will use directory $env:TEMP
+Path to a temporary directory with write permissions required as part of the migration. If the Temp parameter is not specified, the script uses $env:TEMP.
 
 .PARAMETER JavaHome
-Path to the Java Home directory. By default will be used java from install directory.
+Path to the Java Home directory. By default, the Java included in the CloudBees Analytics install directory is used.
 
 .PARAMETER Help
-Script will print usage and quit.
+Prints usage and quits.
 
 
 .EXAMPLE
-# if application installed to the  "C:\Program Files\DOIS\" and config installed to the  "C:\ProgramData\DOIS\" and transport port is 9301
+# The CloudBees Analytics installation directory is "C:\Program Files\DOIS\", the data directory is "C:\ProgramData\DOIS\", and the transport port is 9301:
 PS> update-role-permissions.ps1 -Install "C:\Program Files\DOIS\CloudBees\Software Delivery Automation" -Data "C:\ProgramData\DOIS\CloudBees\Software Delivery Automation" -Port 9301
 
 .EXAMPLE
-# if port 9301
+# The transport port is 9301:
 PS> update-role-permissions.ps1 -Port 9301
 # or
 PS> update-role-permissions.ps1 -p 9301
 
 .EXAMPLE
-# to see usage
+# To view the script usage:
 PS> update-role-permissions.ps1 -Help
 # or
 PS> update-role-permissions.ps1 -h
@@ -61,7 +58,7 @@ param (
 
 
 # Setup values to manage script
-# Apllication name to look for information about it at the Windows registry
+# Application name used to look for information in the the Windows registry:
 $programName = "CloudBees Software Delivery Automation Analytics"
 $logFile = "$env:TEMP\rolepermission.log"  # file to store logs
 $LOG_TO_FILE = $true  # false if you dont need to log to file
@@ -73,11 +70,11 @@ Usage: update-role-permissions.ps1 [-Help] [-Port <number>] [-Data <path>] [-Ins
 
 Parameters:
     -Help          Show usage.
-    -Port          Specify trasport prot for CloudBees Software Delivery Automation Analytics.
-    -Data          Data directory, contains config and yaml files
-    -Install       Path to the installation folder
-    -Temp          Temporary directory with write permissions, will be used for temporary config files
-    -JavaHome      Path to the JAVA HOME you like to use
+    -Port          Specify the trasport port for CloudBees Analytics.
+    -Data          Specify the Data directory that contains the CloudBees Analytics config and YAML files.
+    -Install        Specify the Path to the CloudBees Analytics installation folder.
+    -Temp          Temporary directory with write permissions used for temporary config files while updating. 
+    -JavaHome      Path to the JAVA HOME to use. 
 
 Examples:
     update-role-permissions.ps1 -Port 9355
@@ -282,11 +279,11 @@ if (-not (Test-Administrator) -and (-not $Analyze) ) {
     exit
 }
 
-# ES_DATA - data directory, contains config and yaml files
-# ES_INSTALL - installation  direrctory for DOIS with ElasticSearch
-# ES_JAVA_HOME - Home for java
-# ES_PORT - the transport port used for communication between nodes, specify new port if it was not configured by default as 9300
-# CONFIG_DIR_TMP - temporary folder with write permissions
+# ES_DATA - Data directory, contains config and YAML files
+# ES_INSTALL - Installation  direrctory for DOIS with ElasticSearch
+# ES_JAVA_HOME - Java Home path
+# ES_PORT - The transport port used for communication between nodes, specify a new port if it was not configured to the default 9300
+# CONFIG_DIR_TMP - Temporary folder with write permissions used during migration
 
 $ES_INSTALL = $env:ES_INSTALL
 $ES_JAVA_HOME = $env:ES_JAVA_HOME
@@ -306,12 +303,12 @@ if ($Data) {
     $ES_DATA = $Data
 }
 if ($Install) {
-    Write-Log -level "info" -message "Passed installation directory from from command line as: $Install"
+    Write-Log -level "info" -message "Passed Install directory from from command line as: $Install"
     $ES_INSTALL = $Install
 }
 
 if ($Temp) {
-    Write-Log -level "info" -message "Passed path to temporary directory with write permissions from command line as: $Temp"
+    Write-Log -level "info" -message "Passed path to Temp directory with write permissions from command line as: $Temp"
     $CONFIG_DIR_TMP = $Temp
 }
 
@@ -509,7 +506,7 @@ $args =  "-cp", "$searchGuard7Lib\*;$elasticSearchLib\*",  `
   "-h", "localhost", "-p", $portNumber, "-nhnv", "-icl"
 
 
-Write-Log -level "debug" -message "Goign to execute next command: & $javaBin $args"
+Write-Log -level "debug" -message "Executing next command: & $javaBin $args"
 
 # apply permissions
 & "$javaBin"  $args
