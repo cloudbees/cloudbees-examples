@@ -492,7 +492,7 @@ if (-not $ES_PORT) {
     }
 
     if ( -not $knowPortNumber ) {
-        Write-Log -level "error" -message "There is no reason to continue as not all parameters was found. Quit."
+        Write-Log -level "error" -message "Can not continue as not all parameters were found. Quit."
         exit(-1)
     }
 }
