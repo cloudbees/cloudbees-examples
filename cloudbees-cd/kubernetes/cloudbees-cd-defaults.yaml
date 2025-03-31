@@ -24,7 +24,7 @@ images:
   registry: "docker.io/cloudbees"
 
   ## CloudBees CD/RO flow-server image tag to pull.
-  tag: "2024.12.0.177508_3.2.129_20241202"
+  tag: "2025.03.0.178767_3.2.154_20250318"
 
   ## The image pull policy to use.
   pullPolicy: IfNotPresent
@@ -225,6 +225,8 @@ server:
 #         target:
 #           type: AverageValue
 #           averageValue: 10000m
+  ## Custom labels for CD/RO flow-server pods
+  customLabels: {}
 
 jobInit:
   annotations:
@@ -249,6 +251,9 @@ jobInit:
     initialDelaySeconds: 60
     periodSeconds: 60
     timeoutSeconds: 10
+
+  ## Custom labels for CD/RO job-init pods
+  customLabels: {}
 
 ### --------------------------------------------
 ### Flow web server configuration section
@@ -344,6 +349,8 @@ web:
 #           type: AverageValue
 #           averageValue: 10000m
 
+  ## Custom labels for CD/RO web pods
+  customLabels: {}
 
 
 ### --------------------------------------------
@@ -471,6 +478,9 @@ repository:
 #           type: AverageValue
 #           averageValue: 10000m
 
+  ## Custom labels for CD/RO repository pods
+  customLabels: {}
+
 ### --------------------------------------------
 ### Analytics server configuration section
 ### ---------------------------------------------
@@ -493,7 +503,7 @@ analytics:
   ## Kubernetes cluster.
   serviceEndpoint: "flow-analytics.{{ .Release.Namespace }}"
 
-  ## The name of the cluster.
+  ## The name of the Analytic's cluster.
   clusterName:
   ## The number of primary shards that an index should have.
   numberOfShards:
@@ -721,6 +731,9 @@ analytics:
 #     image: image-version
 #     command:
 #       - "/container-command"
+
+  ## Custom labels for CD/RO analytics pods
+  customLabels: {}
 
 ### --------------------------------------------
 ### (LEGACY) Flow DevOps Insight (DOIS/dois) configuration section
@@ -955,6 +968,9 @@ dois:
 #     image: image-version
 #     command:
 #       - "/container-command"
+
+  ## Custom labels for CD/RO dois pods
+  customLabels: {}
 
 ### --------------------------------------------
 ### Flow bound agent configuration section
@@ -1291,7 +1307,7 @@ zookeeper:
     ## Container repository to pull ZooKeeper image from.
     repository: docker.io/cloudbees/cbflow-tools
     ## Zookeeper image tag to pull.
-    tag: "2024.12.0.177508_3.2.129_20241202"
+    tag: "2025.03.0.178767_3.2.154_20250318"
     ## Added Image repository for global values support
     imageRepository: cbflow-tools
   fullnameOverride: zookeeper
@@ -1554,3 +1570,8 @@ helmTests:
 ## Custom Labels for CDRO workload pods
 customLabels:
   product: cdro
+
+## The resourceOptions variable is used to specify additional parameters to
+## configure or modify a resource for CD/RO agent installation.
+## Example resourceOptions: "--stepLimit 2"
+resourceOptions:
