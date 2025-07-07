@@ -25,7 +25,7 @@ images:
   registry: "docker.io/cloudbees"
 
   ## CloudBees CD/RO flow-server image tag to pull.
-  tag: "2025.03.0.178767_3.2.154_20250318"
+  tag: "2025.06.0.180373_3.2.180_20250618"
 
   ## The image pull policy to use.
   pullPolicy: IfNotPresent
@@ -103,6 +103,23 @@ ingress:
 
   ## Create an OpenShift route rather than a generic ingress.
   route: false
+  ## TLS configuration for the OpenShift Route.
+  routeTls:
+    # Specifies where TLS termination occurs.
+    # Options:
+    # - edge: TLS terminates at the OpenShift router.
+    # - reencrypt: TLS terminates at the router and is re-encrypted to the backend.
+    # - passthrough: TLS is passed through to the backend without termination.
+    termination: edge
+
+    # Defines how HTTP traffic is handled when TLS is enabled.
+    # Options:
+    # - None: Only allow HTTPS traffic.
+    # - Allow: Allow both HTTP and HTTPS traffic.
+    # - Redirect: Redirect HTTP traffic to HTTPS.
+    insecureEdgeTerminationPolicy: Redirect
+
+
 
 ## Enables platform-specific settings.
 ## Platform-specific values are: `eks`, `aws`, `gke`, `aks`, `openshift`
@@ -345,6 +362,19 @@ web:
 #           type: AverageValue
 #           averageValue: 10000m
 
+
+  ## Custom labels for CD/RO web pods
+  customLabels: {}
+
+  ## Enable TLS termination at the CloudBees Flow web server.
+  certificate:
+    ## Set to true to enable TLS termination at the web server.
+    enabled: false 
+    ## Use an existing Kubernetes secret containing the TLS certificate and key.
+    ## The secret must include the keys 'tls.crt' and 'tls.key'.
+    existingSecret:
+    key:
+    crt:
 
 
 ### --------------------------------------------
@@ -593,8 +623,7 @@ analytics:
     location: "/os-backups"
     ## The `imageRepository` in the `images.registry` to pull component image from.
     imageRepository: cbflow-tools
-    cleanupImageRepository: "python"
-    cleanupImageTag: "3.7.7"
+
     restoreSnapshot: false
     restoreSnapshotName:
     externalRepo:
@@ -730,7 +759,7 @@ analytics:
 dois:
 
   ## Flag that dictates the cbflow-dois workload and its accompanying services are installed.
-  enabled: true
+  enabled: false
   ## The `imageRepository` in the `images.registry` to pull component image from.
   imageRepository: cbflow-dois
   ## Number replicas of Elasticsearch nodes to create.
@@ -845,13 +874,16 @@ dois:
     externalRepo:
       ## Enable if you are backing up in Amazon S3 or GCS.
       enabled: false
-      ## Type can be Amazon S3 or GCS.
+      ## Type can be s3, gcs, cloudian, minio, openio.
       type: s3
       # Name of bucket in Amazon S3 or GCS
       bucketName:
-      ## Use GKE Workload Identity with Kubernetes service account to impersonate a Google Cloud
-      ## Use The AWS IAM roles for service accounts to impersonate access to a S3
-      ## Enable serviceAccountsIdentity or provide IAM or GCS  credentials below
+      # endpoint for cloudian,minio, openio
+      endpoint:
+      # endpoint protocol for cloudian, minio, openio options: http, https
+      endpointProtocol:
+      # path style for cloudian, minio, openio
+      pathStyleAccess: true
       serviceAccountsIdentity: false
 
       ## For `existingSecret`, either:
@@ -873,13 +905,16 @@ dois:
       ## `kubectl create secret generic gcssasecret --from-file=GCS_SA_KEY=/tmp/gke-credentials.json`
       existingSecret:
       secret:
-        ## Provide *only* if type is AWS S3.
+        ## Provide *only* if type is s3.
         awsAccessKey:
         awsSecretKey:
-        ## Provide *only* if type is GCS.
+        ## Provide *only* if type is gcs.
         gcsSaKey:
+        ## Provide *only* if type is cloudian,minio, openio.
+        accessKey:
+        secretKey:
 
-      ## Region of the AWS S3 or GCS bucket. Example: us-east-1
+      ## Region of the AWS S3, cloudian, minio, openio or GCS bucket. Example: us-east-1
       region:
     ## Custom Pip config file configuration to install pip packages using private PyPi repo
     pipConfig: {}
@@ -1049,7 +1084,11 @@ boundAgent:
         - apiGroups: [ "apps" ]
           resources: [ "statefulsets/scale" ]
           verbs: [ "update", "patch", "get" ]
+        - apiGroups: [ "" ]
+          resources: [ "pods" ]
+          verbs: [ "list", "get" ]
 
+          
 ### --------------------------------------------
 ### Flow storage configuration section
 ### ---------------------------------------------
@@ -1303,7 +1342,7 @@ zookeeper:
     ## Container repository to pull ZooKeeper image from.
     repository: docker.io/cloudbees/cbflow-tools
     ## Zookeeper image tag to pull.
-    tag: "2025.03.0.178767_3.2.154_20250318"
+    tag: "2025.06.0.180373_3.2.180_20250618"
     ## Added Image repository for global values support
     imageRepository: cbflow-tools
   fullnameOverride: zookeeper
