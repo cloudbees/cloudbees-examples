@@ -24,7 +24,7 @@ images:
   registry: "docker.io/cloudbees"
 
   ## CloudBees CD/RO flow-server image tag to pull.
-  tag: "2025.12.0.183023_3.2.201_20251119"
+  tag: "2025.12.0.183371_3.2.201_20251204"
 
   ## The image pull policy to use.
   pullPolicy: IfNotPresent
@@ -1307,7 +1307,7 @@ zookeeper:
     ## Container repository to pull ZooKeeper image from.
     repository: docker.io/cloudbees/cbflow-tools
     ## Zookeeper image tag to pull.
-    tag: "2025.12.0.183023_3.2.201_20251119"
+    tag: "2025.12.0.183371_3.2.201_20251204"
     ## Added Image repository for global values support
     imageRepository: cbflow-tools
   fullnameOverride: zookeeper
