@@ -25,7 +25,7 @@ images:
   registry: "docker.io/cloudbees"
 
   ## CloudBees CD/RO flow-server image tag to pull.
-  tag: "2025.09.0.181816_3.2.191_20250916"
+  tag: "2025.12.0.183371_3.2.201_20251204"
 
   ## The image pull policy to use.
   pullPolicy: IfNotPresent
