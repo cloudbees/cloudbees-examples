@@ -37,6 +37,9 @@ mariadb:
   enabled:  true
   db:
     user: "flow"
+  image:
+    registry: docker.io
+    repository: bitnamilegacy/mariadb
 
 database:
   dbName: "demo"
