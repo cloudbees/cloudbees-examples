@@ -1,0 +1,44 @@
+removeStrategy:
+  rbac: SYNC
+  items: NONE
+items:
+  - kind: managedController
+    name: controller-name
+    properties:
+    - healthReporting:
+        enabled: true
+    - configurationAsCode:
+        bundle: controller-bundle
+    configuration:
+      kubernetes:
+        memory: 4000
+        cpus: 1.0
+        clusterEndpointId: default
+        disk: 10
+        storageClassName: premium-rwo
+        domain: controller-custom-domain
+        namespace: cloudbees-ci
+        yaml: |
+          apiVersion: "apps/v1"
+          kind: "StatefulSet"
+          spec:
+            template:
+              metadata:
+                labels:
+                  networking/allow-internet-access: "true"
+              spec:
+                containers:
+                - name: "jenkins"
+                  env:
+                  - name: "SECRETS"
+                    value: "/var/jenkins_home/jcasc_secrets"
+                  volumeMounts:
+                  - name: "jcasc-secrets"
+                    mountPath: "/var/jenkins_home/jcasc_secrets"
+                volumes:
+                - name: "jcasc-secrets"
+                  csi:
+                    driver: secrets-store.csi.k8s.io
+                    readOnly: true
+                    volumeAttributes:
+                      secretProviderClass: "cbci-mc-secret-provider"
