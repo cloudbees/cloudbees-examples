@@ -28,6 +28,18 @@ server:
       cpu: 0.5
 
 #---------------------------------------------
+# Flow Analytics server configuration section
+#---------------------------------------------
+## analytics.sysctlInitContainer is a *privileged* init container (sets vm.max_map_count) --
+## OpenShift's default SCC blocks privileged containers, so it must be disabled in favor of
+## openshiftNodeTuning. The dois section below sets this on the wrong (disabled-by-default,
+## dois.enabled: false) component -- analytics is the one that actually runs.
+analytics:
+  openshiftNodeTuning: true
+  sysctlInitContainer:
+    enabled: false
+
+#---------------------------------------------
 # Flow DevOps Insight configuration section
 #---------------------------------------------
 
