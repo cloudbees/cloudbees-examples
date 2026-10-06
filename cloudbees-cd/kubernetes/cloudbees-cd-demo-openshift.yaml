@@ -42,6 +42,13 @@ dois:
 volumePermissions:
   enabled: false
 
+## boundAgent.volumePermissions is a separate key from the top-level volumePermissions above.
+## _helpers.tpl hard-fails the chart render on OpenShift (any cluster with the Route API) unless
+## this is explicitly set to false -- it defaults to true.
+boundAgent:
+  volumePermissions:
+    enabled: false
+
 #---------------------------------------------
 # Ingress configuration section
 #---------------------------------------------
